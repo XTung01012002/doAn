@@ -40,7 +40,7 @@ class PaymentInfoService {
     const paymentInfo = await paymentInfoSchema.findOne({
       userId: sessionUser,
       confirmOrder: false,
-      id,
+      _id: id,
     });
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
@@ -66,7 +66,7 @@ class PaymentInfoService {
   static cancelOrderByUser = async (req, id) => {
     const sessionUser = req.user;
     console.log(sessionUser + "sessionUser");
-    console.log(id + "id"); 
+    console.log(id + "id");
     const paymentInfo = await paymentInfoSchema.findOne({
       userId: sessionUser,
       confirmOrder: false,
@@ -82,7 +82,7 @@ class PaymentInfoService {
 
   static confirmOrderByUser = async (req, id) => {
     const sessionUser = req.user;
-    console.log(sessionUser + "sessionUser"); 
+    console.log(sessionUser + "sessionUser");
     const paymentInfo = await paymentInfoSchema.findOne({
       userId: sessionUser,
       confirmOrder: false,
@@ -134,13 +134,11 @@ class PaymentInfoService {
     const { totalAmount } = req.body;
     const transactionId = this.generateTransactionId();
 
-    const qrUrl = `https://img.vietqr.io/image/${config.bankInfo.bankId}-${
-      config.bankInfo.bankAccount
-    }-${
-      config.bankInfo.template
-    }.png?amount=${totalAmount}&addInfo=${encodeURIComponent(
-      +" Ma giao dich " + transactionId
-    )}&accountName=${encodeURIComponent(config.bankInfo.accountName)}`;
+    const qrUrl = `https://img.vietqr.io/image/${config.bankInfo.bankId}-${config.bankInfo.bankAccount
+      }-${config.bankInfo.template
+      }.png?amount=${totalAmount}&addInfo=${encodeURIComponent(
+        +" Ma giao dich " + transactionId
+      )}&accountName=${encodeURIComponent(config.bankInfo.accountName)}`;
 
     this.transactions[transactionId] = {
       status: "đang xử lý",

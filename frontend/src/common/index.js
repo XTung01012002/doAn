@@ -93,6 +93,10 @@ const SummaryApi = {
     url: `${backendDomin}/api/cartproduct/delete-all-product-in-cart`,
     method: "delete",
   },
+  getAllNotConfirm: {
+    url: `${backendDomin}/api/paymentinfo/all-not-confirm-order`,
+    method: "get"
+  }
 };
 
 export default SummaryApi;
