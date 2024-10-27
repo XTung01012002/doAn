@@ -2,87 +2,87 @@ const backendDomin = "http://localhost:8088";
 
 const SummaryApi = {
   signUp: {
-    url: `${backendDomin}/sign-up`,
+    url: `${backendDomin}/api/user/sign-up`,
     method: "post",
   },
   signIn: {
-    url: `${backendDomin}/sign-in`,
+    url: `${backendDomin}/api/user/sign-in`,
     method: "post",
   },
   userDetail: {
-    url: `${backendDomin}/user-detail`,
+    url: `${backendDomin}/api/user/user-detail`,
     method: "get",
   },
   logOut: {
-    url: `${backendDomin}/log-out`,
+    url: `${backendDomin}/api/user/log-out`,
     method: "get",
   },
   allUsers: {
-    url: `${backendDomin}/all-users`,
+    url: `${backendDomin}/api/user/all-users`,
     method: "get",
   },
   updateUser: {
-    url: `${backendDomin}/update-user`,
+    url: `${backendDomin}/api/user/update-user`,
     method: "put",
   },
   uploadProduct: {
-    url: `${backendDomin}/upload-product`,
+    url: `${backendDomin}/api/product/upload-product`,
     method: "post",
   },
   allProducts: {
-    url: `${backendDomin}/all-products`,
+    url: `${backendDomin}/api/product/all-products`,
     method: "get",
   },
   updateProduct: {
-    url: `${backendDomin}/update-product`,
+    url: `${backendDomin}/api/product/update-product`,
     method: "put",
   },
   categoryProductOne: {
-    url: `${backendDomin}/category-productOne`,
+    url: `${backendDomin}/api/product/category-productOne`,
     method: "get",
   },
   categoryWishProduct: {
-    url: `${backendDomin}/category-wise-product`,
+    url: `${backendDomin}/api/product/category-wise-product`,
     method: "post",
   },
   productDetails: {
-    url: `${backendDomin}/product-details`,
+    url: `${backendDomin}/api/product/product-details`,
     method: "post",
   },
   addProductToCart: {
-    url: `${backendDomin}/add-product-to-cart`,
+    url: `${backendDomin}/api/cartproduct/add-product-to-cart`,
     method: "post",
   },
   countProductInCart: {
-    url: `${backendDomin}/count-product-in-cart`,
+    url: `${backendDomin}/api/cartproduct/count-product-in-cart`,
     method: "get",
   },
   addProductToCartView: {
-    url: `${backendDomin}/add-product-to-cart-view`,
+    url: `${backendDomin}/api/cartproduct/add-product-to-cart-view`,
     method: "get",
   },
   updateQuantityInCart: {
-    url: `${backendDomin}/update-quantity-in-cart`,
+    url: `${backendDomin}/api/cartproduct/update-quantity-in-cart`,
     method: "put",
   },
   deleteProductInCart: {
-    url: `${backendDomin}/delete-product-in-cart`,
+    url: `${backendDomin}/api/cartproduct/delete-product-in-cart`,
     method: "delete",
   },
   searchProduct: {
-    url: `${backendDomin}/search-product`,
+    url: `${backendDomin}/api/product/search-product`,
     method: "get",
   },
   filterProduct: {
-    url: `${backendDomin}/filter-product`,
+    url: `${backendDomin}/api/product/filter-product`,
     method: "post",
   },
   requestPasswordReset: {
-    url: `${backendDomin}/request-password-reset`,
+    url: `${backendDomin}/api/user/request-password-reset`,
     method: "post",
   },
   resetPassword: {
-    url: `${backendDomin}/reset-password`,
+    url: `${backendDomin}/api/user/reset-password`,
     method: "put",
   },
   checkPaymentQrCode: {
@@ -90,7 +90,7 @@ const SummaryApi = {
     method: "post",
   },
   deleteAllProductInCart: {
-    url: `${backendDomin}/delete-all-product-in-cart`,
+    url: `${backendDomin}/api/cartproduct/delete-all-product-in-cart`,
     method: "delete",
   },
 };
