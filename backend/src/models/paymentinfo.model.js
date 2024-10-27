@@ -5,7 +5,6 @@ const paymentInfoSchema = new Schema(
     userId: {
       type: Schema.Types.ObjectId,
       ref: "user",
-
     },
     phone: {
       type: String,
@@ -17,7 +16,7 @@ const paymentInfoSchema = new Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ["Đã thanh toán", "Chưa thanh toán"],
+      enum: ["Đã thanh toán", "Chưa thanh toán", "thanh toán khi nhận hàng"],
       default: "Chưa thanh toán",
     },
     productList: [

@@ -6,13 +6,20 @@ const { authToken, authRole } = require("../middlewares/auth");
 
 router.use(authToken);
 
-router.get("/all", asyncHandle(PaymentInfoController.getAll));
-router.get("/:id", asyncHandle(PaymentInfoController.getById));
-router.post("/qr", asyncHandle(PaymentInfoController.createVietQR));
-router.get("/:transactionId",asyncHandle(PaymentInfoController.checkTransactionStatus));
-router.post("", asyncHandle(PaymentInfoController.create));
-router.put("/:id", asyncHandle(PaymentInfoController.update));
-router.delete("/:id", asyncHandle(PaymentInfoController.delete));
-
+// đối với user
+router.get("/all", asyncHandle(PaymentInfoController.getAllByUser));
+router.get("/all-not-confirm-order", asyncHandle(PaymentInfoController.getAllNotConfirmOrderByUser));
+router.get("/all-confirm-order", asyncHandle(PaymentInfoController.getAllConfirmOrderByUser));
+router.get("/all-canceled-order", asyncHandle(PaymentInfoController.getAllCanceledOrderByUser));
+router.put("/update/:id", asyncHandle(PaymentInfoController.updateByUser));
+router.put("/cancel-order/:id", asyncHandle(PaymentInfoController.cancelOrderByUser));
+router.put("/confirm-order/:id", asyncHandle(PaymentInfoController.confirmOrderByUser));
+router.post("/create", asyncHandle(PaymentInfoController.create));
+router.post("/createQr", asyncHandle(PaymentInfoController.createVietQR));
+router.get("/check/:transactionId",asyncHandle(PaymentInfoController.checkTransactionStatus));
+router.get("/by/:id", asyncHandle(PaymentInfoController.getById));
+// đối với sale
+router.get("/all-not-confirm-order-sale", asyncHandle(PaymentInfoController.getAllConfirmedOrder));
+router.get("/all-confirm-order-sale", asyncHandle(PaymentInfoController.getAllCanceledOrder));
 
 module.exports = router;

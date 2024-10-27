@@ -3,18 +3,78 @@ const { SuccessResponse } = require("../responseHandle/success.response");
 const PaymentInfoService = require("../services/paymentinfo.service");
 
 class PaymentInfoController {
-  getAll = async (req, res) => {
-    const paymentInfo = await PaymentInfoService.getAll();
+  getById = async (req, res) => {
+    const paymentInfo = await PaymentInfoService.getById(req.params.id);
     new SuccessResponse({
       message: "Lấy thông tin thanh toán thành công",
       data: paymentInfo,
     }).send(res);
   };
 
-  getById = async (req, res) => {
-    const paymentInfo = await PaymentInfoService.getById(req.params.id);
+  getAllByUser = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllByUser(req);
     new SuccessResponse({
-      message: "Lấy thông tin thanh toán thành công",
+      message: "Lấy danh sách thông tin thanh toán thành công",
+      data: paymentInfos,
+    }).send(res);
+  };
+
+  getAllNotConfirmOrderByUser = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllNotConfirmOrderByUser(
+      req
+    );
+    new SuccessResponse({
+      message: "Lấy danh sách thông tin thanh toán thành công",
+      data: paymentInfos,
+    }).send(res);
+  };
+
+  getAllConfirmOrderByUser = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllConfirmOrderByUser(req);
+    new SuccessResponse({
+      message: "Lấy danh sách thông tin thanh toán thành công",
+      data: paymentInfos,
+    }).send(res);
+  };
+
+  getAllCanceledOrderByUser = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllCanceledOrderByUser(
+      req
+    );
+    new SuccessResponse({
+      message: "Lấy danh sách thông tin thanh toán thành công",
+      data: paymentInfos,
+    }).send(res);
+  };
+
+  updateByUser = async (req, res) => {
+    const paymentInfo = await PaymentInfoService.updateByUser(req.body, req.params.id, req);
+    new SuccessResponse({
+      message: "Cập nhật thông tin thanh toán thành công",
+      data: paymentInfo,
+    }).send(res);
+  };
+
+  cancelOrderByUser = async (req, res) => {
+    const paymentInfo = await PaymentInfoService.cancelOrderByUser(req, req.params.id);
+    new SuccessResponse({
+      message: "Hủy đơn hàng thành công",
+      data: paymentInfo,
+    }).send(res);
+  };
+
+  confirmOrderByUser = async (req, res) => {
+    const paymentInfo = await PaymentInfoService.confirmOrderByUser(req, req.params.id);
+    new SuccessResponse({
+      message: "Xác nhận đơn hàng thành công",
+      data: paymentInfo,
+    }).send(res);
+  };
+
+  create = async (req, res) => {
+    const paymentInfo = await PaymentInfoService.create(req.body, req);
+    new SuccessResponse({
+      message: "Tạo thông tin thanh toán thành công",
       data: paymentInfo,
     }).send(res);
   };
@@ -37,38 +97,19 @@ class PaymentInfoController {
     }).send(res);
   };
 
-  create = async (req, res) => {
-    const paymentInfo = await PaymentInfoService.create(req.body, req);
+  // đối với sale
+  getAllConfirmedOrder = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllConfirmedOrder();
     new SuccessResponse({
-      message: "Tạo thông tin thanh toán thành công",
-      data: paymentInfo,
+      message: "Lấy danh sách thông tin thanh toán thành công",
+      data: paymentInfos,
     }).send(res);
   };
-
-  update = async (req, res) => {
-    const paymentInfo = await PaymentInfoService.update(
-      req.body,
-      req.params.id
-    );
+  getAllCanceledOrder = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllCanceledOrder();
     new SuccessResponse({
-      message: "Cập nhật thông tin thanh toán thành công",
-      data: paymentInfo,
-    }).send(res);
-  };
-
-  delete = async (req, res) => {
-    const paymentInfo = await PaymentInfoService.delete(req.params.id);
-    new SuccessResponse({
-      message: "Xóa thông tin thanh toán thành công",
-      data: paymentInfo,
-    }).send(res);
-  };
-
-  cancel = async (req, res) => {
-    const paymentInfo = await PaymentInfoService.cancel(req.params.id);
-    new SuccessResponse({
-      message: "Hủy đơn hàng thành công",
-      data: paymentInfo,
+      message: "Lấy danh sách thông tin thanh toán thành công",
+      data: paymentInfos,
     }).send(res);
   };
 }
