@@ -7,7 +7,7 @@ const { productSchema } = require("../models/product.model");
 
 class PaymentInfoService {
   static getById = async (id) => {
-    const paymentInfo = await paymentInfoSchema.findById(id);
+    const paymentInfo = await paymentInfoSchema.findById(id)
     return paymentInfo;
   };
 
@@ -20,17 +20,26 @@ class PaymentInfoService {
 
   static getAllNotConfirmOrderByUser = async (req) => {
     const sessionUser = req.user;
-    return await paymentInfoSchema.find({ userId: sessionUser, confirmOrder: false });
+    return await paymentInfoSchema.find({
+      userId: sessionUser,
+      confirmOrder: false,
+    }).populate("productList.productId").exec();
   };
 
   static getAllConfirmOrderByUser = async (req) => {
     const sessionUser = req.user;
-    return await paymentInfoSchema.find({ userId: sessionUser, confirmOrder: true });
+    return await paymentInfoSchema.find({
+      userId: sessionUser,
+      confirmOrder: true,
+    }).populate("productList.productId").exec();
   };
 
   static getAllCanceledOrderByUser = async (req) => {
     const sessionUser = req.user;
-    return await paymentInfoSchema.find({ userId: sessionUser, orderStatus: "Đã hủy" });
+    return await paymentInfoSchema.find({
+      userId: sessionUser,
+      orderStatus: "Đã hủy",
+    }).populate("productList.productId").exec();
   };
 
   //chỉnh sửa đơn hàng của user
@@ -41,23 +50,24 @@ class PaymentInfoService {
       userId: sessionUser,
       confirmOrder: false,
       _id: id,
-    });
+    }).populate("productList.productId").exec();
+    console.log(paymentInfo + "paymentInfo");
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
     }
-    let totalAmount = 0;
-    for (let i = 0; i < productList.length; i++) {
-      const product = await productSchema.findById(productList[i].productId);
-      if (!product) {
-        throw new BadRequestError("Sản phẩm không tồn tại");
-      }
-      totalAmount += product.price * productList[i].quantity;
-    }
+    // let totalAmount = 0;
+    // for (let i = 0; i < productList.length; i++) {
+    //   const product = await productSchema.findById(productList[i].productId);
+    //   if (!product) {
+    //     throw new BadRequestError("Sản phẩm không tồn tại");
+    //   }
+    //   totalAmount += product.price * productList[i].quantity;
+    // }
 
     paymentInfo.phone = phone;
     paymentInfo.address = address;
-    paymentInfo.productList = productList;
-    paymentInfo.totalAmount = totalAmount;
+    // paymentInfo.productList = productList;
+    // paymentInfo.totalAmount = totalAmount;
     await paymentInfo.save();
 
     return paymentInfo;
@@ -70,8 +80,8 @@ class PaymentInfoService {
     const paymentInfo = await paymentInfoSchema.findOne({
       userId: sessionUser,
       confirmOrder: false,
-      _id: id
-    });
+      _id: id,
+    }).populate("productList.productId").exec();
     console.log(paymentInfo + "paymentInfo");
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
@@ -86,8 +96,8 @@ class PaymentInfoService {
     const paymentInfo = await paymentInfoSchema.findOne({
       userId: sessionUser,
       confirmOrder: false,
-      _id: id
-    });
+      _id: id,
+    }).populate("productList.productId").exec();
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
     }
@@ -107,7 +117,7 @@ class PaymentInfoService {
       if (!product) {
         throw new BadRequestError("Sản phẩm không tồn tại");
       }
-      totalAmount += product.price * productList[i].quantity;
+      totalAmount += product.sellingPrice * productList[i].quantity;
     }
     console.log(sessionUser._id + "sessionUser._id");
     const payload = {
@@ -118,7 +128,7 @@ class PaymentInfoService {
       totalAmount,
     };
     console.log(payload.userId + "payload");
-    const paymentInfo = new paymentInfoSchema(payload); // test
+    const paymentInfo = new paymentInfoSchema(payload);
     await paymentInfo.save();
 
     return paymentInfo;
@@ -134,11 +144,13 @@ class PaymentInfoService {
     const { totalAmount } = req.body;
     const transactionId = this.generateTransactionId();
 
-    const qrUrl = `https://img.vietqr.io/image/${config.bankInfo.bankId}-${config.bankInfo.bankAccount
-      }-${config.bankInfo.template
-      }.png?amount=${totalAmount}&addInfo=${encodeURIComponent(
-        +" Ma giao dich " + transactionId
-      )}&accountName=${encodeURIComponent(config.bankInfo.accountName)}`;
+    const qrUrl = `https://img.vietqr.io/image/${config.bankInfo.bankId}-${
+      config.bankInfo.bankAccount
+    }-${
+      config.bankInfo.template
+    }.png?amount=${totalAmount}&addInfo=${encodeURIComponent(
+      +" Ma giao dich " + transactionId
+    )}&accountName=${encodeURIComponent(config.bankInfo.accountName)}`;
 
     this.transactions[transactionId] = {
       status: "đang xử lý",
@@ -192,11 +204,11 @@ class PaymentInfoService {
   // SALE
   // lấy tất cả đơn hàng đã xác nhận
   static getAllConfirmedOrder = async () => {
-    return await paymentInfoSchema.find({ confirmOrder: true });
+    return await paymentInfoSchema.find({ confirmOrder: true }).populate("productList.productId").exec();
   };
   // lấy tất cả các đơn hàng đã hủy
   static getAllCanceledOrder = async () => {
-    return await paymentInfoSchema.find({ orderStatus: "Đã hủy" });
+    return await paymentInfoSchema.find({ orderStatus: "Đã hủy" }).populate("productList.productId").exec();
   };
 }
 
