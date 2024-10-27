@@ -117,7 +117,7 @@ class PaymentInfoService {
       if (!product) {
         throw new BadRequestError("Sản phẩm không tồn tại");
       }
-      totalAmount += product.price * productList[i].quantity;
+      totalAmount += product.sellingPrice * productList[i].quantity;
     }
     console.log(sessionUser._id + "sessionUser._id");
     const payload = {
