@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Avatar, Button, Image, Space, Table } from 'antd';
+import { Avatar, Button, Image, Table } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchDataWarehouse } from '../../../../store/admin/warehouse/Warahouse';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -125,7 +125,7 @@ const columns = [
 
 const Warehouse = () => {
     const dispatch = useDispatch();
-    const data = useSelector((state) => state.warehouse.data);
+    const data = useSelector((state) => state.warehouse?.data);
 
     useEffect(() => {
         dispatch(fetchDataWarehouse());
@@ -137,7 +137,7 @@ const Warehouse = () => {
             <Table
                 className="whitespace-nowrap"
                 columns={columns}
-                dataSource={data.data}
+                dataSource={data?.data}
                 pagination={{ pageSize: 6 }}
             />
         </div>

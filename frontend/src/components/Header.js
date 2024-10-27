@@ -13,6 +13,7 @@ import { useState } from "react";
 import Context from "../context/index";
 import { useContext } from "react";
 import { useLocation } from "react-router";
+import { Button } from "antd";
 
 const Header = () => {
   const user = useSelector((state) => state?.user?.user);
@@ -87,6 +88,19 @@ const Header = () => {
         </div>
 
         <div className="flex items-center gap-7 ">
+          {user?._id && (
+            <Link to={"/cart"} className="text-2xl relative">
+              <span>
+                <FaShoppingCart />
+              </span>
+
+              <div className="bg-red-600 text-white w-5 h-5 rounded-full p-1 flex items-center justify-center absolute -top-2 -right-3">
+                <p className="text-sm">{context?.cartProductCount}</p>
+              </div>
+            </Link>
+          )}
+
+          
           <div className="relative flex justify-center">
             {user?._id && (
               <div
@@ -106,36 +120,39 @@ const Header = () => {
             )}
 
             {menuDisplay && (
-              <div className="absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded">
+              <div className="absolute bottom-0 top-11 h-fit p-2 shadow-lg rounded z-50 bg-white">
                 <nav>
                   {user?.role === "ADMIN" && (
                     <Link
                       to={"/admin-panel"}
-                      className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
+                      className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
                       onClick={() => setMenuDisplay((prev) => !prev)}
                     >
                       Admin Panel
                     </Link>
+                  )}
+                  {user?._id && (
+                    <div className="flex justify-center">
+                      <Button
+                        onClick={handleLogOut}
+                        className=" rounded-full"
+                        type="primary"
+                        variant="solid"
+                        color="danger"
+                      >
+                        Đăng xuất
+                      </Button>
+                    </div>
                   )}
                 </nav>
               </div>
             )}
           </div>
 
-          {user?._id && (
-            <Link to={"/cart"} className="text-2xl relative">
-              <span>
-                <FaShoppingCart />
-              </span>
-
-              <div className="bg-red-600 text-white w-5 h-5 rounded-full p-1 flex items-center justify-center absolute -top-2 -right-3">
-                <p className="text-sm">{context?.cartProductCount}</p>
-              </div>
-            </Link>
-          )}
+         
 
           <div>
-            {user?._id ? (
+            {/* {user?._id ? (
               <button
                 onClick={handleLogOut}
                 className="px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700"
@@ -143,6 +160,14 @@ const Header = () => {
                 Đăng xuất
               </button>
             ) : (
+              <Link
+                to={"/login"}
+                className="px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700"
+              >
+                Đăng nhập
+              </Link>
+            )} */}
+            {!user?._id && (
               <Link
                 to={"/login"}
                 className="px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700"

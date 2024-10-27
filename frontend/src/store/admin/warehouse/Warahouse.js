@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import SummaryApi from '../../../common';
+import SummaryApi from '../../../common/index';
 
-export const fetchDataWarehouse = createAsyncThunk('data/fetchData', async () => {
+export const fetchDataWarehouse = createAsyncThunk('data/fetchDataWarehouse', async () => {
     const response = await axios.get(`${SummaryApi.allProducts.url}`);
     return response.data;
 });
 
 const WarahouseSlice = createSlice({
-    name: 'api',
+    name: 'fetchDataWarehouse',
     initialState: {
         data: [],
         status: 'idle',
