@@ -7,7 +7,7 @@ const { productSchema } = require("../models/product.model");
 
 class PaymentInfoService {
   static getById = async (id) => {
-    const paymentInfo = await paymentInfoSchema.findById(id);
+    const paymentInfo = await paymentInfoSchema.findById(id)
     return paymentInfo;
   };
 
@@ -20,17 +20,26 @@ class PaymentInfoService {
 
   static getAllNotConfirmOrderByUser = async (req) => {
     const sessionUser = req.user;
-    return await paymentInfoSchema.find({ userId: sessionUser, confirmOrder: false });
+    return await paymentInfoSchema.find({
+      userId: sessionUser,
+      confirmOrder: false,
+    }).populate("productList.productId").exec();
   };
 
   static getAllConfirmOrderByUser = async (req) => {
     const sessionUser = req.user;
-    return await paymentInfoSchema.find({ userId: sessionUser, confirmOrder: true });
+    return await paymentInfoSchema.find({
+      userId: sessionUser,
+      confirmOrder: true,
+    }).populate("productList.productId").exec();
   };
 
   static getAllCanceledOrderByUser = async (req) => {
     const sessionUser = req.user;
-    return await paymentInfoSchema.find({ userId: sessionUser, orderStatus: "Đã hủy" });
+    return await paymentInfoSchema.find({
+      userId: sessionUser,
+      orderStatus: "Đã hủy",
+    }).populate("productList.productId").exec();
   };
 
   //chỉnh sửa đơn hàng của user
@@ -40,24 +49,25 @@ class PaymentInfoService {
     const paymentInfo = await paymentInfoSchema.findOne({
       userId: sessionUser,
       confirmOrder: false,
-      id,
-    });
+      _id: id,
+    }).populate("productList.productId").exec();
+    console.log(paymentInfo + "paymentInfo");
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
     }
-    let totalAmount = 0;
-    for (let i = 0; i < productList.length; i++) {
-      const product = await productSchema.findById(productList[i].productId);
-      if (!product) {
-        throw new BadRequestError("Sản phẩm không tồn tại");
-      }
-      totalAmount += product.price * productList[i].quantity;
-    }
+    // let totalAmount = 0;
+    // for (let i = 0; i < productList.length; i++) {
+    //   const product = await productSchema.findById(productList[i].productId);
+    //   if (!product) {
+    //     throw new BadRequestError("Sản phẩm không tồn tại");
+    //   }
+    //   totalAmount += product.price * productList[i].quantity;
+    // }
 
     paymentInfo.phone = phone;
     paymentInfo.address = address;
-    paymentInfo.productList = productList;
-    paymentInfo.totalAmount = totalAmount;
+    // paymentInfo.productList = productList;
+    // paymentInfo.totalAmount = totalAmount;
     await paymentInfo.save();
 
     return paymentInfo;
@@ -66,12 +76,12 @@ class PaymentInfoService {
   static cancelOrderByUser = async (req, id) => {
     const sessionUser = req.user;
     console.log(sessionUser + "sessionUser");
-    console.log(id + "id"); 
+    console.log(id + "id");
     const paymentInfo = await paymentInfoSchema.findOne({
       userId: sessionUser,
       confirmOrder: false,
-      _id: id
-    });
+      _id: id,
+    }).populate("productList.productId").exec();
     console.log(paymentInfo + "paymentInfo");
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
@@ -82,12 +92,12 @@ class PaymentInfoService {
 
   static confirmOrderByUser = async (req, id) => {
     const sessionUser = req.user;
-    console.log(sessionUser + "sessionUser"); 
+    console.log(sessionUser + "sessionUser");
     const paymentInfo = await paymentInfoSchema.findOne({
       userId: sessionUser,
       confirmOrder: false,
-      _id: id
-    });
+      _id: id,
+    }).populate("productList.productId").exec();
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
     }
@@ -194,11 +204,11 @@ class PaymentInfoService {
   // SALE
   // lấy tất cả đơn hàng đã xác nhận
   static getAllConfirmedOrder = async () => {
-    return await paymentInfoSchema.find({ confirmOrder: true });
+    return await paymentInfoSchema.find({ confirmOrder: true }).populate("productList.productId").exec();
   };
   // lấy tất cả các đơn hàng đã hủy
   static getAllCanceledOrder = async () => {
-    return await paymentInfoSchema.find({ orderStatus: "Đã hủy" });
+    return await paymentInfoSchema.find({ orderStatus: "Đã hủy" }).populate("productList.productId").exec();
   };
 }
 
