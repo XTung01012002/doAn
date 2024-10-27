@@ -14,6 +14,9 @@ import ProductCategory from "../pages/ProductCategory";
 import Payment from "../pages/Payment";
 import ResetPassword from "../pages/ResetPassword";
 import Notification from "../pages/Notification";
+import OrderPage from '../pages/update/order'
+import Warehouse from "../pages/update/admin/warehouse/Warehouse";
+
 
 const router = createBrowserRouter([
   {
@@ -78,6 +81,14 @@ const router = createBrowserRouter([
         path: "notification",
         element: <Notification />,
       },
+      {
+        path: "order",
+        element: <OrderPage />,
+      },
+      {
+        path: "admin/warehouse",
+        element: <Warehouse />
+      }
     ],
   },
 ]);

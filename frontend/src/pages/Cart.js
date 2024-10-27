@@ -5,7 +5,7 @@ import displayVNDCurrency from "../helpers/displayVNDCurrency";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-
+import styles from './ScrollCardX.module.css'
 
 
 const Cart = () => {
@@ -95,84 +95,84 @@ const Cart = () => {
         )}
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-10 lg:justify-between p-4">
+      <div className="flex flex-col lg:flex-row gap-10 lg:justify-between">
         {/***view product */}
-        <div className="w-full max-w-3xl">
+        <div className={`${styles.scrollableContainer}`}>
           {loading
             ? loadingCart?.map((el, index) => {
-                return (
-                  <div
-                    key={el + "Add To Cart Loading" + index}
-                    className="w-full bg-slate-200 h-32 my-2 border border-slate-300 animate-pulse rounded"
-                  ></div>
-                );
-              })
+              return (
+                <div
+                  key={el + "Add To Cart Loading" + index}
+                  className="w-full bg-slate-200 h-32 my-2 border border-slate-300 animate-pulse rounded"
+                ></div>
+              );
+            })
             : data.map((product, index) => {
-                return (
-                  <div
-                    key={product?._id + "Add To Cart Loading"}
-                    className="w-full bg-white h-32 my-2 border border-slate-300  rounded grid grid-cols-[128px,1fr]"
-                  >
-                    <div className="w-32 h-32 bg-slate-200">
-                      <img
-                        src={product?.productId?.productImage[0]}
-                        className="w-full h-full object-scale-down mix-blend-multiply"
-                      />
+              return (
+                <div
+                  key={product?._id + "Add To Cart Loading"}
+                  className="w-full bg-white h-32 my-2 border border-slate-300  rounded grid grid-cols-[128px,1fr]"
+                >
+                  <div className="w-32 h-32 bg-slate-200">
+                    <img
+                      src={product?.productId?.productImage[0]}
+                      alt={product?.productId?.productImage[0]}
+                      className="w-full h-full object-scale-down mix-blend-multiply"
+                    />
+                  </div>
+                  <div className="px-4 py-2 relative">
+                    <div
+                      className="absolute right-0 text-red-600 rounded-full p-2 hover:bg-red-600 hover:text-white cursor-pointer"
+                      onClick={() => deleteProductInCart(product?.productId)}
+                    >
+                      <MdDelete />
                     </div>
-                    <div className="px-4 py-2 relative">
-                      {/**delete product */}
-                      <div
-                        className="absolute right-0 text-red-600 rounded-full p-2 hover:bg-red-600 hover:text-white cursor-pointer"
-                        onClick={() => deleteProductInCart(product?.productId)}
-                      >
-                        <MdDelete />
-                      </div>
 
-                      <h2 className="text-lg lg:text-xl text-ellipsis line-clamp-1">
-                        {product?.productId?.productName}
-                      </h2>
-                      <p className="capitalize text-slate-500">
-                        {product?.productId.category}
+                    <h2 className="text-lg lg:text-xl text-ellipsis line-clamp-1">
+                      {product?.productId?.productName}
+                    </h2>
+                    <p className="capitalize text-slate-500">
+                      {product?.productId.category}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-red-600 font-medium text-lg">
+                        {displayVNDCurrency(product?.productId?.sellingPrice)}
                       </p>
-                      <div className="flex items-center justify-between">
-                        <p className="text-red-600 font-medium text-lg">
-                          {displayVNDCurrency(product?.productId?.sellingPrice)}
-                        </p>
-                        <p className="text-slate-600 font-semibold text-lg">
-                          {displayVNDCurrency(
-                            product?.productId?.sellingPrice * product?.quantity
-                          )}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-3 mt-1">
-                        <button
-                          className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded "
-                          onClick={() =>
-                            decreaseQty(
-                              product?.productId?._id,
-                              product?.quantity
-                            )
-                          }
-                        >
-                          -
-                        </button>
-                        <span>{product?.quantity}</span>
-                        <button
-                          className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded "
-                          onClick={() =>
-                            increaseQty(
-                              product?.productId?._id,
-                              product?.quantity
-                            )
-                          }
-                        >
-                          +
-                        </button>
-                      </div>
+                      <p className="text-slate-600 font-semibold text-lg">
+                        {displayVNDCurrency(
+                          product?.productId?.sellingPrice * product?.quantity
+                        )}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3 mt-1">
+                      <button
+                        className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded "
+                        onClick={() =>
+                          decreaseQty(
+                            product?.productId?._id,
+                            product?.quantity
+                          )
+                        }
+                      >
+                        -
+                      </button>
+                      <span>{product?.quantity}</span>
+                      <button
+                        className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded "
+                        onClick={() =>
+                          increaseQty(
+                            product?.productId?._id,
+                            product?.quantity
+                          )
+                        }
+                      >
+                        +
+                      </button>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              );
+            })}
         </div>
 
         {/***summary  */}
