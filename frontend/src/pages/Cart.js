@@ -95,7 +95,7 @@ const Cart = () => {
         </div>
       )
         :
-        <div className="flex flex-col lg:flex-row gap-10 lg:justify-between">
+        <div className="flex flex-col lg:flex-row  lg:justify-between mt-6">
           {/***view product */}
           <div className={`${styles.scrollableContainer}`}>
             {loading
@@ -111,7 +111,7 @@ const Cart = () => {
                 return (
                   <div
                     key={product?._id + "Add To Cart Loading"}
-                    className="w-full bg-white h-32 my-2 border border-slate-300  rounded grid grid-cols-[128px,1fr]"
+                    className="w-[90vh] bg-white h-32 my-2 border border-slate-300  rounded grid grid-cols-[128px,1fr]"
                   >
                     <div className="w-32 h-32 bg-slate-200">
                       <img
@@ -181,7 +181,7 @@ const Cart = () => {
               <div className="h-36 bg-slate-200 border border-slate-300 animate-pulse"></div>
             ) : (
               <div className="h-36 bg-white">
-                <h2 className="text-white bg-red-600 px-4 py-1">Tóm tắt</h2>
+                <h2 className="text-white bg-red-600 px-4 py-1 rounded-t-xl">Tóm tắt</h2>
                 <div className="flex items-center justify-between px-4 gap-2 font-medium text-lg text-slate-600">
                   <p>Số lượng</p>
                   <p>{totalQuantity}</p>
@@ -192,7 +192,7 @@ const Cart = () => {
                   <p>{displayVNDCurrency(totalPrice)}</p>
                 </div>
                 <Link to={"/payment"}>
-                  <button className="bg-blue-600 p-2 text-white w-full mt-2">
+                  <button className="bg-blue-600 p-2 rounded-b-xl text-white w-full mt-2">
                     Thanh toán
                   </button>
                 </Link>
