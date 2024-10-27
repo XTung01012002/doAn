@@ -118,7 +118,7 @@ class PaymentInfoService {
       totalAmount,
     };
     console.log(payload.userId + "payload");
-    const paymentInfo = new paymentInfoSchema(payload);
+    const paymentInfo = new paymentInfoSchema(payload); // test
     await paymentInfo.save();
 
     return paymentInfo;
