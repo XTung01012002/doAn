@@ -10,7 +10,7 @@ import Rates from './components/rated/Rates';
 const items = [
   {
     key: '1',
-    label: <span className='text-[16px] ' > Đơn đã đặt</span>,
+    label: <span className='text-[16px] ' > Chờ thanh toán/ xử lý</span>,
     children: <Bought />,
   },
   {
@@ -32,7 +32,7 @@ const items = [
 
 const OrderPage = () => {
   return (
-    <div className='container mx-auto px-80 py-10'>
+    <div className='container mx-auto px-48 pt-1'>
       <Tabs
         defaultActiveKey="1"
         items={items}

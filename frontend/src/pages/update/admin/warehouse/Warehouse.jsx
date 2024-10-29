@@ -124,20 +124,23 @@ const columns = [
 ];
 
 const Warehouse = () => {
+
     const dispatch = useDispatch();
-    const data = useSelector((state) => state.warehouse?.data);
+
+    const dataWH = useSelector((state) => state.warehouse.data)
+    console.log('dataxxx: ', dataWH);
 
     useEffect(() => {
         dispatch(fetchDataWarehouse());
-    }, [dispatch]);
-    console.log('datax:', data);
+    }, [dispatch])
+
 
     return (
         <div className={styles.customScrollbar}>
             <Table
                 className="whitespace-nowrap"
                 columns={columns}
-                dataSource={data?.data}
+                dataSource={dataWH}
                 pagination={{ pageSize: 6 }}
             />
         </div>
