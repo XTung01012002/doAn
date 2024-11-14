@@ -35,7 +35,7 @@ const paymentInfoSchema = new Schema(
     ],
     orderStatus: {
       type: String,
-      enum: ["Đang xử lý", "Đã gửi hàng", "Đã giao hàng", "Đã hủy"],
+      enum: ["Đang xử lý", "Đang giao hàng", "Đã giao hàng", "Đã hủy"],
       default: "Đang xử lý",
     },
     totalAmount: {

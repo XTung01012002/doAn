@@ -7,9 +7,30 @@ const productSchema = new Schema(
     category: String,
     productImage: [],
     description: String,
-    price: Number,
-    sellingPrice: Number,
-    
+    price: {
+      type: Number,
+      default: 0,
+    },
+    sellingPrice: {
+      type: Number,
+      default: 0,
+    },
+    priceInventory: {
+      type: Number,
+      default: 0,
+    },
+    quantityInStock: {
+      type: Number,
+      default: 0,
+    },
+    quantitySold: {
+      type: Number,
+      default: 0,
+    },
+    active: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
