@@ -1,10 +1,13 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Card, Col, Image, Row } from 'antd';
+import { Avatar, Button, Card, Col, Dropdown, Image, Row, Space } from 'antd';
 import styles from '../CustomScrollY.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDataBoughtUser } from '../../../../../store/bought/BoughtUser';
 import BoughtModal from './BoughtModal';
+
+
 
 const Bought = () => {
     const [expandedIndices, setExpandedIndices] = useState([]);
@@ -32,7 +35,7 @@ const Bought = () => {
     };
 
     return (
-        <div className={styles.customScrollbar}>
+        <div className={`${styles.customScrollbar}`}>
             <Row gutter={[16, 24]}>
                 {data?.map((items, index) => {
                     const isExpanded = expandedIndices[index];
@@ -169,6 +172,7 @@ const Bought = () => {
                 setOpen={setOpen}
                 data={dataModal}
             />
+           
         </div>
     );
 };

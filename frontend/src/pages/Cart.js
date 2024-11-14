@@ -21,7 +21,7 @@ const Cart = () => {
     });
     const dataApi = await dataResponse.json();
     setData(dataApi.data);
-    console.log(dataApi.data);
+    console.log('data', dataApi.data);
   };
 
   useEffect(() => {
@@ -44,9 +44,7 @@ const Cart = () => {
           quantity: newQuantity,
         }),
       });
-
       const responseData = await response.json();
-
       if (responseData.success) {
         fetchData();
       }
@@ -58,7 +56,6 @@ const Cart = () => {
   const decreaseQty = (productId, quantity) => {
     updateQuantity(productId, quantity, "decrease");
   };
-
   const deleteProductInCart = async (productId) => {
     const response = await fetch(SummaryApi.deleteProductInCart.url, {
       method: SummaryApi.deleteProductInCart.method,
@@ -80,6 +77,7 @@ const Cart = () => {
     (previousValue, currentValue) => previousValue + currentValue.quantity,
     0
   );
+
   const totalPrice = data.reduce(
     (prev, curr) => prev + curr.quantity * curr?.productId?.sellingPrice,
     0
@@ -87,6 +85,8 @@ const Cart = () => {
 
   localStorage.setItem("totalPrice", totalPrice);
   console.log("totalPrice: ", totalPrice);
+  console.log('test', data);
+
   return (
     <div className="container mx-auto">
       {data.length === 0 && !loading ? (
@@ -96,7 +96,6 @@ const Cart = () => {
       )
         :
         <div className="flex flex-col lg:flex-row  lg:justify-between mt-6">
-          {/***view product */}
           <div className={`${styles.scrollableContainer}`}>
             {loading
               ? loadingCart?.map((el, index) => {
@@ -107,7 +106,7 @@ const Cart = () => {
                   ></div>
                 );
               })
-              : data.map((product, index) => {
+              : data.map((product, _index) => {
                 return (
                   <div
                     key={product?._id + "Add To Cart Loading"}
@@ -174,8 +173,6 @@ const Cart = () => {
                 );
               })}
           </div>
-
-          {/***summary  */}
           <div className="mt-5 lg:mt-0 w-full max-w-sm">
             {loading ? (
               <div className="h-36 bg-slate-200 border border-slate-300 animate-pulse"></div>
@@ -191,8 +188,15 @@ const Cart = () => {
                   <p>Tổng tiền</p>
                   <p>{displayVNDCurrency(totalPrice)}</p>
                 </div>
-                <Link to={"/payment"}>
-                  <button className="bg-blue-600 p-2 rounded-b-xl text-white w-full mt-2">
+                <Link
+                  to={"/payment"}
+                >
+                  <button
+                    onClick={() => {
+                        setData([]);
+                    }}
+                    className="bg-blue-600 p-2 rounded-b-xl text-white w-full mt-2"
+                  >
                     Thanh toán
                   </button>
                 </Link>
@@ -201,8 +205,6 @@ const Cart = () => {
           </div>
         </div>
       }
-
-
     </div>
   );
 };

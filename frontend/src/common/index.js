@@ -96,6 +96,17 @@ const SummaryApi = {
   getAllNotConfirm: {
     url: `${backendDomin}/api/paymentinfo/all-not-confirm-order`,
     method: "get"
+  },
+  getAllCanceledOrder: {
+    url: `${backendDomin}/api/paymentinfo/all-canceled-order`,
+    method: "get"
+  },
+  postCreateCart: {
+    url: `${backendDomin}/api/paymentinfo/create`,
+    method: 'post'
+  },
+  postCreateOrder: {
+    url: `${backendDomin}/api/paymentinfo/create`,
   }
 };
 

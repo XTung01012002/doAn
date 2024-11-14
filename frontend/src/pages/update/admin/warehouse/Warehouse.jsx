@@ -129,6 +129,7 @@ const Warehouse = () => {
 
     const dataWH = useSelector((state) => state.warehouse.data)
     console.log('dataxxx: ', dataWH);
+  
 
     useEffect(() => {
         dispatch(fetchDataWarehouse());
