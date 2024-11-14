@@ -5,23 +5,12 @@ const { cartProductSchema } = require("../models/cartproduct.model");
 class ProductService {
   static uploadProduct = async (productData) => {
     try {
-      const {
-        productName,
-        brandName,
-        category,
-        productImage,
-        description,
-        price,
-        sellingPrice,
-      } = productData;
+      const { productName, brandName, category, productImage } = productData;
       const product = new productSchema({
         productName,
         brandName,
         category,
         productImage,
-        description,
-        price,
-        sellingPrice,
       });
       await product.save();
       return product;
@@ -39,7 +28,7 @@ class ProductService {
     }
   };
 
-  static updateProduct = async (productData) => {
+  static updateProduct = async (productData,id) => {
     try {
       const {
         productName,
@@ -49,8 +38,9 @@ class ProductService {
         description,
         price,
         sellingPrice,
+        active,
       } = productData;
-      const product = await productSchema.findById(productData._id);
+      const product = await productSchema.findById(id);
       if (!product) {
         throw new BadRequestError("Product not found");
       }
@@ -61,6 +51,7 @@ class ProductService {
       product.description = description;
       product.price = price;
       product.sellingPrice = sellingPrice;
+      product.active = active;
       await product.save();
       return product;
     } catch (error) {
@@ -140,6 +131,18 @@ class ProductService {
       const product = await productSchema.findByIdAndDelete(productId);
       const cartProduct = await cartProductSchema.deleteMany({ productId });
       return product, cartProduct;
+    } catch (error) {
+      throw new BadRequestError(`${error.message}`);
+    }
+  };
+
+  static productNotActive = async () => {
+    try {
+      const products = await productSchema.find({
+        active: false,
+        quantityInStock: { $gt: 0 },
+      });
+      return products;
     } catch (error) {
       throw new BadRequestError(`${error.message}`);
     }
