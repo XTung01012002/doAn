@@ -6,7 +6,7 @@ import BoughtUserReducer from './bought/BoughtUser'
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    warahouse: WarahouseReducer,
+    warehouse: WarahouseReducer,
     bought: BoughtUserReducer
   },
 })
