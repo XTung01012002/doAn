@@ -22,7 +22,7 @@ const shippingInfoSchema = new Schema(
     },
     shippingStatus: {
       type: String,
-      enum: ["Đang xử lý", "Đang giao", "Đã giao", "Đã hủy"],
+      enum: ["Đang xử lý", "Đã lấy hàng", "Đang giao", "Đã giao", "Đã hủy"],
       default: "Đang xử lý",
     },
     deliveryDate: {
@@ -37,4 +37,4 @@ const shippingInfoSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = model("shippingInfo", shippingInfoSchema);
+module.exports= { shippingInfoSchema: model("shippingInfo", shippingInfoSchema) };

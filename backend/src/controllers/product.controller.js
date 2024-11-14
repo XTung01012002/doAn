@@ -20,7 +20,7 @@ class ProductController {
   };
 
   updateProduct = async (req, res, next) => {
-    const updatedProduct = await ProductService.updateProduct(req.body);
+    const updatedProduct = await ProductService.updateProduct(req.body, req.params.id);
     new SuccessResponse({
       message: "Update product success",
       data: updatedProduct,
@@ -72,7 +72,15 @@ class ProductController {
       message: "Delete product success",
       data: product,
     }).send(res);
-  }
+  };
+
+  productNotActive = async (req, res) => {
+    const products = await ProductService.productNotActive();
+    new SuccessResponse({
+      message: "Get product not active success",
+      data: products,
+    }).send(res);
+  };
 }
 
 module.exports = new ProductController();
