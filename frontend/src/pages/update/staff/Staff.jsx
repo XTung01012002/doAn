@@ -3,6 +3,7 @@ import { Layout, Menu } from 'antd';
 import { UserOutlined, AppstoreAddOutlined, FileTextOutlined } from '@ant-design/icons';
 import styles from './Staff.module.css';
 import AcceptOrder from './components/AcceptOrder/AcceptOrder';
+import AcceptedOrder from './components/AcceptedOrder/AcceptedOrder';
 
 const { Sider, Content } = Layout;
 
@@ -18,7 +19,7 @@ const Staff = () => {
             case '1':
                 return <AcceptOrder />;
             case '2':
-                return <div>Cập nhật hàng từ kho</div>;
+                return <AcceptedOrder />;
             case '3':
                 return <div>Tab 2 Content</div>;
             default:
