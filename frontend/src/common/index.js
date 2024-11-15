@@ -107,7 +107,10 @@ const SummaryApi = {
   },
   postCreateOrder: {
     url: `${backendDomin}/api/paymentinfo/create`,
-  }
+  },
+  postShipInfo:  {
+    url: `${backendDomin}/api/shippinginfo/create`
+}
 };
 
 export default SummaryApi;

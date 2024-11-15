@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { UserOutlined, AppstoreAddOutlined, FileTextOutlined } from '@ant-design/icons';
 import styles from './Staff.module.css';
-import AcceptOrder from './components/AcceptOrder';
+import AcceptOrder from './components/AcceptOrder/AcceptOrder';
 
 const { Sider, Content } = Layout;
 
