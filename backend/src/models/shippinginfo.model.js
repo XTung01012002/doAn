@@ -22,8 +22,8 @@ const shippingInfoSchema = new Schema(
     },
     shippingStatus: {
       type: String,
-      enum: ["Đang xử lý", "Đã lấy hàng", "Đang giao", "Đã giao", "Đã hủy"],
-      default: "Đang xử lý",
+      enum: ["Đang chờ đơn vị vận chuyển", "Đã lấy hàng", "Đang giao", "Đã giao", "Đã hủy"],
+      default: "Đang chờ đơn vị vận chuyển",
     },
     deliveryDate: {
       type: Date,

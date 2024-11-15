@@ -55,7 +55,7 @@ class ShippingInfoService {
     const statusMap = {
       "Đã giao": "Đã giao hàng",
       "Đã hủy": "Đã hủy",
-      "Đang giao": "Đang giao hàng",
+      "Đang chờ đơn vị vận chuyển": "Đang chờ đơn vị vận chuyển",
       "Đã lấy hàng": "Đang giao hàng",
     };
 
@@ -98,7 +98,9 @@ class ShippingInfoService {
   };
 
   static getAllShippingInfo = async () => {
-    const shippingInfo = await shippingInfoSchema.find();
+    const shippingInfo = await shippingInfoSchema.find().
+    populate("paymentInfo").exec();
+    ;
     return shippingInfo;
   };
 
