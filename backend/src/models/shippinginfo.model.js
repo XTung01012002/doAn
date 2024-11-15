@@ -33,6 +33,9 @@ const shippingInfoSchema = new Schema(
       required: true,
       min: 0,
     },
+    totalAmount: {
+      type: Number,
+    }
   },
   { timestamps: true }
 );
