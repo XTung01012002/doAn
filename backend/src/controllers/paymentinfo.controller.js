@@ -98,19 +98,27 @@ class PaymentInfoController {
   };
 
   // đối với sale
-  getAllConfirmedOrder = async (req, res) => {
-    const paymentInfos = await PaymentInfoService.getAllConfirmedOrder();
+  getAllConfirmedOrderSale = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllConfirmedOrderSale();
     new SuccessResponse({
-      message: "Lấy danh sách thông tin thanh toán thành công",
+      message: "Lấy tất cả đơn hàng đã xác nhận thành công",
       data: paymentInfos,
     }).send(res);
   };
-  getAllCanceledOrder = async (req, res) => {
-    const paymentInfos = await PaymentInfoService.getAllCanceledOrder();
+  getAllCanceledOrderSale = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllCanceledOrderSale();
     new SuccessResponse({
-      message: "Lấy danh sách thông tin thanh toán thành công",
+      message: "Lấy tất cả các đơn hàng đã hủy thành công",
       data: paymentInfos,
     }).send(res);
   };
+
+  getAllNotConfirmOrderSale = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllNotConfirmOrderSale();
+    new SuccessResponse({
+      message: "Lấy danh sách đơn hàng chưa xác nhận thành công",
+      data: paymentInfos,
+    }).send(res);
+}
 }
 module.exports = new PaymentInfoController();

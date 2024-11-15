@@ -226,19 +226,29 @@ class PaymentInfoService {
 
   // SALE
   // lấy tất cả đơn hàng đã xác nhận
-  static getAllConfirmedOrder = async () => {
+  static getAllConfirmedOrderSale = async () => {
     return await paymentInfoSchema
       .find({ confirmOrder: true })
       .populate("productList.productId")
       .exec();
   };
   // lấy tất cả các đơn hàng đã hủy
-  static getAllCanceledOrder = async () => {
+  static getAllCanceledOrderSale = async () => {
     return await paymentInfoSchema
       .find({ orderStatus: "Đã hủy" })
       .populate("productList.productId")
       .exec();
   };
+
+  // lấy tất cả các đơn hàng chưa xác nhận
+  static getAllNotConfirmOrderSale = async () => {
+    return await paymentInfoSchema
+      .find({ confirmOrder: false })
+      .populate("productList.productId")
+      .exec();
+  };
+
+
 }
 
 module.exports = PaymentInfoService;
