@@ -230,6 +230,7 @@ class PaymentInfoService {
     return await paymentInfoSchema
       .find({ confirmOrder: true })
       .populate("productList.productId")
+      .populate({ path: "userId", select: "name profilePic -_id" })
       .exec();
   };
   // lấy tất cả các đơn hàng đã hủy
@@ -237,6 +238,7 @@ class PaymentInfoService {
     return await paymentInfoSchema
       .find({ orderStatus: "Đã hủy" })
       .populate("productList.productId")
+      .populate({ path: "userId", select: "name profilePic -_id" })
       .exec();
   };
 
@@ -245,10 +247,9 @@ class PaymentInfoService {
     return await paymentInfoSchema
       .find({ confirmOrder: false })
       .populate("productList.productId")
+      .populate({ path: "userId", select: "name profilePic -_id" })
       .exec();
   };
-
-
 }
 
 module.exports = PaymentInfoService;
