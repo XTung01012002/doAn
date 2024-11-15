@@ -54,6 +54,10 @@ class ShippingInfoService {
     checkPaymentInfo.confirmOrder = true;
     await checkPaymentInfo.save();
 
+    // Tính tổng số tiền
+    let totalAmount = 0;
+    totalAmount += checkPaymentInfo.totalAmount + shippingFee;
+
     // Tạo thông tin vận chuyển
     const shippingInfo = await shippingInfoSchema.create({
       paymentInfo: id,
@@ -61,6 +65,7 @@ class ShippingInfoService {
       shippingMethod,
       deliveryDate,
       shippingFee,
+      totalAmount
     });
 
     return shippingInfo;
