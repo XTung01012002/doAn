@@ -1,0 +1,30 @@
+.customTabsHeight {
+    height: calc(100vh - 120px);
+}
+
+
+/* :global(.ant-tabs-left > .ant-tabs-content-holder > .ant-tabs-content > .ant-tabs-tabpane) {
+    padding: 0 !important;
+} */
+
+:global {
+    .ant-tabs-left>.ant-tabs-content-holder>.ant-tabs-content>.ant-tabs-tabpane {
+        padding: 0 !important;
+    }
+
+    .ant-menu-light.ant-menu-root.ant-menu-inline {
+        border-inline-end: 0 !important;
+    }
+
+}
+
+.customTabsHeight1 {
+    height: calc(100vh - 220px);
+    border-inline-end: 0 !important;
+    width: 100%;
+}
+
+.tabLabel {
+    pointer-events: none !important;
+    cursor: default !important;
+}
