@@ -1,10 +1,13 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Card, Col, Image, Row } from 'antd';
+import { Avatar, Button, Card, Col, Dropdown, Image, Row, Space } from 'antd';
 import styles from '../CustomScrollY.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDataBoughtUser } from '../../../../../store/bought/BoughtUser';
 import BoughtModal from './BoughtModal';
+
+
 
 const Bought = () => {
     const [expandedIndices, setExpandedIndices] = useState([]);
@@ -32,11 +35,12 @@ const Bought = () => {
     };
 
     return (
-        <div className={styles.customScrollbar}>
+        <div className={`${styles.customScrollbar}`}>
             <Row gutter={[16, 24]}>
                 {data?.map((items, index) => {
                     const isExpanded = expandedIndices[index];
                     const displayItems = isExpanded ? items.productList : [items.productList[0]];
+                    console.log('displayIems', items.productList.length);
 
                     return (
                         <Col className="gutter-row" span={24} key={index}>
@@ -49,16 +53,16 @@ const Bought = () => {
                                     {items.paymentStatus}
                                 </span>
                                 {displayItems?.map((item, itemIndex) => {
-                                    const totalPriceItem = item.productId.sellingPrice * item.quantity;
+                                    const totalPriceItem = item.productId?.sellingPrice * item.quantity;
 
                                     return (
                                         <Row gutter={[16, 24]} key={itemIndex} className='mb-4'>
                                             <Col className='gutter-row flex justify-center items-center' span={6}>
-                                                <Avatar
+                                                {/* <Avatar
                                                     shape="square"
                                                     size={150}
-                                                    icon={<Image src={item.productId.productImage[0]} />}
-                                                />
+                                                    icon={<Image src={item.productId?.productImage[0]} />}
+                                                /> */}
                                             </Col>
                                             <Col className='gutter-row' span={18}>
                                                 <Row gutter={[16, 24]} className='flex items-center'>
@@ -67,7 +71,7 @@ const Bought = () => {
                                                             <Col className='gutter-row' span={24}>
                                                                 <Row gutter={[16, 24]} className='flex items-center'>
                                                                     <Col className='gutter-row' span={24}>
-                                                                        <span className='font-medium'>{item.productId.productName}</span>
+                                                                        <span className='font-medium'>{item.productId?.productName}</span>
                                                                     </Col>
                                                                 </Row>
                                                             </Col>
@@ -75,8 +79,8 @@ const Bought = () => {
                                                                 <Row gutter={[16, 24]} className='flex items-center'>
                                                                     <Col className='gutter-row' span={12}>
                                                                         <div>
-                                                                            <span className='mr-2 text-[#B0B3B8] line-through'>{item.productId.price.toLocaleString('vi-VN')} đ</span>
-                                                                            <span className='font-medium'>{item.productId.sellingPrice.toLocaleString('vi-VN')} đ</span>
+                                                                            <span className='mr-2 text-[#B0B3B8] line-through'>{item.productId?.price.toLocaleString('vi-VN')} đ</span>
+                                                                            <span className='font-medium'>{item.productId?.sellingPrice.toLocaleString('vi-VN')} đ</span>
                                                                         </div >
                                                                     </Col>
                                                                     <Col className='gutter-row flex justify-end' span={12}>
@@ -129,36 +133,38 @@ const Bought = () => {
                                     </Col>
                                 </Row>
 
-                                <div className="flex items-center justify-center mt-4">
-                                    <div className="w-1/4 border-t border-gray-300"></div>
-                                    <div className="mx-4 text-center">
-                                        {items.productList.length > 1 && !isExpanded && (
-                                            <Row className="">
-                                                <Button
-                                                    className={styles.noHover}
-                                                    color="default"
-                                                    variant="text"
-                                                    onClick={() => toggleExpanded(index)}
-                                                >
-                                                    Xem thêm
-                                                </Button>
-                                            </Row>
-                                        )}
-                                        {isExpanded && (
-                                            <Row className="">
-                                                <Button
-                                                    className={styles.noHover}
-                                                    color="default"
-                                                    variant="text"
-                                                    onClick={() => toggleExpanded(index)}
-                                                >
-                                                    Thu gọn
-                                                </Button>
-                                            </Row>
-                                        )}
+                                {items.productList.length > 1 &&
+                                    <div className="flex items-center justify-center mt-4">
+                                        <div className="w-1/4 border-t border-gray-300"></div>
+                                        <div className="mx-4 text-center">
+                                            {items.productList.length > 1 && !isExpanded && (
+                                                <Row className="">
+                                                    <Button
+                                                        className={styles.noHover}
+                                                        color="default"
+                                                        variant="text"
+                                                        onClick={() => toggleExpanded(index)}
+                                                    >
+                                                        Xem thêm
+                                                    </Button>
+                                                </Row>
+                                            )}
+                                            {isExpanded && (
+                                                <Row className="">
+                                                    <Button
+                                                        className={styles.noHover}
+                                                        color="default"
+                                                        variant="text"
+                                                        onClick={() => toggleExpanded(index)}
+                                                    >
+                                                        Thu gọn
+                                                    </Button>
+                                                </Row>
+                                            )}
+                                        </div>
+                                        <div className="w-1/4 border-t border-gray-300"></div>
                                     </div>
-                                    <div className="w-1/4 border-t border-gray-300"></div>
-                                </div>
+                                }
                             </Card>
                         </Col>
                     );
@@ -169,6 +175,7 @@ const Bought = () => {
                 setOpen={setOpen}
                 data={dataModal}
             />
+
         </div>
     );
 };
