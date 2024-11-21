@@ -1,5 +1,4 @@
 import { Button, DatePicker, Form, Input, Modal, Select } from 'antd';
-import moment from 'moment';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateShipInfo } from '../../../../../store/shipinfo/ShipInfoCreate';
@@ -18,7 +17,7 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
         dispatch(CreateShipInfo(id, values))
         setOpen(sub)
     };
- 
+
     return (
         <>
             {error ?
@@ -57,7 +56,7 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
                             <Input placeholder="Nhập mã vận chuyển" />
                         </Form.Item>
 
-                        <Form.Item
+                        {/* <Form.Item
                             label="Phương thức vận chuyển"
                             name="shippingMethod"
                             rules={[
@@ -69,7 +68,7 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
                                 <Select.Option value="Chuyển phát tiêu chuẩn">Chuyển phát tiêu chuẩn</Select.Option>
                                 <Select.Option value="Giao hàng tiết kiệm">Giao hàng tiết kiệm</Select.Option>
                             </Select>
-                        </Form.Item>
+                        </Form.Item> */}
 
                         <Form.Item
                             label="Ngày giao hàng"
@@ -85,7 +84,7 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
                             />
                         </Form.Item>
 
-                        <Form.Item
+                        {/* <Form.Item
                             label="Phí vận chuyển"
                             name='shippingFee'
                             rules={[
@@ -93,8 +92,8 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
                             ]}
                         >
                             <Input placeholder="Nhập phí vận chuyển" />
-                        </Form.Item>
-
+                        </Form.Item> */}
+                       
                         <Form.Item className='flex justify-end'>
                             <Button
                                 type="primary"
@@ -105,8 +104,8 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
                             </Button>
                         </Form.Item>
                     </Form>
-                </Modal>        
-        }
+                </Modal>
+            }
         </>
     );
 };

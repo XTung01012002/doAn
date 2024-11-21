@@ -43,23 +43,6 @@ const AcceptedModal = ({ open, setOpen, data }) => {
                 onCancel={handleClickCannel}
                 centered
                 width={700}
-
-                okButtonProps={{
-                    style: {
-                        backgroundColor: '#1890ff',
-                        borderColor: '#1890ff',
-                        color: '#fff'
-                    },
-                }}
-                cancelButtonProps={{
-                    style: {
-                        color: '#fff',
-                        borderColor: '#ff4d4f',
-                        backgroundColor: '#ff4d4f'
-                    },
-
-
-                }}
                 footer={false}
             >
                 <Row

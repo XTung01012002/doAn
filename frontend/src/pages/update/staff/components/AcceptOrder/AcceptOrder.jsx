@@ -4,6 +4,7 @@ import AcceptOderModal from './AcceptOderModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchDataBoughtUser } from '../../../../../store/bought/BoughtUser'
 import { IoCheckmarkDone } from "react-icons/io5";
+import formatAmount from '../../../../../components/formatNumber/FormatNumber'
 
 const AcceptOrder = () => {
     const dispatch = useDispatch();
@@ -64,8 +65,12 @@ const AcceptOrder = () => {
         },
         {
             key: 'name',
-            dataIndex: '',
-            title: 'Tên khách hàng'
+            dataIndex: 'userId',
+            title: 'Tên khách hàng',
+            render: (userId) => {
+
+                return `${userId.name}`
+            }
         },
         {
             key: 'phone',
@@ -89,7 +94,10 @@ const AcceptOrder = () => {
         {
             key: 'totalAmount',
             dataIndex: 'totalAmount',
-            title: 'Tổng tiền'
+            title: 'Tổng tiền',
+            render: (value) => {
+                return `${formatAmount(value)} VNĐ`
+            }
         },
         {
             key: 'paymentStatus',
@@ -128,7 +136,7 @@ const AcceptOrder = () => {
             <Table
                 columns={column}
                 dataSource={dataSource}
-                
+                pagination={{ pageSize: 10 }}
             />
 
             <AcceptOderModal open={open} setOpen={setOpen} id={id} />

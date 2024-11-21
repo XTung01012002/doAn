@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetAllInfoShipOrder } from '../../../../../store/shipinfo/GetAllOrderShipInfo';
 import { Button, Table } from 'antd';
-import { FaEye } from "react-icons/fa";
+import formatAmount from '../../../../../components/formatNumber/FormatNumber';
+import { MdOutlineRemoveRedEye } from "react-icons/md";
 
 
 
@@ -22,7 +23,10 @@ const AcceptedOrder = () => {
         {
             key: '_id',
             dataIndex: '_id',
-            title: 'ID'
+            title: 'ID',
+            render: (text) => (
+                <span className="truncate block max-w-[100px]">{text.length > 15 ? `${text.slice(0, 15)}...` : text}</span>
+            ),
         },
         {
             key: 'createdAt',
@@ -67,6 +71,14 @@ const AcceptedOrder = () => {
             }
         },
         {
+            key: 'totalAmount',
+            dataIndex: 'totalAmount',
+            title: 'Giá tiền',
+            render: (totalAmount) => {
+                return `${formatAmount(totalAmount)} VNĐ`
+            }
+        },
+        {
             key: 'action',
             dataIndex: 'action',
             title: 'Xem chi tiết',
@@ -77,7 +89,7 @@ const AcceptedOrder = () => {
                         color='default'
                         onClick={() => setId(data._id)}
                     >
-                        <FaEye
+                        <MdOutlineRemoveRedEye
                             color='blue'
                             size={20}
                         />
@@ -91,6 +103,7 @@ const AcceptedOrder = () => {
         <Table
             columns={column}
             dataSource={dataSource}
+            pagination={{ pageSize: 10 }}
         />
     )
 }

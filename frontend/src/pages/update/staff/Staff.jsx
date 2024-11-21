@@ -4,8 +4,12 @@ import { UserOutlined, AppstoreAddOutlined, FileTextOutlined } from '@ant-design
 import styles from './Staff.module.css';
 import AcceptOrder from './components/AcceptOrder/AcceptOrder';
 import AcceptedOrder from './components/AcceptedOrder/AcceptedOrder';
+import ProductManager from './components/ProductManager/ProductManager';
 
 const { Sider, Content } = Layout;
+
+
+
 
 const Staff = () => {
     const [selectedKey, setSelectedKey] = useState('1');
@@ -23,7 +27,7 @@ const Staff = () => {
             case '3':
                 return <div>Tab 2 Content</div>;
             default:
-                return <div>Content not available</div>;
+                return <ProductManager />;
         }
     };
 
@@ -49,7 +53,7 @@ const Staff = () => {
                         Danh sách đơn hủy
                     </Menu.Item>
                     <Menu.Item key="4" icon={<FileTextOutlined />}>
-                        Danh sách sản phẩm từ kho
+                        Quản lý sản phẩm
                     </Menu.Item>
                 </Menu>
             </Sider>

@@ -1,9 +1,9 @@
 .customScrollbar {
     position: relative;
-    /* max-height: 900px; */
-    padding: 40px 144px;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-inline: 50px;
+    padding-top: 5%;
 }
 
 .customScrollbar::-webkit-scrollbar {
