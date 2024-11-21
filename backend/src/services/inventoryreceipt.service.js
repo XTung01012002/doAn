@@ -34,7 +34,6 @@ class InventoryReceiptService {
 
     // Cập nhật số lượng sản phẩm trong kho song song
     const updatePromises = productList.map(async (item) => {
-        
       const product = products.find((p) => p._id.toString() === item.productId);
       product.quantity += item.quantity;
       product.priceInventory = item.price;
@@ -81,8 +80,19 @@ class InventoryReceiptService {
   };
 
   static getAll = async () => {
-    const inventoryReceipt = await inventoryReceiptSchema.find();
-    return inventoryReceipt;
+    const inventoryReceipts = await inventoryReceiptSchema.find().populate({
+      path: "productList",
+      populate: {
+        path: "productId",
+        select: "productName brandName category -_id",
+      },
+    }).lean();
+    
+    const result = inventoryReceipts.map((receipt) => ({
+      ...receipt,
+      productList: receipt.productList.map(({ _id, ...product }) => product),
+    }));
+    return result;
   };
 }
 
