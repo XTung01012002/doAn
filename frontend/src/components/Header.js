@@ -100,7 +100,7 @@ const Header = () => {
             </Link>
           )}
 
-          
+
           <div className="relative flex justify-center">
             {user?._id && (
               <div
@@ -120,7 +120,7 @@ const Header = () => {
             )}
 
             {menuDisplay && (
-              <div className="absolute bottom-0 top-11 h-fit p-2 shadow-lg rounded z-50 bg-white">
+              <div className="absolute bottom-0 top-11 h-fit px-10 py-4 shadow-2xl shadow-slate-400 rounded z-50 bg-white">
                 <nav>
                   {user?.role === "ADMIN" && (
                     <Link
@@ -131,6 +131,24 @@ const Header = () => {
                       Admin Panel
                     </Link>
                   )}
+                  <Link
+                    to={'/staff'}
+                    className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
+                  >
+                    Nhân viên
+                  </Link>
+                  <Link
+                    to={'/admin/warehouse'}
+                    className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
+                  >
+                    Kho
+                  </Link>
+                  <Link
+                    to={'/order'}
+                    className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
+                  >
+                    Đơn hàng
+                  </Link>
                   {user?._id && (
                     <div className="flex justify-center">
                       <Button
@@ -149,7 +167,7 @@ const Header = () => {
             )}
           </div>
 
-         
+
 
           <div>
             {/* {user?._id ? (

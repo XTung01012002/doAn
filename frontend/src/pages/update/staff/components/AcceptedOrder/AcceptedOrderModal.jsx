@@ -3,65 +3,27 @@ import React, { useState } from 'react'
 import styles from './ButtonStyles.module.css'
 
 
-const BoughtModal = ({ open, setOpen, data }) => {
+const AcceptedModal = ({ open, setOpen, data }) => {
 
-
-    console.log(data);
-
-
-    const [value, setValue] = useState(1);
+    // const [value, setValue] = useState(1);
     const [fix, setFix] = useState(false)
-
-    const onChange1 = (e) => {
-        console.log('radio checked', e.target.value);
-        setValue(e.target.value);
-    };
-    console.log('dataa', data);
     if (!data) {
         return null;
     }
     const handleClickOK = () => {
 
         setOpen(false)
-        setValue(1)
+        // setValue(1)
     }
 
     const handleClickCannel = () => {
         setOpen(false)
-        setValue(1)
+        // setValue(1)
     }
 
     const onChange = (key) => {
         console.log(key);
     };
-
-    const items = [
-        {
-            key: '1',
-            label: <div className='font-bold text-[16px]'>Hình thức thanh toán</div>,
-            children:
-                <>
-                    <Radio.Group onChange={onChange1} value={value}>
-                        <Space direction="vertical">
-                            <Radio value={1}>Thanh toán khi nhận hàng</Radio>
-                            <Radio value={2}>Chuyển khoản ngân hàng</Radio>
-                        </Space>
-                    </Radio.Group>
-                    {value === 2 &&
-                        <img
-                            src="https://img.vietqr.io/image/TCB-19037144050012-compact.png"
-                            alt="QR Code"
-                            width="256"
-                            height="256"
-                            className="mx-auto"
-                        />
-                    }
-                </>
-
-            ,
-        },
-
-    ];
 
     const vt = 24000
 
@@ -81,23 +43,6 @@ const BoughtModal = ({ open, setOpen, data }) => {
                 onCancel={handleClickCannel}
                 centered
                 width={700}
-
-                okButtonProps={{
-                    style: {
-                        backgroundColor: '#1890ff',
-                        borderColor: '#1890ff',
-                        color: '#fff'
-                    },
-                }}
-                cancelButtonProps={{
-                    style: {
-                        color: '#fff',
-                        borderColor: '#ff4d4f',
-                        backgroundColor: '#ff4d4f'
-                    },
-
-
-                }}
                 footer={false}
             >
                 <Row
@@ -233,18 +178,6 @@ const BoughtModal = ({ open, setOpen, data }) => {
                         <hr />
                     </Col>
                     <Col className="gutter-row" span={24}>
-                        <Collapse
-                            onChange={onChange}
-                            ghost
-                            expandIconPosition={'end'}
-                            items={items}
-                            className={styles.customCollapseHeader}
-                        />
-                    </Col>
-                    <Col span={24}>
-                        <hr />
-                    </Col>
-                    <Col className="gutter-row" span={24}>
                         <div className='flex justify-between'>
                             <div className='mb-5 font-bold text-[16px]'>
                                 Thanh toán
@@ -304,4 +237,4 @@ const BoughtModal = ({ open, setOpen, data }) => {
     )
 }
 
-export default BoughtModal
+export default AcceptedModal

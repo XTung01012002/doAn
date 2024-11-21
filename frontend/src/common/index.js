@@ -94,8 +94,25 @@ const SummaryApi = {
     method: "delete",
   },
   getAllNotConfirm: {
-    url: `${backendDomin}/api/paymentinfo/all-not-confirm-order`,
+    url: `${backendDomin}/api/paymentinfo/all-not-confirm-order-sale`,
     method: "get"
+  },
+  getAllCanceledOrder: {
+    url: `${backendDomin}/api/paymentinfo/all-canceled-order-sale`,
+    method: "get"
+  },
+  postCreateCart: {
+    url: `${backendDomin}/api/paymentinfo/create`,
+    method: 'post'
+  },
+  postCreateOrder: {
+    url: `${backendDomin}/api/paymentinfo/create`,
+  },
+  postShipInfo: {
+    url: `${backendDomin}/api/shippinginfo/create`,
+  },
+  getAllOrderShipInfor: {
+    url: `${backendDomin}/api/shippinginfo/all`
   }
 };
 

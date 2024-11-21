@@ -9,6 +9,8 @@ export const fetchDataBoughtUser = createAsyncThunk('data/fetchDataBoughtUser', 
             {
                 withCredentials: true
             })
+        console.log('dadada', response.data.data);
+        
         return response.data.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || "Error fetching data");
