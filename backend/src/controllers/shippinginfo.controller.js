@@ -4,8 +4,8 @@ const ShippingInfoService = require("../services/shippinginfo.service");
 class ShippingInfoController {
   create = async (req, res, next) => {
     const shippingInfo = await ShippingInfoService.createShip(
-      req.body,
-      req.params.id
+      req.params.id,
+      req.body
     );
     new SuccessResponse({
       message: "Tạo thông tin vận chuyển thành công",

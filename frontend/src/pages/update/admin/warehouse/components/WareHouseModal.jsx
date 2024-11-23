@@ -56,8 +56,8 @@ const WareHouseModal = ({ open, setOpen }) => {
             }));
             setOptions(tmp);
         }
-    }, []);
-    // }, [dataWH, options]);
+    // }, []);
+    }, [dataWH, options]);
 
 
 
