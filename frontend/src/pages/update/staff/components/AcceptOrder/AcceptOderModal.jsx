@@ -11,7 +11,7 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
     const error = useSelector((state) => state.createShipInfo.error)
     const handleSubmit = (values) => {
         if (values.deliveryDate) {
-            values.deliveryDate = values.deliveryDate.format('DD-MM-YYYY');
+            values.deliveryDate = values.deliveryDate.format('YYYY-MM-DD');
         }
         if (values.shippingFee) {
             values.shippingFee = parseFloat(values.shippingFee.replace(/,/g, ''));
