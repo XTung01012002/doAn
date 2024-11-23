@@ -100,11 +100,13 @@ const AcceptedOrder = () => {
     ]
 
     return (
-        <Table
-            columns={column}
-            dataSource={dataSource}
-            pagination={{ pageSize: 10 }}
-        />
+        <div>
+            <Table
+                columns={column}
+                dataSource={dataSource}
+                pagination={{ pageSize: 10 }}
+            />
+        </div>
     )
 }
 

@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/heading-has-content */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useContext, useEffect, useRef, useState } from "react";
 import fetchCategoryWiseProduct from "../helpers/fetchCategoryWiseProduct";
 import displayVNDCurrency from "../helpers/displayVNDCurrency";
@@ -11,7 +14,7 @@ const HorizontalCardProduct = ({ category, heading }) => {
   const [loading, setLoading] = useState(true);
   const loadingList = new Array(13).fill(null);
 
-  const [scroll, setScroll] = useState(0);
+  // const [scroll, setScroll] = useState(0);
   const scrollElement = useRef();
 
   const { fetchUserAddToCart } = useContext(Context);
@@ -86,6 +89,7 @@ const HorizontalCardProduct = ({ category, heading }) => {
                   <div className="bg-slate-200 h-full p-4 min-w-[120px] md:min-w-[145px]">
                     <img
                       src={product.productImage[0]}
+                      alt={product.productImage[0]}
                       className="object-scale-down h-full hover:scale-110 transition-all"
                     />
                   </div>
