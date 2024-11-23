@@ -14,16 +14,16 @@ const AcceptOrder = () => {
     useEffect(() => {
         dispatch(fetchDataBoughtUser());
     }, [dispatch]);
+    
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 4; 
 
 
     const column = [
         {
-            key: '_id',
-            dataIndex: '_id',
-            title: 'ID',
-            render: (text) => (
-                <span className="truncate block max-w-[100px]">{text.length > 15 ? `${text.slice(0, 15)}...` : text}</span>
-            ),
+            key: 'stt',
+            title: 'STT',
+            render: (_text, _record, index) => (currentPage - 1) * pageSize + index + 1, // Tính STT dựa trên trang hiện tại
         },
         {
             key: 'createdAt',
@@ -136,7 +136,10 @@ const AcceptOrder = () => {
             <Table
                 columns={column}
                 dataSource={dataSource}
-                pagination={{ pageSize: 10 }}
+                pagination={{
+                    pageSize: pageSize,
+                    onChange: (page) => setCurrentPage(page), // Cập nhật trang hiện tại
+                }}
             />
 
             <AcceptOderModal open={open} setOpen={setOpen} id={id} />
