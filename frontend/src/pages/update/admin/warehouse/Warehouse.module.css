@@ -1,24 +1,30 @@
-.customScrollbar {
-    position: relative;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-inline: 50px;
-    padding-top: 5%;
+.customTabsHeight {
+    height: calc(100vh - 120px);
 }
 
-.customScrollbar::-webkit-scrollbar {
-    width: 8px;
+
+/* :global(.ant-tabs-left > .ant-tabs-content-holder > .ant-tabs-content > .ant-tabs-tabpane) {
+    padding: 0 !important;
+} */
+
+:global {
+    .ant-tabs-left>.ant-tabs-content-holder>.ant-tabs-content>.ant-tabs-tabpane {
+        padding: 0 !important;
+    }
+
+    .ant-menu-light.ant-menu-root.ant-menu-inline {
+        border-inline-end: 0 !important;
+    }
+
 }
 
-.customScrollbar::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
+.customTabsHeight1 {
+    height: calc(100vh - 220px);
+    border-inline-end: 0 !important;
+    width: 100%;
 }
 
-.customScrollbar::-webkit-scrollbar-thumb {
-    background-color: #E3E3E3;
-    border-radius: 9999px;
-}
-
-.customScrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #CDCDCD;
+.tabLabel {
+    pointer-events: none !important;
+    cursor: default !important;
 }

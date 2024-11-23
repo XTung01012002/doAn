@@ -102,12 +102,12 @@ const AcceptOrder = () => {
         {
             key: 'paymentStatus',
             dataIndex: 'paymentStatus',
-            title: 'Trạng thái thanh toán'
+            title: 'Thanh toán'
         },
         {
             key: 'status',
             dataIndex: 'orderStatus',
-            title: 'Trạng thái đơn hàng'
+            title: 'Đơn hàng'
         },
         {
             key: 'action',
