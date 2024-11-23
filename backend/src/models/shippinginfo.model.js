@@ -22,7 +22,13 @@ const shippingInfoSchema = new Schema(
     },
     shippingStatus: {
       type: String,
-      enum: ["Đang chờ đơn vị vận chuyển", "Đã lấy hàng", "Đang giao", "Đã giao", "Đã hủy"],
+      enum: [
+        "Đang chờ đơn vị vận chuyển",
+        "Đã lấy hàng",
+        "Đang giao",
+        "Đã giao",
+        "Đã hủy",
+      ],
       default: "Đang chờ đơn vị vận chuyển",
     },
     deliveryDate: {
@@ -33,11 +39,14 @@ const shippingInfoSchema = new Schema(
       required: true,
       min: 0,
     },
+
     totalAmount: {
       type: Number,
-    }
+    },
   },
   { timestamps: true }
 );
 
-module.exports= { shippingInfoSchema: model("shippingInfo", shippingInfoSchema) };
+module.exports = {
+  shippingInfoSchema: model("shippingInfo", shippingInfoSchema),
+};

@@ -4,14 +4,17 @@ const { paymentInfoSchema } = require("../models/paymentinfo.model");
 const { productSchema } = require("../models/product.model");
 
 class ShippingInfoService {
-  static createShip = async (data, id) => {
+  static createShip = async (id, data) => {
     const { maVanDon, shippingMethod, deliveryDate, shippingFee } = data;
+    console.log("data:::", data);
+    console.log(maVanDon, shippingMethod, deliveryDate, shippingFee);
 
     // Kiểm tra xem thông tin thanh toán có tồn tại không
     const checkPaymentInfo = await paymentInfoSchema.findById(id);
     if (!checkPaymentInfo) {
       throw new BadRequestError("Thông tin thanh toán không tồn tại");
     }
+    console.log("checkPaymentInfo:::", checkPaymentInfo);
 
     // Lấy danh sách sản phẩm từ thông tin thanh toán
     const productList = checkPaymentInfo.productList;
@@ -65,7 +68,7 @@ class ShippingInfoService {
       shippingMethod,
       deliveryDate,
       shippingFee,
-      totalAmount
+      totalAmount: totalAmount,
     });
 
     return shippingInfo;
