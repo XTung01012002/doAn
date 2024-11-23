@@ -58,11 +58,11 @@ const Bought = () => {
                                     return (
                                         <Row gutter={[16, 24]} key={itemIndex} className='mb-4'>
                                             <Col className='gutter-row flex justify-center items-center' span={6}>
-                                                {/* <Avatar
+                                                <Avatar
                                                     shape="square"
                                                     size={150}
                                                     icon={<Image src={item.productId?.productImage[0]} />}
-                                                /> */}
+                                                />
                                             </Col>
                                             <Col className='gutter-row' span={18}>
                                                 <Row gutter={[16, 24]} className='flex items-center'>

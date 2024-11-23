@@ -25,7 +25,7 @@ const Staff = () => {
             case '2':
                 return <AcceptedOrder />;
             case '3':
-                return <div>Tab 2 Content</div>;
+                return <div>Chưa có API đâu</div>;
             default:
                 return <ProductManager />;
         }

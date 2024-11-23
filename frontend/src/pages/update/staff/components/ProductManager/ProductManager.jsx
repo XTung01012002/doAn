@@ -53,11 +53,13 @@ const ProductManager = () => {
                         {productImage.length > 0 ?
                             <Image
                                 width={50}
+                                height={50}
                                 src={productImage[0]}
                             />
                             :
                             <Image
                                 width={50}
+                                height={50}
                                 src=' https://imgs.search.brave.com/jt84d5SmMRH9IYwpquW1be6mriU5QEgM7G1ML6O8rsU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oYXlj/YWZlLnZuL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzA2L0hp/bmgtYW5oLUF2YXRh/ci10cmFuZy10cm9u/LTYwMHg2MDAuanBn'
                             />
                         }
@@ -154,6 +156,7 @@ const ProductManager = () => {
             <Table
                 columns={column}
                 dataSource={dataSource}
+                pagination={{pageSize: 7}}
 
             />
             <EditProductModal open={open} setOpen={setOpen} />

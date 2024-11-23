@@ -2,9 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, Button, Image, Space, Table } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchDataWarehouse } from '../../../../store/admin/warehouse/Warahouse';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import styles from './Warehouse.module.css';
+import { fetchDataWarehouse } from '../../../../../store/admin/warehouse/Warahouse';
 import WareHouseModal from './WareHouseModal';
 
 const maxLength = 20;
@@ -15,9 +13,7 @@ const columns = [
         dataIndex: '_id',
         key: '_id',
         render: (text) => (
-            <span className="truncate block max-w-[100px]">
-                {text && text.length > maxLength ? `${text.slice(0, maxLength)}...` : text || 'Không có dữ liệu'}
-            </span>
+            <span className="truncate block max-w-[100px]">{text.length > 15 ? `${text.slice(0, 15)}...` : text}</span>
         ),
     },
     {
@@ -25,14 +21,12 @@ const columns = [
         dataIndex: 'createdAt',
         key: 'createdAt',
         render: (createdAt) => {
-            if (!createdAt) return 'Không có dữ liệu';
-            const date = new Date(createdAt);
-            return date.toLocaleDateString('vi-VN', {
-                year: 'numeric',
-                month: '2-digit',
+            return createdAt ? new Date(createdAt).toLocaleDateString('vi-VN', {
                 day: '2-digit',
-            });
-        },
+                month: '2-digit',
+                year: 'numeric'
+            }) : '';
+        }
     },
     {
         title: <span >Ảnh sản phẩm</span>,
@@ -57,9 +51,7 @@ const columns = [
         dataIndex: 'productName',
         key: 'productName',
         render: (text) => (
-            <span className="truncate block max-w-[200px]">
-                {text && text.length > maxLength ? `${text.slice(0, maxLength)}...` : text || 'Không có dữ liệu'}
-            </span>
+            <span className="truncate block max-w-[100px]">{text.length > 15 ? `${text.slice(0, 15)}...` : text}</span>
         ),
     },
     {
@@ -67,9 +59,7 @@ const columns = [
         dataIndex: 'brandName',
         key: 'brandName',
         render: (text) => (
-            <span className="truncate block max-w-[200px]">
-                {text && text.length > maxLength ? `${text.slice(0, maxLength)}...` : text || 'Không có dữ liệu'}
-            </span>
+            <span className="truncate block max-w-[100px]">{text.length > 15 ? `${text.slice(0, 15)}...` : text}</span>
         ),
     },
     {
@@ -77,16 +67,16 @@ const columns = [
         dataIndex: 'category',
         key: 'category',
         render: (text) => (
-            <span className="truncate block max-w-[200px]">
-                {text && text.length > maxLength ? `${text.slice(0, maxLength)}...` : text || 'Không có dữ liệu'}
-            </span>
+            <span className="truncate block max-w-[100px]">{text.length > 15 ? `${text.slice(0, 15)}...` : text}</span>
         ),
     },
     {
         title: <span >Giá nhập hàng</span>,
         dataIndex: 'price',
         key: 'price',
-        render: (price) => price || 'Không có dữ liệu',
+        render: (text) => (
+            <span className="truncate block max-w-[100px]">{text.length > 15 ? `${text.slice(0, 15)}...` : text}</span>
+        ),
     },
     // {
     //     title: <span >Giá khuyến mãi</span>,
@@ -133,15 +123,15 @@ const Warehouse = () => {
     const dispatch = useDispatch();
     const dataWH = useSelector((state) => state.warehouse.data || []);
     const [open, setOpen] = useState(false)
-    
+
     useEffect(() => {
         dispatch(fetchDataWarehouse());
     }, [dispatch]);
 
     return (
-        <div className={styles.customScrollbar}>
-            <Space
-                className='flex justify-end pb-4'
+        <>
+            <div
+                className='flex justify-end pb-2'
             >
                 <Button
                     variant='solid'
@@ -150,15 +140,15 @@ const Warehouse = () => {
                 >
                     Thêm sản phẩm
                 </Button>
-            </Space>
+            </div>
             <Table
                 columns={columns}
                 dataSource={dataWH}
-                pagination={{ pageSize: 10 }}
+                pagination={{ pageSize: 6 }}
             />
 
             <WareHouseModal open={open} setOpen={setOpen} />
-        </div>
+        </>
     );
 };
 

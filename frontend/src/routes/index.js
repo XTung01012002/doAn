@@ -15,8 +15,9 @@ import Payment from "../pages/Payment";
 import ResetPassword from "../pages/ResetPassword";
 import Notification from "../pages/Notification";
 import OrderPage from '../pages/update/order'
-import Warehouse from "../pages/update/admin/warehouse/Warehouse";
+// import Warehouse from "../pages/update/admin/warehouse/components/Warehouse";
 import Staff from "../pages/update/staff/Staff";
+import WarehouseAdmin from "../pages/update/admin/warehouse";
 
 
 const router = createBrowserRouter([
@@ -88,7 +89,7 @@ const router = createBrowserRouter([
       },
       {
         path: "admin/warehouse",
-        element: <Warehouse />
+        element: <WarehouseAdmin />
       },
       {
         path: "staff",
