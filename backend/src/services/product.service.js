@@ -3,7 +3,7 @@ const { BadRequestError } = require("../responseHandle/error.response");
 const { cartProductSchema } = require("../models/cartproduct.model");
 
 class ProductService {
-  static uploadProduct = async (productData) => {
+  static uploadProducts = async (productData) => {
     const products = await productSchema.insertMany(productData);
       return products;
   }

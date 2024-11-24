@@ -3,8 +3,8 @@ const { SuccessResponse } = require("../responseHandle/success.response");
 const ProductService = require("../services/product.service");
 
 class ProductController {
-  uploadProduct = async (req, res, next) => {
-    const product = await ProductService.uploadProduct(req.body);
+  uploadProducts = async (req, res, next) => {
+    const product = await ProductService.uploadProducts(req.body);
     new SuccessResponse({
       message: "Upload product success",
       data: product,
