@@ -27,7 +27,8 @@ class PaymentInfoService {
       })
       .populate({
         path: "productList.productId",
-        select: "productName brandName category productImage description price",
+        select:
+          "productName brandName category productImage description price sellingPrice ",
       })
       .populate({ path: "userId", select: "name profilePic -_id" })
       .lean()
@@ -244,8 +245,6 @@ class PaymentInfoService {
 
   // lấy tất cả các đơn hàng chưa xác nhận
   static getAllNotConfirmOrderSale = async () => {
-
-    
     return await paymentInfoSchema
       .find({ confirmOrder: false })
       .populate("productList.productId")
