@@ -4,20 +4,21 @@ const { cartProductSchema } = require("../models/cartproduct.model");
 
 class ProductService {
   static uploadProduct = async (productData) => {
-    try {
-      const { productName, brandName, category, productImage } = productData;
-      const product = new productSchema({
-        productName,
-        brandName,
-        category,
-        productImage,
-      });
-      await product.save();
-      return product;
-    } catch (error) {
-      throw new BadRequestError(`${error.message}`);
-    }
-  };
+    const products = await productSchema.insertMany(productData);
+      return products;
+  }
+
+ // thêm 1 hoặc nhiều sản phẩm
+  // static uploadProducts = async (productData) => {
+  //   try {
+  //     const products = await productSchema.insertMany(productData);
+  //     return products;
+  //   } catch (error) {
+  //     throw new BadRequestError(`${error.message}`);
+  //   }
+  // };
+
+
 
   static getAllProducts = async () => {
     try {
