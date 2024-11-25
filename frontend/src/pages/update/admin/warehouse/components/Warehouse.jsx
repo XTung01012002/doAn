@@ -1,10 +1,11 @@
 
 import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Image, Space, Table } from 'antd';
+import { Avatar, Button, Image, Space, Steps, Table } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchDataWarehouse } from '../../../../../store/admin/warehouse/Warahouse';
 import WareHouseModal from './WareHouseModal';
-
+import ModalAddProduct from './ModalAddProduct';
+import { LoadingOutlined } from '@ant-design/icons';
 const maxLength = 20;
 
 const columns = [
@@ -123,30 +124,39 @@ const Warehouse = () => {
     const dispatch = useDispatch();
     const dataWH = useSelector((state) => state.warehouse.data || []);
     const [open, setOpen] = useState(false)
-
+    const [open1, setOpen1] = useState(false)
     useEffect(() => {
         dispatch(fetchDataWarehouse());
     }, [dispatch]);
-
+    const [loading, setLoading] = useState(true)
     return (
         <>
             <div
                 className='flex justify-end pb-2'
             >
-                <Button
-                    variant='solid'
-                    color='primary'
-                    onClick={() => setOpen(true)}
-                >
-                    Thêm sản phẩm
-                </Button>
+                <Space>
+                    <Button
+                        variant='outlined'
+                        color='primary'
+                        onClick={() => setOpen1(true)}
+                    >
+                        Thêm sản phẩm
+                    </Button>
+                    <Button
+                        variant='solid'
+                        color='primary'
+                        onClick={() => setOpen(true)}
+                    >
+                        Nhập hàng
+                    </Button>
+                </Space>
             </div>
             <Table
                 columns={columns}
                 dataSource={dataWH}
                 pagination={{ pageSize: 6 }}
             />
-
+            <ModalAddProduct open={open1} setOpen={setOpen1} />
             <WareHouseModal open={open} setOpen={setOpen} />
         </>
     );

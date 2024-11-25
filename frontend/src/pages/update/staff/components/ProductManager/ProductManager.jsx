@@ -12,6 +12,7 @@ const ProductManager = () => {
 
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false)
+    const [id, setID] = useState(null)
     const dataSource = useSelector(state => state.warehouse.data)
     useEffect(() => {
         dispatch(fetchDataWarehouse())
@@ -21,6 +22,7 @@ const ProductManager = () => {
         console.log(`switch to ${checked}`);
     };
 
+console.log(id);
 
     const column = [
         {
@@ -136,15 +138,15 @@ const ProductManager = () => {
                             color='primary'
                             shape="circle"
                             icon={<AiOutlineEdit size={20} />}
-                            onClick={() => setOpen(true)}
+                            onClick={() => { setOpen(true); setID(data._id) }}
                         />
-                        <Button
+                        {/* <Button
                             variant='text'
                             className='border-none '
                             color='danger'
                             shape="circle"
                             icon={<CiTrash size={20} />}
-                        />
+                        /> */}
                     </Space>
                 )
             }
@@ -156,10 +158,10 @@ const ProductManager = () => {
             <Table
                 columns={column}
                 dataSource={dataSource}
-                pagination={{pageSize: 7}}
+                pagination={{ pageSize: 7 }}
 
             />
-            <EditProductModal open={open} setOpen={setOpen} />
+            <EditProductModal open={open} setOpen={setOpen} id={id} />
         </>
     )
 }

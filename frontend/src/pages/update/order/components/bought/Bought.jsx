@@ -9,11 +9,13 @@ import BoughtModal from './BoughtModal';
 
 
 
+
 const Bought = () => {
     const [expandedIndices, setExpandedIndices] = useState([]);
     const [open, setOpen] = useState(false)
     const dispatch = useDispatch();
     const data = useSelector((state) => state.bought.data);
+console.log('datanew', data);
 
     const [dataModal, setDataModal] = useState(null);
 
@@ -80,7 +82,8 @@ const Bought = () => {
                                                                     <Col className='gutter-row' span={12}>
                                                                         <div>
                                                                             <span className='mr-2 text-[#B0B3B8] line-through'>{item.productId?.price.toLocaleString('vi-VN')} đ</span>
-                                                                            <span className='font-medium'>{item.productId?.sellingPrice.toLocaleString('vi-VN')} đ</span>
+                                                                            {/* <span className='font-medium'>{item.productId?.sellingPrice.toLocaleString('vi-VN')} đ</span> */}
+                                                                            <span className='font-medium'>{item.productId?.sellingPrice} đ</span>
                                                                         </div >
                                                                     </Col>
                                                                     <Col className='gutter-row flex justify-end' span={12}>
@@ -96,7 +99,7 @@ const Bought = () => {
                                                                 <Row gutter={[16, 24]} className='flex items-center justify-end'>
                                                                     <Col className='gutter-row flex items-center justify-end' span={24}>
                                                                         <span className=''>{item.quantity} sản phẩm: </span>
-                                                                        <span className='ml-1 font-medium'>{totalPriceItem.toLocaleString('vi-VN')} đ</span>
+                                                                        {/* <span className='ml-1 font-medium'>{totalPriceItem.toLocaleString('vi-VN')} đ</span> */}
                                                                     </Col>
                                                                 </Row>
                                                             </Col>

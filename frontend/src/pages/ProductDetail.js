@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/heading-has-content */
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SummaryApi from "../common";
@@ -99,6 +101,7 @@ const ProductDetails = () => {
           <div className="h-[300px] w-[300px] lg:h-96 lg:w-96 bg-slate-200 relative p-2">
             <img
               src={activeImage}
+              alt=""
               className="h-full w-full object-scale-down mix-blend-multiply"
               onMouseMove={handleZoomImage}
               onMouseLeave={handleLeaveImageZoom}
@@ -143,6 +146,7 @@ const ProductDetails = () => {
                     >
                       <img
                         src={imgURL}
+                        alt=""
                         className="w-full h-full object-scale-down mix-blend-multiply cursor-pointer"
                         onMouseEnter={() => handleMouseEnterProduct(imgURL)}
                         onClick={() => handleMouseEnterProduct(imgURL)}
