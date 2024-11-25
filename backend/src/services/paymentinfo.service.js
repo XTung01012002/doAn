@@ -24,6 +24,7 @@ class PaymentInfoService {
       .find({
         userId: sessionUser,
         confirmOrder: false,
+        orderStatus: { $ne: "Đã hủy" },
       })
       .populate({
         path: "productList.productId",
