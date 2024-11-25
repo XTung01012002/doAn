@@ -5,10 +5,10 @@ const { cartProductSchema } = require("../models/cartproduct.model");
 class ProductService {
   static uploadProducts = async (productData) => {
     const products = await productSchema.insertMany(productData);
-      return products;
-  }
+    return products;
+  };
 
- // thêm 1 hoặc nhiều sản phẩm
+  // thêm 1 hoặc nhiều sản phẩm
   // static uploadProducts = async (productData) => {
   //   try {
   //     const products = await productSchema.insertMany(productData);
@@ -17,8 +17,6 @@ class ProductService {
   //     throw new BadRequestError(`${error.message}`);
   //   }
   // };
-
-
 
   static getAllProducts = async () => {
     try {
@@ -29,7 +27,7 @@ class ProductService {
     }
   };
 
-  static updateProduct = async (productData,id) => {
+  static updateProduct = async (productData, id) => {
     try {
       const {
         productName,
@@ -147,6 +145,21 @@ class ProductService {
     } catch (error) {
       throw new BadRequestError(`${error.message}`);
     }
+  };
+
+  // chỉnh sửa trạng thái sản phẩm từ active sang not active
+
+  static updateProductActive = async (data, id) => {
+    const {active} = data;
+    console.log(active);
+    console.log(typeof active);
+    const product = await productSchema.findById(id);
+    if (!product) {
+      throw new BadRequestError("Sản phẩm không tồn tại");
+    }
+    product.active = active;
+    await product.save();
+    return product;
   };
 }
 module.exports = ProductService;

@@ -17,6 +17,7 @@ router.post("/filter-product", asyncHandle(ProductController.filterProduct));
 router.delete("/delete-product", asyncHandle(ProductController.deleteProduct));
 
 router.get("/product-not-active", asyncHandle(ProductController.productNotActive));
+router.put("/update-active/:id", asyncHandle(ProductController.updateProductActive));
 
 
 

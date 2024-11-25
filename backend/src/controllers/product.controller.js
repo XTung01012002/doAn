@@ -81,6 +81,14 @@ class ProductController {
       data: products,
     }).send(res);
   };
+
+  updateProductActive = async (req, res) => {
+    const product = await ProductService.updateProductActive(req.body, req.params.id);
+    new SuccessResponse({
+      message: "Thay đổi trạng thái sản phẩm thành công",
+      data: product,
+    }).send(res);
+  }
 }
 
 module.exports = new ProductController();
