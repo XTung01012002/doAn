@@ -1,12 +1,63 @@
-import { Button, Form, Input, Modal, Space } from 'antd'
-import React from 'react'
+import { Avatar, Button, Divider, Form, Input, Modal, Space, Tooltip, Upload } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { AntDesignOutlined, PlusOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { PutProductStaff } from '../../../../../store/staff/EditProduct';
 
-const EditProductModal = ({ open, setOpen }) => {
+const EditProductModal = ({ open, setOpen, id }) => {
+
+    const data = useSelector(state => state.warehouse.data)
+    // console.log('ada', data);
+    const dispatch = useDispatch()
+
     const [form] = Form.useForm();
-    const handleSubmit = (value) => {
-        console.log('formdata', value);
+    const [fileList1, setFileList1] = useState([]);
+    const [fileList, setFileList] = useState([]);
+    useEffect(() => {
+        if (id) {
+            const product = data.find((item) => item._id === id);
+            // console.log('productsasdasdasdasd', product);
 
-    }
+            if (product) {
+                form.setFieldsValue({
+                    productName: product.productName,
+                    brandName: product.brandName,
+                    category: product.category,
+                    priceInventory: product.priceInventory,
+                    quantitySold: product.quantitySold,
+                    description: product.description,
+                });
+
+                setFileList(product.productImage)
+            }
+        }
+    }, [id, data, form]);
+
+    const handleSubmit = (value) => {
+
+
+        const convertedValue = {
+            ...value,
+            priceInventory: typeof value.priceInventory === 'string'
+                ? parseInt(value.priceInventory.replace(/\./g, ''), 10)
+                : value.priceInventory,
+            quantitySold: typeof value.quantitySold === 'string'
+                ? parseInt(value.quantitySold.replace(/\./g, ''), 10)
+                : value.quantitySold,
+            productImage: fileList1.length === 0 ? [] : fileList1
+        };
+
+        console.log('ID:', id);
+        console.log('Converted Value:', convertedValue);
+
+        // if (!id || typeof id !== 'string' && typeof id !== 'number') {
+        //     console.error('Invalid ID:', id);
+        //     return;
+        // }
+        console.log(convertedValue);
+
+        dispatch(PutProductStaff({ id: id, data: convertedValue }));
+    };
 
     const handleInput = (e) => {
         const input = e.target;
@@ -18,30 +69,115 @@ const EditProductModal = ({ open, setOpen }) => {
             input.value = new Intl.NumberFormat('vi-VN').format(value);
         }
     };
+    const handleUploadChange = ({ fileList }) => {
+        setFileList(fileList)
+        const files = fileList.map((file) =>
+            file.originFileObj ? file.originFileObj : file
+        );
+        setFileList1(files);
+        form.setFieldsValue({
+            productImage: files
+        });
+    };
+
+    // console.log('ádasdasdasd', fileList1);
 
 
-
+    const beforeUpload = (file) => {
+        return false;
+    };
     return (
         <Modal
             title={<div className="text-center">Sửa thông tin sản phẩm</div>}
             open={open}
             onCancel={() => setOpen(false)}
             centered
-            footer={null}
+            footer={
+                <div className="flex justify-end" style={{ position: 'sticky', bottom: 0, background: '#fff', padding: '10px 16px', zIndex: 1 }}>
+                    <Space>
+                        <Button onClick={() => setOpen(false)} color="danger">
+                            Hủy
+                        </Button>
+                        <Button onClick={() => form.submit()} color="primary" type="primary">
+                            Cập nhật
+                        </Button>
+                    </Space>
+                </div>
+            }
             closeIcon={false}
+            style={{ maxHeight: '80vh' }}
+            styles={{
+                body: {
+                    maxHeight: 'calc(70vh - 60px)',
+                    overflowY: 'auto',
+                    scrollbarWidth: 'thin',
+                    scrollbarColor: 'white transparent',
+                }
+
+            }}
         >
             <Form
                 name='basic'
                 form={form}
                 onFinish={handleSubmit}
-                labelCol={{
-                    span: 8
-                }}
-                wrapperCol={{
-                    span: 16
-                }}
+                layout='vertical'
+                className='mr-1'
             >
-                {/* uploadAnh */}
+                <Form.Item
+                    name="productImage"
+                    className='flex justify-center'
+                >
+                    <Space direction='vertical' size={16}>
+                        {fileList[0] && (
+
+                            <Avatar
+                                src={typeof fileList[0] === 'string'
+                                    ? fileList[0]
+                                    : fileList[0].originFileObj
+                                        ? URL.createObjectURL(fileList[0].originFileObj)
+                                        : null
+                                }
+                                shape="square"
+                                size={200}
+                            />
+                        )}
+                        <Avatar.Group
+                            max={{
+                                count: 2,
+                                style: { color: '#f56a00', backgroundColor: '#fde3cf' },
+                            }}
+                        >
+                            {fileList.slice(1).map((file, index) => (
+                                <Avatar
+                                    key={index}
+                                    src={typeof file === 'string'
+                                        ? file
+                                        : file.originFileObj
+                                            ? URL.createObjectURL(file.originFileObj)
+                                            : null
+                                    }
+                                    alt={`thumbnail-${index}`}
+                                    style={{ borderRadius: 4 }}
+                                />
+                            ))}
+                        </Avatar.Group>
+                    </Space>
+
+                    <div className='flex justify-center mt-2'>
+                        <Upload
+                            // listType="picture-card"
+                            fileList={[]}
+                            beforeUpload={beforeUpload}
+                            onChange={handleUploadChange}
+                            multiple
+                        >
+
+                            <Button icon={<UploadOutlined />}>
+                                Thêm ảnh
+                            </Button>
+                        </Upload>
+                    </div>
+                </Form.Item>
 
 
                 <Form.Item
@@ -52,31 +188,31 @@ const EditProductModal = ({ open, setOpen }) => {
                 </Form.Item>
 
                 <Form.Item
-                    label='Tên thương hiệu'
+                    label='Thương hiệu'
                     name='brandName'
                 >
-                    <Input placeholder='Nhập tên thương hiệu...' />
+                    <Input placeholder='Nhập thương hiệu...' />
                 </Form.Item>
 
                 <Form.Item
-                    label='Phân loại'
+                    label='Danh mục'
                     name='category'
                 >
-                    <Input placeholder='Nhập phân loại sản phẩm...' />
+                    <Input placeholder='Nhập danh mục sản phẩm...' />
                 </Form.Item>
                 <Form.Item
-                    label='Giá sản phẩm'
-                    name='price'
+                    label='Giá nhập sản phẩm'
+                    name='priceInventory'
                 >
                     <Input
-                        placeholder='Nhập giá sản phẩm...'
+                        placeholder='Nhập giá nhập sản phẩm...'
                         suffix="VNĐ"
                         onInput={handleInput}
                     />
                 </Form.Item>
                 <Form.Item
-                    label='Giá bán'
-                    name='sellingPrice'
+                    label='Giá bán sản phẩm'
+                    name='quantitySold'
 
                 >
                     <Input
@@ -95,7 +231,9 @@ const EditProductModal = ({ open, setOpen }) => {
                     />
                 </Form.Item>
 
-                <Form.Item
+                {/* <Form.Item
+                    name={null}
+                    label={null}
                     className='flex justify-end'
                 >
                     <Space>
@@ -113,7 +251,7 @@ const EditProductModal = ({ open, setOpen }) => {
                             Cập nhật
                         </Button>
                     </Space>
-                </Form.Item>
+                </Form.Item> */}
 
             </Form>
         </Modal>

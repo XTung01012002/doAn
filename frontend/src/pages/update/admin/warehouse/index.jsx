@@ -28,7 +28,7 @@ const WarehouseAdmin
             <Layout className={styles.customTabsHeight}>
                 <Sider width={250} className={`${styles.customTabsHeight} bg-white `}  >
                     <div className='text-center text-[24px] font-bold py-4'>
-                        Đơn hàng
+                        Kho hàng
                     </div>
                     <Menu
                         mode="inline"

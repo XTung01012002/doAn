@@ -38,6 +38,7 @@ const Header = () => {
     const dataApi = await fetchData.json();
     console.log(dataApi);
     if (dataApi.success) {
+      setMenuDisplay(!menuDisplay)
       toast.success(dataApi.message);
       dispatch(setUserDetails(null));
       navigate("/login");
@@ -126,7 +127,7 @@ const Header = () => {
                     <Link
                       to={"/admin-panel"}
                       className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
-                      onClick={() => setMenuDisplay((prev) => !prev)}
+                      onClick={() => setMenuDisplay(!menuDisplay)}
                     >
                       Admin Panel
                     </Link>
@@ -134,18 +135,21 @@ const Header = () => {
                   <Link
                     to={'/staff'}
                     className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay(!menuDisplay)}
                   >
                     Nhân viên
                   </Link>
                   <Link
                     to={'/admin/warehouse'}
                     className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay(!menuDisplay)}
                   >
                     Kho
                   </Link>
                   <Link
                     to={'/order'}
                     className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay(!menuDisplay)}
                   >
                     Đơn hàng
                   </Link>
