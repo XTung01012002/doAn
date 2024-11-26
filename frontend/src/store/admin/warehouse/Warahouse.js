@@ -7,7 +7,9 @@ export const fetchDataWarehouse = createAsyncThunk('data/fetchDataWarehouse', as
     // return response.data;
 
     try {
-        const response = await axios.get(`${SummaryApi.allProducts.url}`)
+        const response = await axios.get(`${SummaryApi.allProducts.url}`, {
+            withCredentials: true
+        })
         console.log('apiresponse:', response.data.data);
 
         return response.data.data;

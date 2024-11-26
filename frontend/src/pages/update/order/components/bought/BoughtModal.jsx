@@ -63,9 +63,9 @@ const BoughtModal = ({ open, setOpen, data }) => {
 
     ];
 
-    const vt = 24000
+    // const vt = 24000
 
-    const total = data?.totalAmount + vt
+    const total = data?.totalAmount 
 
     return (
         <>
@@ -119,9 +119,9 @@ const BoughtModal = ({ open, setOpen, data }) => {
                             </div>
                         </div>
                         <Row gutter={[8, 12]}>
-                            <Col className='gutter-row' span={24}>
+                            {/* <Col className='gutter-row' span={24}>
                                 Vận chuyển
-                            </Col>
+                            </Col> */}
                             <Col className='gutter-row' span={24}>
                                 <Row gutter={[8, 12]}>
 
@@ -259,18 +259,13 @@ const BoughtModal = ({ open, setOpen, data }) => {
                             </div>
                         </div>
                         <Row gutter={[16, 24]}>
-                            <Col className='gutter-row' span={12}>
+                            {/* <Col className='gutter-row' span={12}>
                                 Tổng tiền sản phẩm:
                             </Col>
                             <Col className='gutter-row flex justify-end font-medium' span={12}>
                                 {data?.totalAmount.toLocaleString('vi-VN')} đ
-                            </Col>
-                            <Col className='gutter-row' span={12}>
-                                Phí vận chuyển:
-                            </Col>
-                            <Col className='gutter-row flex justify-end font-medium' span={12}>
-                                + {vt.toLocaleString('vi-VN')} đ
-                            </Col>
+                            </Col> */}
+                          
                             <Col className='gutter-row' span={12}>
                                 Thành tiền:
                             </Col>

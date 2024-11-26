@@ -1,5 +1,8 @@
-import { Button, Form, Input } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Button, Form, Input, DatePicker, Row, Col } from 'antd';
+import React, { useEffect } from 'react';
+import moment from 'moment';
+
+
 
 const formItem = [
     {
@@ -19,22 +22,34 @@ const formItem = [
         name: 'shipper',
         message: 'Vui lòng nhập phân loại sản phẩm',
         placeholder: 'Nhập người giao hàng . . .'
-    },
-    {
-        label: 'Số điện thoại',
-        name: 'phoneNumber',
-        message: 'Vui lòng nhập số điện thoại',
-        placeholder: 'Nhập số điện thoại . . .'
     }
 ];
 
 const Step1 = ({ current, setCurrent, data, setData }) => {
+    
     const [form] = Form.useForm();
 
+    useEffect(() => {
+        if (data) {
+            const formattedData = {
+                ...data,
+                deliveryDate: data.deliveryDate ? moment(data.deliveryDate, 'DD-MM-YYYY') : null,
+            };
+            form.setFieldsValue(formattedData);
+        }
+    }, [data, form]);
 
+
+    const onChange = (date, dateString) => {
+        console.log(date, dateString);
+    };
     const onFinish = (values) => {
         console.log(values);
-        const merge = { ...data, ...values };
+        const merge = {
+            ...data,
+            ...values,
+            deliveryDate: values.deliveryDate.format('DD-MM-YYYY')
+        };
         setData(merge);
         setCurrent(current + 1);
     };
@@ -51,23 +66,40 @@ const Step1 = ({ current, setCurrent, data, setData }) => {
             onFinish={onFinish}
             onFinishFailed={onFinished}
         >
-            {formItem.map((item, index) => {
-                return (
-                    <Form.Item
-                        name={item.name}
-                        key={index}
-                        label={item.label}
-                        rules={[{ required: true, message: item.message }]}
-                    >
-                        <Input placeholder={item.placeholder} />
-                    </Form.Item>
-                );
-            })}
-            <Form.Item label={null} className="flex justify-end">
-                <Button
-                    type="primary"
-                    htmlType="submit"
+            {formItem.map((item, index) => (
+                <Form.Item
+                    name={item.name}
+                    key={index}
+                    label={item.label}
+                    rules={[{ required: true, message: item.message }]}
                 >
+                    <Input placeholder={item.placeholder} />
+                </Form.Item>
+            ))}
+
+            <Row gutter={16}>
+                <Col span={12}>
+                    <Form.Item
+                        name="phoneNumber"
+                        label="Số điện thoại"
+                        rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}
+                    >
+                        <Input placeholder="Nhập số điện thoại . . ." />
+                    </Form.Item>
+                </Col>
+                <Col span={12}>
+                    <Form.Item
+                        name="deliveryDate"
+                        label="Ngày giao hàng"
+                        rules={[{ required: true, message: 'Vui lòng chọn ngày giao hàng' }]}
+                    >
+                        <DatePicker onChange={onChange} style={{ width: '100%' }} format="DD-MM-YYYY" />
+                    </Form.Item>
+                </Col>
+            </Row>
+
+            <Form.Item className="flex justify-end">
+                <Button type="primary" htmlType="submit">
                     Next
                 </Button>
             </Form.Item>

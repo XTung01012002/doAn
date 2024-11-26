@@ -5,12 +5,14 @@ import SummaryApi from '../../common/index';
 export const fetchDataCanceledUser = createAsyncThunk('data/fetchDataCanceledUser', async () => {
 
     try {
-        const response = await axios.get(`${SummaryApi.getAllCanceledOrder.url}`,
+        const response = await axios.get(`${SummaryApi.getAllProductCanceledOrder.url}`,
             {
                 withCredentials: true
             })
+
         return response.data.data;
     } catch (error) {
+
         throw new Error(error.response?.data?.message || "Error fetching data");
     }
 });
