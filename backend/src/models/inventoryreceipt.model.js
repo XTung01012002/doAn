@@ -23,8 +23,8 @@ const inventoryReceiptSchema = new Schema(
     totalAmount: {
       type: Number,
     },
-    // nhà cung cấp
-    supplier: {
+    // tên nhà cung cấp
+    supplierName: {
       type: String,
       required: true,
     },
@@ -32,15 +32,31 @@ const inventoryReceiptSchema = new Schema(
     creator: {
       type: Schema.Types.ObjectId,
       ref: "user",
+    },
+    address: {
+      type: String,
       required: true,
     },
-    note: {
+    // ngày nhập
+    date: {
+      type: Date,
+      required: true,
+    },
+    // người giao hàng
+    deliveryPerson: {
       type: String,
-      default: "",
+      required: true,
+    },
+    // Số điện thoại
+    phoneNumber: {
+      type: String,
+      required: true,
     },
   },
 
   { timestamps: true }
 );
 
-module.exports = { inventoryReceiptSchema: model("inventoryReceipt", inventoryReceiptSchema) };
+module.exports = {
+  inventoryReceiptSchema: model("inventoryReceipt", inventoryReceiptSchema),
+};
