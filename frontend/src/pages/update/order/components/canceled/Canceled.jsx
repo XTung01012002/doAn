@@ -181,16 +181,27 @@
 
 
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { CanceledData } from './CanceledData'
 import { Avatar, Button, Card, Col, Image, Row } from 'antd'
 import styles from '../CustomScrollY.module.css'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchDataCanceledUser } from '../../../../../store/canceled/CanceledUser'
 
 const Canceled = () => {
+    const dispatch = useDispatch()
+    const data = useSelector(state => state.cancel.data)
+
+    console.log('asdd', data);
+
+    useEffect(() => {
+        dispatch(fetchDataCanceledUser())
+    }, [dispatch])
+
     return (
         <div className={styles.customScrollbar}>
             <Row gutter={[16, 24]}>
-                {CanceledData?.map((item, index) => {
+                {data?.map((item, index) => {
                     return (
                         <Col className="gutter-row " span={24} key={index}>
                             <Card
