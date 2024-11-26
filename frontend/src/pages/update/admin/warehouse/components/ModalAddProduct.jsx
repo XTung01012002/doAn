@@ -1,5 +1,8 @@
-import { Badge, Button, Form, Input, Modal, Space, Table } from 'antd'
-import React, { useState } from 'react'
+import { Badge, Button, Form, Input, message, Modal, Space, Table } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { PostUploadProduct } from '../../../../../store/admin/upProduct/UpProductReducer'
+import { fetchDataWarehouse } from '../../../../../store/admin/warehouse/Warahouse'
 
 
 const formItem = [
@@ -29,13 +32,28 @@ const formItem = [
 
 
 const ModalAddProduct = ({ open, setOpen }) => {
-
+    const dispatch = useDispatch();
 
     const [form] = Form.useForm()
     // const [options, setOptions] = useState([]);
     // const [selectedId, setSelectedId] = useState(null);
+
+
+    const [messageApi, contextHolder] = message.useMessage();
+    const success = () => {
+        messageApi.open({
+            type: 'success',
+            content: 'Thêm sản phẩm thành công.',
+            duration: 3,
+        });
+    };
+
+
     const [products, setProducts] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
+
+    const loading = useSelector(state => state.postUpProduct.loading)
+    const sub = useSelector(state => state.postUpProduct.sub)
 
     const handleEditProduct = (index) => {
         const product = products[index];
@@ -46,10 +64,21 @@ const ModalAddProduct = ({ open, setOpen }) => {
 
     const handleSubmit = () => {
         console.log('Danh sách sản phẩm:', products);
-        setOpen(false)
-        form.resetFields();
-        setProducts([])
+        dispatch(PostUploadProduct(products))
+        // setOpen(false)
+        // form.resetFields();
+        // setProducts([])
     };
+
+    useEffect(() => {
+        if (sub) {
+            setOpen(false)
+            success()
+            dispatch(fetchDataWarehouse());
+            form.resetFields();
+            setProducts([])
+        }
+    }, [sub])
 
     const handleClose = () => {
         setOpen(false)
@@ -110,69 +139,76 @@ const ModalAddProduct = ({ open, setOpen }) => {
     ];
 
     return (
-        <Modal
-            open={open}
-            onClose={handleClose}
-            onCancel={handleClose}
-            title={<div className='text-center'>Thêm sản phẩm mới</div>}
-            footer={false}
-            closeIcon={false}
-            centered
-            width={900}
-        >
-            <Form
-                form={form}
-                name='basic'
-                layout="vertical"
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
+        <>
+            {contextHolder}
+            <Modal
+                open={open}
+                onClose={handleClose}
+                onCancel={handleClose}
+                title={<div className='text-center'>Thêm sản phẩm mới</div>}
+                footer={false}
+                closeIcon={false}
+                centered
+                width={900}
             >
-                {formItem.map((item, index) => {
+                <Form
+                    form={form}
+                    name='basic'
+                    layout="vertical"
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                >
+                    {formItem.map((item, index) => {
 
-                    return (
-                        <Form.Item
-                            name={item.name}
-                            key={index}
-                            label={item.label}
-                            rules={[{ required: true, message: item.message }]}
-                        >
-                            <Input placeholder={item.placeholder} />
-                        </Form.Item>
-                    )
-                })}
-                <Form.Item label={null}>
-                    <Space className="flex justify-end" size="middle">
-                        <Button
-                            htmlType='submit'
-                            variant='outlined'
-                            color='primary'
-                        >
-                            {editingIndex !== null ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm'}
-                        </Button>
-                        {products.length > 0 &&
-                            <Button type="primary" onClick={handleSubmit}>
-                                Xác nhận
+                        return (
+                            <Form.Item
+                                name={item.name}
+                                key={index}
+                                label={item.label}
+                                rules={[{ required: true, message: item.message }]}
+                            >
+                                <Input placeholder={item.placeholder} />
+                            </Form.Item>
+                        )
+                    })}
+                    <Form.Item label={null}>
+                        <Space className="flex justify-end" size="middle">
+                            <Button
+                                htmlType='submit'
+                                variant='outlined'
+                                color='primary'
+                            >
+                                {editingIndex !== null ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm'}
                             </Button>
-                        }
-                    </Space>
-                </Form.Item>
+                            {products.length > 0 &&
+                                <Button
+                                    type="primary"
+                                    onClick={handleSubmit}
+                                    loading={loading}
+                                >
+                                    Xác nhận
+                                </Button>
+                            }
+                        </Space>
+                    </Form.Item>
 
-            </Form>
+                </Form>
 
-            {products.length > 0 &&
-                <div className='mt-1'>
-                    <p className='text-[18px] font-medium mb-2'>Danh sách sản phẩm đã thêm: <Badge count={products.length} showZero color="blue" /></p>
-                    <Table
-                        dataSource={products.map((product, index) => ({
-                            ...product,
-                            key: index,
-                        }))}
-                        columns={columns}
-                        pagination={{ pageSize: 2 }}
-                    />
-                </div>
-            }
-        </Modal>
+                {products.length > 0 &&
+                    <div className='mt-1'>
+                        <p className='text-[18px] font-medium mb-2'>Danh sách sản phẩm đã thêm: <Badge count={products.length} showZero color="blue" /></p>
+                        <Table
+                            dataSource={products.map((product, index) => ({
+                                ...product,
+                                key: index,
+                            }))}
+                            columns={columns}
+                            pagination={{ pageSize: 2 }}
+                        />
+                    </div>
+                }
+            </Modal>
+        </>
     )
 }
 

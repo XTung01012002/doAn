@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchDataWarehouse } from '../../../../../store/admin/warehouse/Warahouse';
-import { Button, Image, Space, Switch, Table, Tag } from 'antd';
+import { Button, Image, message, Space, Switch, Table, Tag } from 'antd';
 import { CiTrash } from "react-icons/ci";
 import EditProductModal from './EditProductModal';
 import { AiOutlineEdit } from "react-icons/ai";
+import { PutUpdateActive } from '../../../../../store/staff/EditProduct';
 
 
 const ProductManager = () => {
@@ -14,15 +15,38 @@ const ProductManager = () => {
     const [open, setOpen] = useState(false)
     const [id, setID] = useState(null)
     const dataSource = useSelector(state => state.warehouse.data)
+
+    const loading = useSelector(state => state.putProductStaff.loading1)
+    const sub = useSelector(state => state.putProductStaff.sub1)
+
+
+    const [messageApi, contextHolder] = message.useMessage();
+    const success = () => {
+        messageApi.open({
+            type: 'success',
+            content: 'Cập nhật thành công.',
+            duration: 3,
+        });
+    };
+
+
+
+
     useEffect(() => {
         dispatch(fetchDataWarehouse())
     }, [dispatch])
 
-    const onChange = (checked) => {
+    const onChange = (checked, data) => {
         console.log(`switch to ${checked}`);
+        dispatch(PutUpdateActive({ id: data._id, data: { active: checked } }))
     };
+    useEffect(() => {
+        if (sub) {
+            success();
+            dispatch(fetchDataWarehouse())
+        }
+    }, [sub])
 
-console.log(id);
 
     const column = [
         {
@@ -131,7 +155,10 @@ console.log(id);
             render: (_, data) => {
                 return (
                     <Space>
-                        <Switch size="small" defaultChecked={data.active} onChange={onChange} />
+                        <Switch size="small"
+                            defaultChecked={data.active}
+                            onChange={(e) => onChange(e, data)}
+                        />
                         <Button
                             variant='text'
                             className='border-none '
@@ -155,6 +182,7 @@ console.log(id);
 
     return (
         <>
+            {contextHolder}
             <Table
                 columns={column}
                 dataSource={dataSource}

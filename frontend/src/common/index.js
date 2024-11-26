@@ -116,6 +116,15 @@ const SummaryApi = {
   },
   putProductStaff: {
     url: `${backendDomin}/api/product/update-product`
+  },
+  putUpdateActive: {
+    url: `${backendDomin}/api/product/update-active`
+  },
+  postUpProducts: {
+    url: `${backendDomin}/api/product/upload-products`
+  },
+  getAllProductCanceledOrder: {
+    url: `${backendDomin}/api/paymentinfo/all-canceled-order`
   }
 };
 
