@@ -200,138 +200,6 @@ const Payment = () => {
         <h1 className="text-3xl font-bold text-gray-800">Thanh Toán</h1>
       </header>
 
-      {/* <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-md"
-      >
-        <h2 className="text-2xl font-semibold mb-4">Thông tin thanh toán</h2>
-
-        <div className="mb-4">
-          <label
-            htmlFor="phone"
-            className="block text-gray-700 text-sm font-semibold mb-2"
-          >
-            Số điện thoại
-          </label>
-          <input
-            type="text"
-            id="phone"
-            name="phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="Nhập số điện thoại"
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="address"
-            className="block text-gray-700 text-sm font-semibold mb-2"
-          >
-            Địa chỉ:
-          </label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            placeholder="Nhập địa chỉ"
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
-          />
-        </div>
-
-        <fieldset className="mb-6">
-          <legend className="text-gray-700 text-sm font-semibold mb-2">
-            Phương thức thanh toán:
-          </legend>
-
-          <div className="flex items-center mb-2">
-            <input
-              type="radio"
-              id="bank-transfer"
-              name="payment-method"
-              value="bank-transfer"
-              checked={paymentMethod === "bank-transfer"}
-              onChange={handlePaymentMethodChange}
-              className="mr-2"
-              required
-            />
-            <label htmlFor="bank-transfer" className="text-gray-700">
-              Chuyển khoản ngân hàng
-            </label>
-          </div>
-          <div className="flex items-center mb-2">
-            <input
-              type="radio"
-              id="cash-on-delivery"
-              name="payment-method"
-              value="cash-on-delivery"
-              checked={paymentMethod === "cash-on-delivery"}
-              onChange={handlePaymentMethodChange}
-              className="mr-2"
-              required
-            />
-            <label htmlFor="cash-on-delivery" className="text-gray-700">
-              Thanh toán khi nhận hàng
-            </label>
-          </div>
-        </fieldset>
-
-        {showQRCode && (
-          <div className="mb-6 text-center">
-            <img
-              src="https://img.vietqr.io/image/TCB-19037144050012-compact.png"
-              alt="QR Code"
-              width="256"
-              height="256"
-              className="mx-auto"
-            />
-            <p className="mt-2 text-gray-700">
-              Quét mã QR để thực hiện thanh toán chuyển khoản
-            </p>
-          </div>
-        )}
-
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-2">Tóm tắt đơn hàng:</h3>
-          {cartData.map((product) => (
-            <div
-              key={product.productId._id}
-              className="flex justify-between mb-2"
-            >
-              <span className="text-gray-700">
-                {product.productId.productName}: x{product.quantity}
-              </span>
-              <span className="text-gray-700">
-                {displayVNDCurrency(
-                  product.productId.sellingPrice * product.quantity
-                )}
-              </span>
-            </div>
-          ))}
-          <div className="flex justify-between mb-2 font-semibold">
-            <span>Tổng cộng:</span>
-            <span>{displayVNDCurrency(totalPrice)}</span>
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300"
-          disabled={loading}
-        >
-          {loading ? "Đang xử lý..." : "Đặt hàng"}
-        </button>
-
-        {success && <p className="text-green-500 mt-4">{success}</p>}
-        {error && <p className="text-red-500 mt-4">{error}</p>}
-        {orderStatus && <p className="text-blue-500 mt-4">{orderStatus}</p>}
-      </form> */}
-
       <h2 className="text-2xl font-semibold mb-4">Thông tin thanh toán</h2>
 
       <div className="mb-4">
@@ -377,53 +245,9 @@ const Payment = () => {
           Phương thức thanh toán:
         </legend>
 
-        {/* <div className="flex items-center mb-2">
-          <input
-            type="radio"
-            id="bank-transfer"
-            name="payment-method"
-            value="bank-transfer"
-            checked={paymentMethod === "bank-transfer"}
-            onChange={handlePaymentMethodChange}
-            className="mr-2"
-            required
-          />
-          <label htmlFor="bank-transfer" className="text-gray-700">
-            Chuyển khoản ngân hàng
-          </label>
-        </div>
-        <div className="flex items-center mb-2">
-          <input
-            type="radio"
-            id="cash-on-delivery"
-            name="payment-method"
-            value="cash-on-delivery"
-            checked={paymentMethod === "cash-on-delivery"}
-            onChange={handlePaymentMethodChange}
-            className="mr-2"
-            required
-          />
-          <label htmlFor="cash-on-delivery" className="text-gray-700">
-            Thanh toán khi nhận hàng
-          </label>
-        </div> */}
       </fieldset>
 
-      {/* {showQRCode && (
-        <div className="mb-6 text-center">
-          <img
-            src="https://img.vietqr.io/image/TCB-19037144050012-compact.png"
-            alt="QR Code"
-            width="256"
-            height="256"
-            className="mx-auto"
-          />
-          <p className="mt-2 text-gray-700">
-            Quét mã QR để thực hiện thanh toán chuyển khoản
-          </p>
-        </div>
-      )} */}
-
+    
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-2">Tóm tắt đơn hàng:</h3>
         {cartData.map((product) => (
@@ -454,11 +278,6 @@ const Payment = () => {
       >
         {loading ? "Đang xử lý..." : "Đặt hàng"}
       </button>
-
-      {/* {success && <p className="text-green-500 mt-4">{success}</p>}
-      {error && <p className="text-red-500 mt-4">{error}</p>}
-      {orderStatus && <p className="text-blue-500 mt-4">{orderStatus}</p>} */}
-
 
       <Modal
         open={open}
