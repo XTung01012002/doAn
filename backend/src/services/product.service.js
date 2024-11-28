@@ -150,7 +150,7 @@ class ProductService {
   // chỉnh sửa trạng thái sản phẩm từ active sang not active
 
   static updateProductActive = async (data, id) => {
-    const {active} = data;
+    const { active } = data;
     console.log(active);
     console.log(typeof active);
     const product = await productSchema.findById(id);
@@ -160,6 +160,18 @@ class ProductService {
     product.active = active;
     await product.save();
     return product;
+  };
+
+  // lấy ra các category mà có sản phẩm active = true
+  static getCategory = async () => {
+    let categories = await productSchema.distinct("category", {
+      active: true,
+    });
+    // viết hoa mỗi chữ cái đầu của category
+    categories = categories.map((category) => {
+      return category.charAt(0).toUpperCase() + category.slice(1);
+    });
+    return categories;
   };
 }
 module.exports = ProductService;
