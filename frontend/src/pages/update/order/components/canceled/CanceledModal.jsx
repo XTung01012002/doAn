@@ -1,12 +1,19 @@
 import { Col, Image, Modal, Row, Avatar, Card, Button, Collapse, Select, Radio, Space, Input, Typography } from 'antd'
 import React, { useState } from 'react'
-import styles from './ButtonStyles.module.css'
+import styles from '../bought/ButtonStyles.module.css'
 
 
-const BoughtModal = ({ open, setOpen, data }) => {
-
+const CanceledModal = ({ open, setOpen, data }) => {
+const [open1, setOpen1] = useState(false)
     const [value, setValue] = useState(1);
     const [fix, setFix] = useState(false)
+
+    const [showQRCode, setShowQRCode] = useState(false);
+
+
+    const [paymentMethod, setPaymentMethod] = useState("");
+
+
 
     const onChange1 = (e) => {
         setValue(e.target.value);
@@ -29,35 +36,63 @@ const BoughtModal = ({ open, setOpen, data }) => {
         console.log(key);
     };
 
-    const items = [
-        {
-            key: '1',
-            label: <div className='font-bold text-[16px]'>Hình thức thanh toán</div>,
-            children:
-                <>
-                    <Radio.Group onChange={onChange1} value={value}>
-                        <Space direction="vertical">
-                            <Radio value={1}>Thanh toán khi nhận hàng</Radio>
-                            <Radio value={2}>Chuyển khoản ngân hàng</Radio>
-                        </Space>
-                    </Radio.Group>
-                    {value === 2 &&
-                        <img
-                            src="https://img.vietqr.io/image/TCB-19037144050012-compact.png"
-                            alt="QR Code"
-                            width="256"
-                            height="256"
-                            className="mx-auto"
-                        />
-                    }
-                </>
+    // const items = [
+    //     {
+    //         key: '1',
+    //         label: <div className='font-bold text-[16px]'>Hình thức thanh toán</div>,
+    //         children:
+    //             <>
+    //                 <Radio.Group onChange={onChange1} value={value}>
+    //                     <Space direction="vertical">
+    //                         <Radio value={1}>Thanh toán khi nhận hàng</Radio>
+    //                         <Radio value={2}>Chuyển khoản ngân hàng</Radio>
+    //                     </Space>
+    //                 </Radio.Group>
+    //                 {value === 2 &&
+    //                     <img
+    //                         src="https://img.vietqr.io/image/TCB-19037144050012-compact.png"
+    //                         alt="QR Code"
+    //                         width="256"
+    //                         height="256"
+    //                         className="mx-auto"
+    //                     />
+    //                 }
+    //             </>
 
-            ,
-        },
+    //         ,
+    //     },
+    // ];
 
-    ];
+    const total = data?.totalAmount
 
-    const total = data?.totalAmount 
+
+
+    const handleClose = () => {
+        // dispatch(CreateOrder(formSubmit))
+        setOpen1(false)
+        // nav('/order')
+    }
+    const handleOK = () => {
+        setOpen1(false)
+    }
+
+    const handleCancel = () => {
+        setOpen1(false)
+    }
+
+    const handlePaymentMethodChange = (e) => {
+        const value = e.target.value;
+        console.log('values', value);
+
+        setPaymentMethod(value);
+
+        if (value === "bank-transfer") {
+            setShowQRCode(true);
+        } else {
+            setShowQRCode(false);
+        }
+    };
+
 
     return (
         <>
@@ -218,7 +253,7 @@ const BoughtModal = ({ open, setOpen, data }) => {
                             })}
                         </Row>
                     </Col>
-                    <Col span={24}>
+                    {/* <Col span={24}>
                         <hr />
                     </Col>
                     <Col className="gutter-row" span={24}>
@@ -229,7 +264,7 @@ const BoughtModal = ({ open, setOpen, data }) => {
                             items={items}
                             className={styles.customCollapseHeader}
                         />
-                    </Col>
+                    </Col> */}
                     <Col span={24}>
                         <hr />
                     </Col>
@@ -238,21 +273,14 @@ const BoughtModal = ({ open, setOpen, data }) => {
                             <div className='mb-5 font-bold text-[16px]'>
                                 Thanh toán
                             </div>
-                            <div
-                                className="mb-5 font-bold"
-                                style={{
-                                    color: data.paymentStatus === 'Chưa thanh toán' ? '#FF4D4F' : '#3BD80D',
-                                }}
-                            >
-                                {data.paymentStatus}
-                            </div>
+                           cd 
                         </div>
                         <Row gutter={[16, 24]}>
-                          
-                          
+
+
                             <Col className='gutter-row' span={12}>
                                 Thành tiền:
-                            </Col>
+                 cd            </Col>
                             <Col className='gutter-row flex justify-end font-medium' span={12}>
                                 {total.toLocaleString('vi-VN')} đ
                             </Col>
@@ -263,24 +291,84 @@ const BoughtModal = ({ open, setOpen, data }) => {
                         span={24}
                     >
                         <Button
-                            color='danger'
-                            variant='solid'
-                            className='mr-2'
-                        >
-                            Hủy đơn
-                        </Button>
-                        <Button
                             color='primary'
                             variant='solid'
+                            onClick={() => setOpen1(true)}
                         >
-                            Thanh toán ngay
+                            Mua lại
                         </Button>
                     </Col>
                 </Row >
             </Modal >
-
+            <Modal
+                open={open1}
+                onOk={handleOK}
+                onCancel={handleCancel}
+                footer={false}
+                closable={false}
+            >
+                <div>
+                    <div className="flex items-center mb-2">
+                        <input
+                            type="radio"
+                            id="bank-transfer"
+                            name="payment-method"
+                            value="bank-transfer"
+                            checked={paymentMethod === "bank-transfer"}
+                            onChange={handlePaymentMethodChange}
+                            className="mr-2"
+                            required
+                        />
+                        <label htmlFor="bank-transfer" className="text-gray-700">
+                            Chuyển khoản ngân hàng
+                        </label>
+                    </div>
+                    <div className="flex items-center mb-2">
+                        <input
+                            type="radio"
+                            id="cash-on-delivery"
+                            name="payment-method"
+                            value="cash-on-delivery"
+                            checked={paymentMethod === "cash-on-delivery"}
+                            onChange={handlePaymentMethodChange}
+                            className="mr-2"
+                            required
+                        />
+                        <label htmlFor="cash-on-delivery" className="text-gray-700">
+                            Thanh toán khi nhận hàng
+                        </label>
+                    </div>
+                    {showQRCode ? (
+                        <div className="mb-6 text-center">
+                            <img
+                                src="https://img.vietqr.io/image/TCB-19037144050012-compact.png"
+                                alt="QR Code"
+                                width="256"
+                                height="256"
+                                className="mx-auto"
+                            />
+                            <p className="mt-2 text-gray-700">
+                                Quét mã QR để thực hiện thanh toán chuyển khoản
+                            </p>
+                        </div>
+                    )
+                        :
+                        <></>
+                    }
+                </div>
+                <div>
+                    <Button
+                        onClick={handleClose}
+                    >
+                        Đóng
+                    </Button>
+                    <Button>
+                        Xác nhận
+                    </Button>
+                </div>
+            </Modal>
         </>
     )
 }
 
-export default BoughtModal
+export default CanceledModal

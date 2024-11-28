@@ -30,7 +30,6 @@ const EditProductModal = ({ open, setOpen, id }) => {
     useEffect(() => {
         if (id) {
             const product = data.find((item) => item._id === id);
-            // console.log('productsasdasdasdasd', product);
 
             if (product) {
                 form.setFieldsValue({
@@ -46,7 +45,7 @@ const EditProductModal = ({ open, setOpen, id }) => {
                 setFileList(product.productImage)
             }
         }
-    }, [id, data, form]);
+    }, [id]);
 
     const handleSubmit = (value) => {
 
@@ -62,16 +61,8 @@ const EditProductModal = ({ open, setOpen, id }) => {
             productImage: value.productImage.length > 0 ? value.productImage : fileList1.length === 0 ? [] : fileList1
         };
 
-        console.log('ID:', id);
-        console.log('Converted Value:', convertedValue);
-
-        // if (!id || typeof id !== 'string' && typeof id !== 'number') {
-        //     console.error('Invalid ID:', id);
-        //     return;
-        // }
         console.log(convertedValue);
-
-        dispatch(PutProductStaff({ id: id, data: convertedValue }));
+        // dispatch(PutProductStaff({ id: id, data: convertedValue }));
     };
 
     useEffect(() => {
@@ -92,20 +83,46 @@ const EditProductModal = ({ open, setOpen, id }) => {
             input.value = new Intl.NumberFormat('vi-VN').format(value);
         }
     };
-    const handleUploadChange = ({ fileList }) => {
-        setFileList(fileList)
-        const files = fileList.map((file) =>
+
+    const handleUploadChange = ({ fileList: newFileList }) => {
+        const files = newFileList.map((file) =>
             file.originFileObj ? file.originFileObj : file
         );
-        setFileList1(files);
+
+        console.log('uploadanhFileList', newFileList);
+        console.log('uploadanhFileList1', files);
+
+
+
+        const uniqueFileList = [...fileList];
+        const uniqueFileList1 = [...fileList1];
+
+        newFileList.forEach(item => uniqueFileList.push(item))
+        files.forEach(item => uniqueFileList1.push(item))
+
+        setFileList(uniqueFileList);
+        setFileList1(uniqueFileList1);
+
         form.setFieldsValue({
-            // productImage: files
-            productImage: fileList
+            productImage: uniqueFileList,
         });
     };
 
-    // console.log('ádasdasdasd', fileList1);
 
+    const handleRemoveImage = (index) => {
+        const updatedFileList = [...fileList];
+        const updatedFileList1 = [...fileList1];
+
+        updatedFileList.splice(index, 1);
+        updatedFileList1.splice(index - 1, 1);
+
+        setFileList(updatedFileList);
+        setFileList1(updatedFileList1);
+
+        form.setFieldsValue({
+            productImage: updatedFileList,
+        });
+    };
 
     const beforeUpload = (file) => {
         return false;
@@ -156,42 +173,141 @@ const EditProductModal = ({ open, setOpen, id }) => {
                 >
                     <Form.Item
                         name="productImage"
-                        className='flex justify-center'
+                        className='flex justify-center w-full'
                     >
-                        <Space direction='vertical' size={16}>
-                            {fileList[0] && (
-
-                                <Avatar
-                                    src={typeof fileList[0] === 'string'
-                                        ? fileList[0]
-                                        : fileList[0].originFileObj
-                                            ? URL.createObjectURL(fileList[0].originFileObj)
-                                            : null
-                                    }
-                                    shape="square"
-                                    size={200}
-                                />
-                            )}
-                            <Avatar.Group
-                                max={{
-                                    count: 2,
-                                    style: { color: '#f56a00', backgroundColor: '#fde3cf' },
+                        <Space direction='vertical' size={16} className='w-full'>
+                            <Space className="flex justify-center" style={{ position: 'relative' }}>
+                                {fileList[0] && (
+                                    <div style={{ position: 'relative', display: 'inline-block' }}>
+                                        <Avatar
+                                            src={
+                                                typeof fileList[0] === 'string'
+                                                    ? fileList[0]
+                                                    : fileList[0].originFileObj
+                                                        ? URL.createObjectURL(fileList[0].originFileObj)
+                                                        : null
+                                            }
+                                            shape="square"
+                                            size={200}
+                                        />
+                                        <Button
+                                            type="text"
+                                            danger
+                                            shape="circle"
+                                            size="small"
+                                            icon={<PlusOutlined rotate={45} />}
+                                            style={{
+                                                position: 'absolute',
+                                                top: 5,
+                                                right: 5,
+                                                backgroundColor: 'white',
+                                                border: '1px solid lightgray',
+                                                zIndex: 10,
+                                            }}
+                                            onClick={() => handleRemoveImage(0)}
+                                        />
+                                    </div>
+                                )}
+                            </Space>
+                            {/* <Space
+                                className='flex justify-center'
+                                style={{
+                                    overflowX: 'auto',
+                                    whiteSpace: 'nowrap',
+                                    width: '90%',
                                 }}
                             >
-                                {fileList.slice(1).map((file, index) => (
-                                    <Avatar
-                                        key={index}
-                                        src={typeof file === 'string'
-                                            ? file
-                                            : file.originFileObj
-                                                ? URL.createObjectURL(file.originFileObj)
-                                                : null
-                                        }
-                                        alt={`thumbnail-${index}`}
-                                        style={{ borderRadius: 4 }}
-                                    />
-                                ))}
-                            </Avatar.Group>
+                                {fileList.slice(1).map((file, index) => {
+                                    const src = typeof file === 'string'
+                                        ? file
+                                        : file.originFileObj instanceof File
+                                            ? URL.createObjectURL(file.originFileObj)
+                                            : null;
+
+                                    return (
+                                        <div key={index} style={{ position: 'relative', display: 'inline-block' }}>
+                                            {src && (
+                                                <Avatar
+                                                    src={src}
+                                                    alt={`thumbnail-${index}`}
+                                                    style={{ borderRadius: 4 }}
+                                                    size={60}
+                                                />
+                                            )}
+                                            <Button
+                                                type="text"
+                                                danger
+                                                shape="circle"
+                                                size="small"
+                                                icon={<PlusOutlined rotate={45} />}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: -5,
+                                                    right: -5,
+                                                    backgroundColor: 'white',
+                                                    border: '1px solid lightgray',
+                                                    zIndex: 10,
+                                                }}
+                                                onClick={() => handleRemoveImage(index + 1)}
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            </Space> */}
+                            <div
+                                className="flex justify-center overflow-x-scroll "
+                                style={{
+                                    maxWidth: "100%", // Giới hạn chiều rộng
+                                    width: "300px",   // Tùy chọn đặt chiều rộng cố định
+                                    whiteSpace: "nowrap" // Đảm bảo không xuống dòng
+                                }}
+                            >
+                                {fileList.slice(1).map((file, index) => {
+                                    const src = typeof file === 'string'
+                                        ? file
+                                        : file.originFileObj instanceof File
+                                            ? URL.createObjectURL(file.originFileObj)
+                                            : null;
+
+                                    return (
+                                        <div
+                                            key={index}
+                                            style={{
+                                                position: 'relative',
+                                                display: 'inline-block',
+                                                marginRight: 8, // Khoảng cách giữa các hình
+                                            }}
+                                        >
+                                            {src && (
+                                                <Avatar
+                                                    src={src}
+                                                    alt={`thumbnail-${index}`}
+                                                    style={{ borderRadius: 4 }}
+                                                    size={60}
+                                                />
+                                            )}
+                                            <Button
+                                                type="text"
+                                                danger
+                                                shape="circle"
+                                                size="small"
+                                                icon={<PlusOutlined rotate={45} />}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: -5,
+                                                    right: -5,
+                                                    backgroundColor: 'white',
+                                                    border: '1px solid lightgray',
+                                                    zIndex: 10,
+                                                }}
+                                                onClick={() => handleRemoveImage(index + 1)}
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+
                         </Space>
 
                         <div className='flex justify-center mt-2'>
