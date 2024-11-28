@@ -18,6 +18,7 @@ router.delete("/delete-product", asyncHandle(ProductController.deleteProduct));
 
 router.get("/product-not-active", asyncHandle(ProductController.productNotActive));
 router.put("/update-active/:id", asyncHandle(ProductController.updateProductActive));
+router.get("/category", asyncHandle(ProductController.getCategory));
 
 
 

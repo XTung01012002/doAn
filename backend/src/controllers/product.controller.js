@@ -89,6 +89,14 @@ class ProductController {
       data: product,
     }).send(res);
   }
+
+  getCategory = async (req, res, next) => {
+    const products = await ProductService.getCategory(req);
+    new SuccessResponse({
+      message: "Get category success",
+      data: products,
+    }).send(res);
+  }
 }
 
 module.exports = new ProductController();

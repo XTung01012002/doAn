@@ -1,7 +1,7 @@
 module.exports = {
     bankInfo: {
-      bankId: '970422', 
-      bankAccount: '4250126032002', 
+      bankId: '970416', 
+      bankAccount: '21756847', 
       accountName: 'TRINH XUAN TUNG', 
       template: 'compact2'
     },
