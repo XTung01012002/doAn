@@ -1,74 +1,74 @@
-import { Col, Image, Modal, Row, Avatar, Card, Button, Collapse, Select, Radio, Space, Input, Typography } from 'antd'
-import React, { useState } from 'react'
+import { Col, Image, Modal, Row, Avatar, Button, Input, Typography, message } from 'antd'
+import React, { useEffect, useState } from 'react'
 import styles from '../bought/ButtonStyles.module.css'
+import { CreateOrder } from '../../../../../store/createCart/CreateCartSlice'
+import { useDispatch } from 'react-redux'
 
 
-const CanceledModal = ({ open, setOpen, data }) => {
-const [open1, setOpen1] = useState(false)
-    const [value, setValue] = useState(1);
+const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduct, phone, setPhone, address, setAddress, setTotalAllAmount, totleAllAmount }) => {
+
+    const dispatch = useDispatch()
+    const [open1, setOpen1] = useState(false)
+    const [open2, setOpen2] = useState(false)
     const [fix, setFix] = useState(false)
-
+    const [formData, setFormData] = useState()
     const [showQRCode, setShowQRCode] = useState(false);
-
-
     const [paymentMethod, setPaymentMethod] = useState("");
+    const [messageApi, contextHolder] = message.useMessage();
+
+    console.log('quantityProductdata', data);
+    console.log('quantityProduct123123123', quantityProduct);
+    console.log('quantityProduct', quantityProduct[0]?.quantity);
 
 
 
-    const onChange1 = (e) => {
-        setValue(e.target.value);
+
+    const info = () => {
+        messageApi.info('Xóa sản phẩm thành công!');
     };
-    if (!data) {
-        return null;
-    }
-    const handleClickOK = () => {
 
-        setOpen(false)
-        setValue(1)
+    useEffect(() => {
+        const tmp = []
+        quantityProduct.forEach(item => tmp.push({
+            productId: item.productId,
+            quantity: item.quantity
+        }))
+        setFormData(
+            {
+                phone: phone,
+                address: address,
+                productList: tmp
+            }
+        )
+    }, [quantityProduct, phone, address])
+
+
+    useEffect(() => {
+        const total = quantityProduct.reduce((sum, item) => sum + (item.quantity * item.amount), 0);
+        setTotalAllAmount(total);
+    }, [quantityProduct]);
+
+    const onChangePhone = (e) => {
+        setPhone(e.target.value)
     }
+
+    const onChangeAddess = (e) => {
+        setAddress(e.target.value)
+    }
+
 
     const handleClickCannel = () => {
+        setQuantityProduct([])
         setOpen(false)
-        setValue(1)
     }
 
-    const onChange = (key) => {
-        console.log(key);
-    };
-
-    // const items = [
-    //     {
-    //         key: '1',
-    //         label: <div className='font-bold text-[16px]'>Hình thức thanh toán</div>,
-    //         children:
-    //             <>
-    //                 <Radio.Group onChange={onChange1} value={value}>
-    //                     <Space direction="vertical">
-    //                         <Radio value={1}>Thanh toán khi nhận hàng</Radio>
-    //                         <Radio value={2}>Chuyển khoản ngân hàng</Radio>
-    //                     </Space>
-    //                 </Radio.Group>
-    //                 {value === 2 &&
-    //                     <img
-    //                         src="https://img.vietqr.io/image/TCB-19037144050012-compact.png"
-    //                         alt="QR Code"
-    //                         width="256"
-    //                         height="256"
-    //                         className="mx-auto"
-    //                     />
-    //                 }
-    //             </>
-
-    //         ,
-    //     },
-    // ];
 
     const total = data?.totalAmount
 
 
 
     const handleClose = () => {
-        // dispatch(CreateOrder(formSubmit))
+        dispatch(CreateOrder(formData))
         setOpen1(false)
         // nav('/order')
     }
@@ -79,6 +79,18 @@ const [open1, setOpen1] = useState(false)
     const handleCancel = () => {
         setOpen1(false)
     }
+    const handleOK1 = () => {
+        setOpen2(false)
+    }
+
+    const handleCancel1 = () => {
+        setOpen2(false)
+    }
+
+    const totalAmountProduct = (amount, quantity) => {
+        return amount * quantity
+    }
+
 
     const handlePaymentMethodChange = (e) => {
         const value = e.target.value;
@@ -93,9 +105,36 @@ const [open1, setOpen1] = useState(false)
         }
     };
 
+    const handleUp = (index) => {
+        const datanew = [...quantityProduct];
+        datanew[index].quantity = datanew[index].quantity + 1;
+        setQuantityProduct(datanew)
+    }
+
+    const handleDown = (index) => {
+        const datanew = [...quantityProduct]
+        if (datanew[index].quantity > 1) {
+            datanew[index].quantity = datanew[index].quantity - 1;
+            setQuantityProduct(datanew)
+        } else info()
+    }
+
+
+    const handleBuy = () => {
+        console.log('formData', formData);
+        setOpen1(true)
+    }
+
+
+
+    if (!data) {
+        return null;
+    }
+
 
     return (
         <>
+            {contextHolder}
             <Modal
                 title={
                     <div className='text-center font-bold text-[18px]'>
@@ -104,7 +143,6 @@ const [open1, setOpen1] = useState(false)
                     </div>
                 }
                 open={open}
-                onOk={handleClickOK}
                 onCancel={handleClickCannel}
                 centered
                 width={700}
@@ -156,12 +194,14 @@ const [open1, setOpen1] = useState(false)
                                                     <Typography className='text-[14px] font-medium'>Số điện thoại</Typography>
                                                     <Input
                                                         defaultValue={data.phone}
+                                                        onChange={onChangePhone}
                                                     />
                                                 </Col>
                                                 <Col className='gutter-row' span={24}>
                                                     <Typography className='text-[14px] font-medium'>Địa chỉ:</Typography>
                                                     <Input
                                                         defaultValue={data.address}
+                                                        onChange={onChangeAddess}
                                                     />
                                                 </Col>
                                             </Row>
@@ -196,7 +236,8 @@ const [open1, setOpen1] = useState(false)
                         </div>
                         <Row gutter={[16, 24]}>
                             {data?.productList?.map((item, index) => {
-                                const totalPriceItem = item.productId.sellingPrice * item.quantity
+                                const totalPriceItem = item.productId.sellingPrice * item.quantity;
+
                                 return (
                                     <Col className='gutter-row' span={24} key={index}>
                                         <Row gutter={[16, 24]}>
@@ -226,8 +267,26 @@ const [open1, setOpen1] = useState(false)
                                                                             <span className='font-medium'>{item.productId.sellingPrice.toLocaleString('vi-VN')} đ</span>
                                                                         </div >
                                                                     </Col>
-                                                                    <Col className='gutter-row flex justify-end' span={12}>
+                                                                    {/* <Col className='gutter-row flex justify-end' span={12}>
                                                                         <span className='font-medium'>x {item.quantity}</span>
+                                                                    </Col> */}
+                                                                    <Col className='gutter-row flex justify-end' span={12}>
+                                                                        <div>
+                                                                            <Button
+                                                                                className='px-2'
+                                                                                onClick={() => handleDown(index)}
+                                                                            >
+                                                                                -
+                                                                            </Button>
+                                                                            <span className='px-2'>{quantityProduct[index]?.quantity}</span>
+                                                                            <Button
+                                                                                className='px-2'
+                                                                                onClick={() => handleUp(index)}
+                                                                            >
+                                                                                +
+                                                                            </Button>
+
+                                                                        </div>
                                                                     </Col>
                                                                 </Row>
                                                             </Col>
@@ -238,8 +297,8 @@ const [open1, setOpen1] = useState(false)
                                                             <Col className='gutter-row' span={24}>
                                                                 <Row gutter={[16, 24]} className='flex items-center justify-end'>
                                                                     <Col className='gutter-row flex items-center justify-end' span={24}>
-                                                                        <span className=''>{item.quantity} sản phẩm: </span>
-                                                                        <span className=' ml-1 font-medium'>{totalPriceItem.toLocaleString('vi-VN')} đ</span>
+                                                                        <span className=''>{quantityProduct[index]?.quantity} sản phẩm: </span>
+                                                                        <span className=' ml-1 font-medium'>{totalAmountProduct(item.productId.sellingPrice, quantityProduct[index]?.quantity).toLocaleString('vi-VN')} đ</span>
                                                                     </Col>
                                                                 </Row>
                                                             </Col>
@@ -273,16 +332,15 @@ const [open1, setOpen1] = useState(false)
                             <div className='mb-5 font-bold text-[16px]'>
                                 Thanh toán
                             </div>
-                           cd 
                         </div>
                         <Row gutter={[16, 24]}>
 
 
                             <Col className='gutter-row' span={12}>
                                 Thành tiền:
-                 cd            </Col>
+                            </Col>
                             <Col className='gutter-row flex justify-end font-medium' span={12}>
-                                {total.toLocaleString('vi-VN')} đ
+                                {totleAllAmount && totleAllAmount.toLocaleString('vi-VN')} đ
                             </Col>
                         </Row>
                     </Col>
@@ -293,7 +351,7 @@ const [open1, setOpen1] = useState(false)
                         <Button
                             color='primary'
                             variant='solid'
-                            onClick={() => setOpen1(true)}
+                            onClick={handleBuy}
                         >
                             Mua lại
                         </Button>
@@ -366,6 +424,17 @@ const [open1, setOpen1] = useState(false)
                         Xác nhận
                     </Button>
                 </div>
+            </Modal>
+
+
+            <Modal
+                open={open2}
+                onOk={handleOK1}
+                onCancel={handleCancel1}
+                footer={false}
+                closable={false}
+            >
+
             </Modal>
         </>
     )
