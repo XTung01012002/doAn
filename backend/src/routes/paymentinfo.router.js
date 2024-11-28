@@ -18,6 +18,7 @@ router.post("/create", asyncHandle(PaymentInfoController.create));
 router.post("/createQr", asyncHandle(PaymentInfoController.createVietQR));
 router.get("/check/:transactionId",asyncHandle(PaymentInfoController.checkTransactionStatus));
 router.get("/by/:id", asyncHandle(PaymentInfoController.getById));
+router.delete("/deleteCanceledOrder/:id", asyncHandle(PaymentInfoController.deleteCanceledOrder));
 // đối với sale
 router.get("/all-confirm-order-sale", asyncHandle(PaymentInfoController.getAllConfirmedOrderSale));
 router.get("/all-cancel-order-sale", asyncHandle(PaymentInfoController.getAllCanceledOrderSale));

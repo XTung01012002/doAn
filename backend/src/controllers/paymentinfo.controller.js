@@ -97,6 +97,13 @@ class PaymentInfoController {
     }).send(res);
   };
 
+  deleteCanceledOrder = async (req, res) => {
+    await PaymentInfoService.deleteCanceledOrder(req,req.params.id);
+    new SuccessResponse({
+      message: "Xóa đơn hàng đã hủy thành công",
+    }).send(res);
+  }
+
   // đối với sale
   getAllConfirmedOrderSale = async (req, res) => {
     const paymentInfos = await PaymentInfoService.getAllConfirmedOrderSale();
