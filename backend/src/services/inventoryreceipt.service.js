@@ -5,7 +5,21 @@ const { productSchema } = require("../models/product.model");
 class InventoryReceiptService {
   static createInventory = async (data, req) => {
     const sessionUser = req.user;
-    const { productList, receiptDate, supplier, note } = data;
+    const {
+      productList,
+      supplierName,
+      address,
+      date,
+      deliveryPerson,
+      phoneNumber,
+    } = data;
+
+    const phoneRegex = /^(\+84|0)[1-9]\d{8,9}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      throw new BadRequestError(
+         `Số điện thoại không hợp lệ!`
+      );
+    }
 
     // Kiểm tra tồn tại của tất cả sản phẩm trong productList và tính tổng
     const productIds = productList.map((item) => item.productId);
@@ -25,10 +39,12 @@ class InventoryReceiptService {
     const inventoryReceipt = await inventoryReceiptSchema.create({
       productList,
       totalAmount: total,
-      receiptDate,
-      supplier,
-      note,
+      supplierName,
+      address,
+      date,
       creator: sessionUser,
+      deliveryPerson,
+      phoneNumber,
     });
     console.log(inventoryReceipt);
 
@@ -48,7 +64,14 @@ class InventoryReceiptService {
   };
 
   static update = async (data, id) => {
-    const { productList, receiptDate, supplier, note } = data;
+    const {
+      productList,
+      supplierName,
+      address,
+      date,
+      deliveryPerson,
+      phoneNumber,
+    } = data;
     let total = 0;
     for (let i = 0; i < productList.length; i++) {
       const checkProduct = await productSchema.findById(
@@ -66,9 +89,11 @@ class InventoryReceiptService {
       {
         productList,
         totalAmount: total,
-        receiptDate,
-        supplier,
-        note,
+        supplierName,
+        address,
+        date,
+        deliveryPerson,
+        phoneNumber,
       }
     );
     return inventoryReceipt;
@@ -80,14 +105,17 @@ class InventoryReceiptService {
   };
 
   static getAll = async () => {
-    const inventoryReceipts = await inventoryReceiptSchema.find().populate({
-      path: "productList",
-      populate: {
-        path: "productId",
-        select: "productName brandName category -_id",
-      },
-    }).lean();
-    
+    const inventoryReceipts = await inventoryReceiptSchema
+      .find()
+      .populate({
+        path: "productList",
+        populate: {
+          path: "productId",
+          select: "productName brandName category -_id",
+        },
+      })
+      .lean();
+
     const result = inventoryReceipts.map((receipt) => ({
       ...receipt,
       productList: receipt.productList.map(({ _id, ...product }) => product),
