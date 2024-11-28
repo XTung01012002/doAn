@@ -226,6 +226,26 @@ class PaymentInfoService {
     }
   };
 
+  // Sau khi mua lại thì xóa đơn đã hủy
+  static deleteCanceledOrder = async (req, id) => {
+    const sessionUser = req.user;
+    const paymentInfo = await paymentInfoSchema
+      .findOne({
+        userId: sessionUser,
+        orderStatus: "Đã hủy",
+        _id: id,
+      })
+      .populate("productList.productId")
+      .exec();
+      
+    if (!paymentInfo) {
+      throw new BadRequestError("Không tìm thấy đơn hàng");
+    }
+  
+    await paymentInfoSchema.deleteOne({ _id: paymentInfo._id });
+  };
+  
+
   // SALE
   // lấy tất cả đơn hàng đã xác nhận
   static getAllConfirmedOrderSale = async () => {
