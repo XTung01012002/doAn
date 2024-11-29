@@ -125,6 +125,12 @@ const SummaryApi = {
   },
   getAllProductCanceledOrder: {
     url: `${backendDomin}/api/paymentinfo/all-canceled-order`
+  },
+  deleteProductCanceled: {
+    url: `${backendDomin}/api/paymentinfo/deleteCanceledOrder`
+  },
+  putCancelOrder: {  // api hủy đơn
+    url: `${backendDomin}/api/paymentinfo/cancel-order`
   }
 };
 

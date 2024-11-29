@@ -12,10 +12,24 @@ const Canceled = () => {
     const [expandedIndices, setExpandedIndices] = useState([]);
     const [open, setOpen] = useState(false)
     const [dataModal, setDataModal] = useState(null);
-    
+    const [quantityProduct, setQuantityProduct] = useState([])
+    const [phone, setPhone] = useState()
+    const [address, setAddress] = useState()
+    const [totleAllAmount, setTotalAllAmount] = useState()
+
+    // const loadingDelete = useSelector(state => state.statusCanceled.loadingCreateOrder)
+    const subDelete = useSelector(state => state.statusCanceled.subCreateOrder)
+
+
     useEffect(() => {
         dispatch(fetchDataCanceledUser())
     }, [dispatch])
+
+    useEffect(() => {
+        if (subDelete) {
+            dispatch(fetchDataCanceledUser())
+        }
+    }, [subDelete])
 
     const toggleExpanded = (index) => {
         setExpandedIndices((prev) => {
@@ -29,6 +43,21 @@ const Canceled = () => {
         });
     };
 
+
+    const handleBuyed = (items) => {
+        setOpen(true);
+        setDataModal(items)
+        const tmp = [...quantityProduct]
+        items?.productList.forEach(item => tmp.push({
+            productId: item.productId._id,
+            quantity: item.quantity,
+            amount: item.productId.sellingPrice
+        }))
+        setQuantityProduct(tmp)
+        setPhone(items.phone)
+        setAddress(items.address)
+        setTotalAllAmount(items.totalAmount)
+    }
 
 
     return (
@@ -46,7 +75,7 @@ const Canceled = () => {
                                 <span
                                     className='absolute right-6 top-4 text-[16px] font-semibold text-[#ff4242]'
                                 >
-                                    {items.paymentStatus}
+                                    {items.orderStatus}
                                 </span>
                                 {displayItems?.map((item, itemIndex) => {
                                     const totalPriceItem = item.productId?.sellingPrice * item.quantity;
@@ -117,7 +146,7 @@ const Canceled = () => {
                                         <Button
                                             variant='solid'
                                             color='primary'
-                                            onClick={() => { setOpen(true); setDataModal(items) }}
+                                            onClick={() => handleBuyed(items)}
                                         >
                                             Mua lại
                                         </Button>
@@ -165,6 +194,14 @@ const Canceled = () => {
                 open={open}
                 setOpen={setOpen}
                 data={dataModal}
+                quantityProduct={quantityProduct}
+                setQuantityProduct={setQuantityProduct}
+                phone={phone}
+                setPhone={setPhone}
+                address={address}
+                setAddress={setAddress}
+                totleAllAmount={totleAllAmount}
+                setTotalAllAmount={setTotalAllAmount}
             />
         </div>
     )
