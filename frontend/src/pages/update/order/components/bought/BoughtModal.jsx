@@ -1,12 +1,31 @@
 import { Col, Image, Modal, Row, Avatar, Card, Button, Collapse, Select, Radio, Space, Input, Typography } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './ButtonStyles.module.css'
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchDataBoughtUser, putCancelOrder } from '../../../../../store/bought/BoughtUser';
 
 const BoughtModal = ({ open, setOpen, data }) => {
 
     const [value, setValue] = useState(1);
     const [fix, setFix] = useState(false)
+    const dispatch = useDispatch()
+    const loading = useSelector(state => state.bought.loadingPut)
+    const sub = useSelector(state => state.bought.subPut)
+
+    console.log('ádasdasd', data);
+
+
+    const handleCancelOrder = () => {
+        dispatch(putCancelOrder(data._id))
+    }
+
+
+    useEffect(() => {
+        if (sub) {
+            setOpen(false)
+            dispatch(fetchDataBoughtUser());
+        }
+    }, [sub])
 
     const onChange1 = (e) => {
         setValue(e.target.value);
@@ -57,7 +76,7 @@ const BoughtModal = ({ open, setOpen, data }) => {
 
     ];
 
-    const total = data?.totalAmount 
+    const total = data?.totalAmount
 
     return (
         <>
@@ -248,8 +267,8 @@ const BoughtModal = ({ open, setOpen, data }) => {
                             </div>
                         </div>
                         <Row gutter={[16, 24]}>
-                          
-                          
+
+
                             <Col className='gutter-row' span={12}>
                                 Thành tiền:
                             </Col>
@@ -266,6 +285,8 @@ const BoughtModal = ({ open, setOpen, data }) => {
                             color='danger'
                             variant='solid'
                             className='mr-2'
+                            onClick={handleCancelOrder}
+                            loading={loading}
                         >
                             Hủy đơn
                         </Button>

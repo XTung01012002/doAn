@@ -16,9 +16,20 @@ const Canceled = () => {
     const [phone, setPhone] = useState()
     const [address, setAddress] = useState()
     const [totleAllAmount, setTotalAllAmount] = useState()
+
+    // const loadingDelete = useSelector(state => state.statusCanceled.loadingCreateOrder)
+    const subDelete = useSelector(state => state.statusCanceled.subCreateOrder)
+
+
     useEffect(() => {
         dispatch(fetchDataCanceledUser())
     }, [dispatch])
+
+    useEffect(() => {
+        if (subDelete) {
+            dispatch(fetchDataCanceledUser())
+        }
+    }, [subDelete])
 
     const toggleExpanded = (index) => {
         setExpandedIndices((prev) => {

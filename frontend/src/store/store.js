@@ -7,7 +7,7 @@ import CreateShipInfoReducer from './shipinfo/ShipInfoCreate'
 import GetAllInfoShipOrderReducer from './shipinfo/GetAllOrderShipInfo'
 import PutProductStaffReducer from './staff/EditProduct'
 import PostUploadProductReducer from './admin/upProduct/UpProductReducer'
-
+import CanceledOrderReducer from './createCart/CreateCartSlice'
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +18,7 @@ export const store = configureStore({
     createShipInfo: CreateShipInfoReducer,
     getAllShipInfo: GetAllInfoShipOrderReducer,
     putProductStaff: PutProductStaffReducer,
-    postUpProduct: PostUploadProductReducer
+    postUpProduct: PostUploadProductReducer,
+    statusCanceled: CanceledOrderReducer
   },
 })

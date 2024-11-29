@@ -1,8 +1,9 @@
 import { Col, Image, Modal, Row, Avatar, Button, Input, Typography, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styles from '../bought/ButtonStyles.module.css'
-import { CreateOrder } from '../../../../../store/createCart/CreateCartSlice'
-import { useDispatch } from 'react-redux'
+import { CreateOrder, DeleteOrder } from '../../../../../store/createCart/CreateCartSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 
 const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduct, phone, setPhone, address, setAddress, setTotalAllAmount, totleAllAmount }) => {
@@ -15,10 +16,17 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
     const [showQRCode, setShowQRCode] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState("");
     const [messageApi, contextHolder] = message.useMessage();
+    const loadingCreate = useSelector(state => state.statusCanceled.loadingCreateOrder)
+    const subCreate = useSelector(state => state.statusCanceled.subCreateOrder)
+    const nav = useNavigate()
 
-    console.log('quantityProductdata', data);
-    console.log('quantityProduct123123123', quantityProduct);
-    console.log('quantityProduct', quantityProduct[0]?.quantity);
+
+    console.log(data);
+
+
+    // console.log('quantityProductdata', data);
+    // console.log('quantityProduct123123123', quantityProduct);
+    // console.log('quantityProduct', quantityProduct[0]?.quantity);
 
 
 
@@ -48,6 +56,17 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
         setTotalAllAmount(total);
     }, [quantityProduct]);
 
+
+    // các hành động sau khi thêm
+    useEffect(() => {
+        if (subCreate) {
+            setOpen(false)
+            setOpen1(false)
+            dispatch(DeleteOrder(data._id))
+        }
+    }, [subCreate])
+
+
     const onChangePhone = (e) => {
         setPhone(e.target.value)
     }
@@ -69,7 +88,7 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
 
     const handleClose = () => {
         dispatch(CreateOrder(formData))
-        setOpen1(false)
+        // setOpen1(false)
         // nav('/order')
     }
     const handleOK = () => {
@@ -211,13 +230,13 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
                                                     Số điện thoại:
                                                 </Col>
                                                 <Col className='gutter-row' span={20}>
-                                                    {data.phone}
+                                                    {phone}
                                                 </Col>
                                                 <Col className='gutter-row' span={4}>
                                                     Địa chỉ:
                                                 </Col>
                                                 <Col className='gutter-row' span={20}>
-                                                    {data.address}
+                                                    {address}
                                                 </Col>
                                             </Row>
                                         }
@@ -417,6 +436,7 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
                 <div>
                     <Button
                         onClick={handleClose}
+                        loading={loadingCreate}
                     >
                         Đóng
                     </Button>
