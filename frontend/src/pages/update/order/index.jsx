@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Layout, Menu } from 'antd';
+import React, { useEffect, useState } from 'react'
+import { Badge, Layout, Menu } from 'antd';
 import Bought from './components/bought/Bought';
 import Canceled from './components/canceled/Canceled';
 import Delivered from './components/delivered/delivered';
@@ -7,12 +7,31 @@ import Rates from './components/rated/Rates';
 import styles from './Order.module.css';
 import { UserOutlined, AppstoreAddOutlined, FileTextOutlined } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { GetRate } from '../../../store/rate/getRate';
+import { GetDelivered } from '../../../store/delivered/Delivered';
+import { fetchDataCanceledUser } from '../../../store/canceled/CanceledUser';
+import { fetchDataBoughtUser } from '../../../store/bought/BoughtUser';
 
 const { Sider, Content } = Layout;
 
 const OrderPage = () => {
 
+  // const dispatch = useDispatch()
 
+  // const countBought = useSelector(state => state.bought.data)
+  // const countCancel = useSelector(state => state.cancel.data)
+  // const countdeliver = useSelector(state => state.getDeliver.data)
+  // const countRate = useSelector(state => state.getRate.data)
+
+  // useEffect(() => {
+  //   dispatch(fetchDataBoughtUser());
+  //   dispatch(fetchDataCanceledUser())
+  //   dispatch(GetDelivered())
+  //   dispatch(GetRate())
+  // }, [dispatch])
+
+  
   const nav = useNavigate();
   const location = useLocation()
 
@@ -47,17 +66,48 @@ const OrderPage = () => {
           onClick={handleMenuClick}
           className={`${styles.customTabsHeight1} w-full border-none`}
         >
-          <Menu.Item key="bought" icon={<UserOutlined />}>
-            Chưa duyệt
+
+          <Menu.Item className='relative' key="bought" icon={<UserOutlined />}>
+            <div className='flex justify-between items-center w-[94%]' >
+              <div>
+                Chưa duyệt
+              </div>
+              {/* <div className='absolute top-[-10px] right-3 '>
+                <Badge count={countBought.length} offset={[10, 0]} />
+              </div> */}
+            </div>
           </Menu.Item>
-          <Menu.Item key="canceled" icon={<AppstoreAddOutlined />}>
-            Đã hủy
+          <Menu.Item className='relative' key="canceled" icon={<AppstoreAddOutlined />}>
+            <div className=' flex justify-between items-center w-[94%]' >
+              <div>
+                Đã hủy
+              </div>
+              {/* <div className='absolute top-[-10px] right-3 '>
+                <Badge count={countCancel.length} offset={[10, 0]} />
+              </div> */}
+            </div>
           </Menu.Item>
-          <Menu.Item key="delivered" icon={<AppstoreAddOutlined />}>
-            Đang vận chuyển
+          <Menu.Item className='relative'  key="delivered" icon={<AppstoreAddOutlined />}>
+
+            <div className='flex justify-between items-center w-[94%]' >
+              <div >
+                Trạng thái vận chuyển
+              </div>
+              {/* <div className='absolute top-[-10px] right-3 '>
+                <Badge count={countdeliver.length} offset={[10, 0]} />
+              </div> */}
+            </div>
           </Menu.Item>
-          <Menu.Item key="rates" icon={<FileTextOutlined />}>
-            Đánh giá
+          <Menu.Item className='relative' key="rates" icon={<FileTextOutlined />}>
+
+            <div className='flex justify-between items-center w-[94%]' >
+              <div>
+                Đánh giá
+              </div>
+              {/* <div className='absolute top-[-10px] right-3 '>
+                <Badge count={countRate.length} offset={[10, 0]} />
+              </div> */}
+            </div>
           </Menu.Item>
         </Menu>
       </Sider>

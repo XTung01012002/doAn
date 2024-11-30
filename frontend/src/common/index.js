@@ -137,6 +137,15 @@ const SummaryApi = {
   },
   getInventoryreceipt: {
     url: `${backendDomin}/api/inventoryreceipt/all`
+  },
+  getStatistical: { // lọc thống kê
+    url: `${backendDomin}/api/statistics/range-statistics`
+  },
+  getDelivered: {
+    url: `${backendDomin}/api/paymentinfo/all-ShippingOrder`
+  },
+  getRate: {
+    url: `${backendDomin}/api/paymentinfo/all-DeliveredOrder`
   }
 };
 

@@ -4,6 +4,7 @@ import styles from '../bought/ButtonStyles.module.css'
 import { CreateOrder, DeleteOrder } from '../../../../../store/createCart/CreateCartSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { fetchDataCanceledUser } from '../../../../../store/canceled/CanceledUser'
 
 
 const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduct, phone, setPhone, address, setAddress, setTotalAllAmount, totleAllAmount }) => {
@@ -19,7 +20,7 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
     const loadingCreate = useSelector(state => state.statusCanceled.loadingCreateOrder)
     const subCreate = useSelector(state => state.statusCanceled.subCreateOrder)
     const nav = useNavigate()
-
+    const subDele = useSelector(state => state.statusCanceled.subDeleteOrder)
 
     console.log(data);
 
@@ -57,7 +58,6 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
     }, [quantityProduct]);
 
 
-    // các hành động sau khi thêm
     useEffect(() => {
         if (subCreate) {
             setOpen(false)
@@ -65,7 +65,11 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
             dispatch(DeleteOrder(data._id))
         }
     }, [subCreate])
-
+    useEffect(() => {
+        if (subDele) {
+            dispatch(fetchDataCanceledUser())
+        }
+    }, [subDele])
 
     const onChangePhone = (e) => {
         setPhone(e.target.value)

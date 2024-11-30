@@ -12,7 +12,9 @@ import PutCancelOrderReducer from './bought/PutCancelOrder'
 import PostInventoryreceiptCreateReducer from './admin/createBill/CreateBill'
 import GetBillReducer from './admin/getBill/GetBill'
 import GetAllUserAdminReducer from './admin/PageAdmin/getAllUser'
-
+import GetStatisticalReducer from './admin/PageAdmin/getStatistical'
+import GetDeliveredReducer from './delivered/Delivered'
+import GetRateReducer from './rate/getRate'
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +30,9 @@ export const store = configureStore({
     statusPutCancel: PutCancelOrderReducer,
     createBill: PostInventoryreceiptCreateReducer,
     getBill: GetBillReducer,
-    getAllUserAdmin: GetAllUserAdminReducer
+    getAllUserAdmin: GetAllUserAdminReducer,
+    getStatistical: GetStatisticalReducer,
+    getDeliver: GetDeliveredReducer,
+    getRate: GetRateReducer
   },
 })
