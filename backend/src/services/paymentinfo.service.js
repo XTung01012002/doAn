@@ -237,14 +237,39 @@ class PaymentInfoService {
       })
       .populate("productList.productId")
       .exec();
-      
+
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
     }
-  
+
     await paymentInfoSchema.deleteOne({ _id: paymentInfo._id });
   };
-  
+
+  // lấy ra những đơn hàng đang giao hàng và đang chờ đơn vị vận chuyển
+  static getAllShippingOrder = async (req) => {
+    const sessionUser = req.user;
+    return await paymentInfoSchema
+      .find({
+        userId: sessionUser,
+        orderStatus: { $in: ["Đang giao hàng", "Đang chờ đơn vị vận chuyển"] },
+      })
+      .populate("productList.productId")
+      .populate({ path: "userId", select: "name profilePic -_id" })
+      .exec();
+  };
+
+  // lấy tất cả đơn hàng đã giao của user
+  static getAllDeliveredOrder = async (req) => {
+    const sessionUser = req.user;
+    return await paymentInfoSchema
+      .find({
+        userId: sessionUser,
+        orderStatus: "Đã giao hàng",
+      })
+      .populate("productList.productId")
+      .populate({ path: "userId", select: "name profilePic -_id" })
+      .exec();
+    };
 
   // SALE
   // lấy tất cả đơn hàng đã xác nhận
