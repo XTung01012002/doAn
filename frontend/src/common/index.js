@@ -131,6 +131,12 @@ const SummaryApi = {
   },
   putCancelOrder: {  // api hủy đơn
     url: `${backendDomin}/api/paymentinfo/cancel-order`
+  },
+  postInventoryreceiptCreate: { // tạo phiếu
+    url: `${backendDomin}/api/inventoryreceipt/create`
+  },
+  getInventoryreceipt: {
+    url: `${backendDomin}/api/inventoryreceipt/all`
   }
 };
 

@@ -7,7 +7,7 @@ import moment from 'moment';
 const formItem = [
     {
         label: 'Nhà cung cấp',
-        name: 'supply',
+        name: 'supplierName',
         message: 'Vui lòng nhập tên sản phẩm',
         placeholder: 'Nhập nhà cung cấp . . .'
     },
@@ -19,7 +19,7 @@ const formItem = [
     },
     {
         label: 'Người giao hàng',
-        name: 'shipper',
+        name: 'deliveryPerson',
         message: 'Vui lòng nhập phân loại sản phẩm',
         placeholder: 'Nhập người giao hàng . . .'
     }
@@ -33,7 +33,7 @@ const Step1 = ({ current, setCurrent, data, setData }) => {
         if (data) {
             const formattedData = {
                 ...data,
-                deliveryDate: data.deliveryDate ? moment(data.deliveryDate, 'DD-MM-YYYY') : null,
+                date: data.date ? moment(data.date, 'DD-MM-YYYY') : null,
             };
             form.setFieldsValue(formattedData);
         }
@@ -48,7 +48,7 @@ const Step1 = ({ current, setCurrent, data, setData }) => {
         const merge = {
             ...data,
             ...values,
-            deliveryDate: values.deliveryDate.format('DD-MM-YYYY')
+            date: values.date.format('YYYY-MM-DD')
         };
         setData(merge);
         setCurrent(current + 1);
@@ -89,7 +89,7 @@ const Step1 = ({ current, setCurrent, data, setData }) => {
                 </Col>
                 <Col span={12}>
                     <Form.Item
-                        name="deliveryDate"
+                        name="date"
                         label="Ngày giao hàng"
                         rules={[{ required: true, message: 'Vui lòng chọn ngày giao hàng' }]}
                     >

@@ -1,6 +1,7 @@
 import { Badge, Button, Form, Input, Select, Space, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { PostInventoryreceiptCreate } from '../../../../../../store/admin/createBill/CreateBill';
 
 
 const Step2 = ({ current, setCurrent, data, setData }) => {
@@ -15,7 +16,8 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
     const [editingIndex, setEditingIndex] = useState(null);
 
 
-    console.log('ádasasd', dataWH);
+    const loading = useSelector(state => state.createBill.loading)
+    const submit = useSelector(state => state.createBill.submit)
 
 
     const columns = [
@@ -55,7 +57,7 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
             const tmp = dataWH.map((item) => ({
                 value: item.productName,
                 label: item.productName,
-                id: item._id,
+                productId: item._id,
             }));
             setOptions(tmp);
         }
@@ -70,19 +72,34 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
 
     const handleSubmit = () => {
         console.log('Danh sách sản phẩm:', products);
-        // setOpen(false)
-        
-        // setProducts([])
-        const merge = { ...data, merge: products }
+        const updatedProducts = products.map(product => ({
+            productId: product.productId,
+            price: Number(product.price),
+            quantity: Number(product.quantity)
+        }));
+
+        const merge = { ...data, productList: updatedProducts };
         setData(merge)
-        setCurrent(current + 1);
-        form.resetFields();
+
     };
+
+    useEffect(() => {
+        if (data?.productList?.length > 0) {
+            dispatch(PostInventoryreceiptCreate(data))
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (submit) {
+            setCurrent(current + 1);
+            form.resetFields();
+        }
+    }, [submit])
 
     const onFinish = (value) => {
         form.validateFields()
             .then((values) => {
-                const newProduct = { ...values, id: selectedId };
+                const newProduct = { ...values, productId: selectedId };
                 if (editingIndex !== null) {
                     const updatedProducts = [...products];
                     updatedProducts[editingIndex] = newProduct;
@@ -103,23 +120,23 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
-    const handleSearch = (value) => {
-        if (value && !options.find((option) => option.value === value)) {
-            const newOption = {
-                value: value,
-                label: value,
-                id: null,
-            };
+    // const handleSearch = (value) => {
+    //     if (value && !options.find((option) => option.value === value)) {
+    //         const newOption = {
+    //             value: value,
+    //             label: value,
+    //             productId: null,
+    //         };
 
-            setOptions((prev) => [...prev, newOption]);
+    //         setOptions((prev) => [...prev, newOption]);
 
-            form.setFieldsValue({
-                nameProduct: value,
-                brand: null,
-                category: null,
-            });
-        }
-    };
+    //         form.setFieldsValue({
+    //             nameProduct: value,
+    //             brand: null,
+    //             category: null,
+    //         });
+    //     }
+    // };
 
     const handleChange = (value) => {
         const selectedOption = dataWH.find((item) => item.productName === value);
@@ -163,7 +180,7 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
                         options={options}
                         showSearch
                         allowClear
-                        onSearch={handleSearch}
+                        // onSearch={handleSearch}
                         onChange={handleChange}
                     />
                 </Form.Item>
@@ -190,7 +207,7 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
                 </Form.Item>
                 <Form.Item
                     label="Giá tiền"
-                    name="monet"
+                    name="price"
                     rules={[{ required: true, message: 'Vui lòng nhập giá sản phẩm' }]}
                 >
                     <Input placeholder="Nhập giá sản phẩm . . ." />
@@ -240,6 +257,7 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
                     <Button
                         type="primary"
                         onClick={handleSubmit}
+                        loading={loading}
                         disabled={products.length > 0 ? false : true}
                     >
                         Tiếp theo

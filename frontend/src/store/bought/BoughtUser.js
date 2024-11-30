@@ -20,20 +20,6 @@ export const fetchDataBoughtUser = createAsyncThunk('data/fetchDataBoughtUser', 
 
 
 
-export const putCancelOrder = createAsyncThunk(
-    'put1CancelOrder', async (id, { rejectWithValue }) => {
-        try {
-            const res = await axios.put(`${SummaryApi.putCancelOrder.url}/${id}`,
-                {
-                    withCredentials: true
-                })
-            return res
-        } catch (error) {
-            return rejectWithValue(error.res.data)
-        }
-    }
-)
-
 
 
 const BoughtUser = createSlice({
@@ -42,9 +28,6 @@ const BoughtUser = createSlice({
         data: [],
         status: 'idle',
         error: null,
-        loadingPut: false,
-        subPut: false,
-        errorPut: null
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -60,21 +43,7 @@ const BoughtUser = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            .addCase(putCancelOrder.pending, (state) => {
-                state.loadingPut = true
-                state.subPut = false
-                state.errorPut = null
-            })
-            .addCase(putCancelOrder.fulfilled, (state) => {
-                state.loadingPut = false
-                state.subPut = true
-                state.errorPut = null
-            })
-            .addCase(putCancelOrder.rejected, (state, action) => {
-                state.loadingPut = false
-                state.subPut = false
-                state.errorPut = action.payload
-            });
+           
     },
 });
 

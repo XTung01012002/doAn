@@ -140,7 +140,7 @@ const Header = () => {
                     Nhân viên
                   </Link>
                   <Link
-                    to={'/admin/warehouse'}
+                    to={'admin-warehouse'}
                     className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
                     onClick={() => setMenuDisplay(!menuDisplay)}
                   >

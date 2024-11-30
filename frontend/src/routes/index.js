@@ -18,6 +18,7 @@ import OrderPage from '../pages/update/order'
 // import Warehouse from "../pages/update/admin/warehouse/components/Warehouse";
 import Staff from "../pages/update/staff/Staff";
 import WarehouseAdmin from "../pages/update/admin/warehouse";
+import PageAdmin from "../pages/update/admin/PageAdmin";
 
 
 const router = createBrowserRouter([
@@ -41,19 +42,29 @@ const router = createBrowserRouter([
         path: "sign-up",
         element: <SignUp />,
       },
+      // {
+      //   path: "admin-panel",
+      //   element: <AdminPanel />,
+      //   children: [
+      //     {
+      //       path: "all-users",
+      //       element: <AllUser />,
+      //     },
+      //     {
+      //       path: "all-products",
+      //       element: <AllProduct />,
+      //     },
+      //   ],
+      // },
       {
-        path: "admin-panel",
-        element: <AdminPanel />,
+        path: 'admin-panel',
+        element: <PageAdmin />,
         children: [
           {
-            path: "all-users",
-            element: <AllUser />,
-          },
-          {
-            path: "all-products",
-            element: <AllProduct />,
-          },
-        ],
+            path: ':key',
+            element: <PageAdmin />
+          }
+        ]
       },
       {
         path: "product/:id",
@@ -86,15 +97,33 @@ const router = createBrowserRouter([
       {
         path: "order",
         element: <OrderPage />,
+        children: [
+          {
+            path: ':key',
+            element: <OrderPage />,
+          }
+        ]
       },
       {
-        path: "admin/warehouse",
-        element: <WarehouseAdmin />
+        path: "admin-warehouse",
+        element: <WarehouseAdmin />,
+        children: [
+          {
+            path: ":key",
+            element: <WarehouseAdmin />,
+          },
+        ],
       },
       {
         path: "staff",
-        element: <Staff />
-      }
+        element: <Staff />,
+        children: [
+          {
+            path: ":key",
+            element: <Staff />,
+          },
+        ],
+      },
     ],
   },
 ]);
