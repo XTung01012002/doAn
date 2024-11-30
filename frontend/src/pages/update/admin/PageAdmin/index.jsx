@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import AllUser from '../../../AllUser';
 import AllProduct from '../../../AllProduct';
 import AllUserAdmin from './components/AllUsersAdmin';
+import Statistical from './components/Statistical';
 
 
 const { Sider, Content } = Layout;
@@ -26,7 +27,7 @@ const PageAdmin = () => {
         switch (selectedKey) {
 
             case 'statistical':
-                return 'Chưa có thống kê'
+                return <Statistical />
             case 'all-users':
                 return <AllUserAdmin />
             // return <AllUser />;

@@ -4,6 +4,9 @@ import styles from './ButtonStyles.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDataBoughtUser } from '../../../../../store/bought/BoughtUser';
 import { putCancelOrder } from '../../../../../store/bought/PutCancelOrder';
+import { fetchDataCanceledUser } from '../../../../../store/canceled/CanceledUser';
+import { GetDelivered } from '../../../../../store/delivered/Delivered';
+import { GetRate } from '../../../../../store/rate/getRate';
 
 const BoughtModal = ({ open, setOpen, data }) => {
 
@@ -24,6 +27,9 @@ const BoughtModal = ({ open, setOpen, data }) => {
         if (sub) {
             setOpen(false)
             dispatch(fetchDataBoughtUser());
+            dispatch(fetchDataCanceledUser())
+            dispatch(GetDelivered())
+            dispatch(GetRate())
         }
     }, [sub])
 

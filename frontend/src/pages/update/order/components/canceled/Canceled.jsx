@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { CanceledData } from './CanceledData'
 import { Avatar, Button, Card, Col, Image, Row } from 'antd'
 import styles from '../CustomScrollY.module.css'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,18 +17,12 @@ const Canceled = () => {
     const [totleAllAmount, setTotalAllAmount] = useState()
 
     // const loadingDelete = useSelector(state => state.statusCanceled.loadingCreateOrder)
-    const subDelete = useSelector(state => state.statusCanceled.subCreateOrder)
 
 
     useEffect(() => {
         dispatch(fetchDataCanceledUser())
     }, [dispatch])
-
-    useEffect(() => {
-        if (subDelete) {
-            dispatch(fetchDataCanceledUser())
-        }
-    }, [subDelete])
+   
 
     const toggleExpanded = (index) => {
         setExpandedIndices((prev) => {
