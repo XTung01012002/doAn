@@ -2,17 +2,17 @@ import { Col, Image, Modal, Row, Avatar, Card, Button, Collapse, Select, Radio, 
 import React, { useEffect, useState } from 'react'
 import styles from './ButtonStyles.module.css'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDataBoughtUser, putCancelOrder } from '../../../../../store/bought/BoughtUser';
+import { fetchDataBoughtUser } from '../../../../../store/bought/BoughtUser';
+import { putCancelOrder } from '../../../../../store/bought/PutCancelOrder';
 
 const BoughtModal = ({ open, setOpen, data }) => {
 
     const [value, setValue] = useState(1);
     const [fix, setFix] = useState(false)
     const dispatch = useDispatch()
-    const loading = useSelector(state => state.bought.loadingPut)
-    const sub = useSelector(state => state.bought.subPut)
+    const loading = useSelector(state => state.statusPutCancel.loadingPut)
+    const sub = useSelector(state => state.statusPutCancel.subPut)
 
-    console.log('ádasdasd', data);
 
 
     const handleCancelOrder = () => {

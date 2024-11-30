@@ -17,16 +17,17 @@ const AcceptedOrder = () => {
         dispatch(GetAllInfoShipOrder())
     }, [dispatch])
 
-    console.log('dataSource', dataSource);
+    console.log(dataSource);
+
 
     const column = [
         {
             key: '_id',
             dataIndex: '_id',
-            title: 'ID',
-            render: (text) => (
-                <span className="truncate block max-w-[100px]">{text.length > 15 ? `${text.slice(0, 15)}...` : text}</span>
-            ),
+            title: 'STT',
+            render: (_text, _object, index) => {
+                return index + 1
+            }
         },
         {
             key: 'createdAt',
@@ -67,7 +68,7 @@ const AcceptedOrder = () => {
             dataIndex: 'paymentInfo',
             title: 'Trạng thái thanh toán',
             render: (paymentInfo) => {
-                return paymentInfo.paymentStatus
+                return paymentInfo?.paymentStatus
             }
         },
         {
@@ -75,28 +76,28 @@ const AcceptedOrder = () => {
             dataIndex: 'totalAmount',
             title: 'Giá tiền',
             render: (totalAmount) => {
-                return `${formatAmount(totalAmount)} VNĐ`
+                return `${formatAmount(totalAmount)} đ`
             }
         },
-        {
-            key: 'action',
-            dataIndex: 'action',
-            title: 'Xem chi tiết',
-            render: (_value, data) => {
-                return (
-                    <Button
-                        variant='text'
-                        color='default'
-                        onClick={() => setId(data._id)}
-                    >
-                        <MdOutlineRemoveRedEye
-                            color='blue'
-                            size={20}
-                        />
-                    </Button>
-                )
-            }
-        }
+        // {
+        //     key: 'action',
+        //     dataIndex: 'action',
+        //     title: 'Xem chi tiết',
+        //     render: (_value, data) => {
+        //         return (
+        //             <Button
+        //                 variant='text'
+        //                 color='default'
+        //                 onClick={() => setId(data._id)}
+        //             >
+        //                 <MdOutlineRemoveRedEye
+        //                     color='blue'
+        //                     size={20}
+        //                 />
+        //             </Button>
+        //         )
+        //     }
+        // }
     ]
 
     return (

@@ -6,23 +6,29 @@ import Delivered from './components/delivered/delivered';
 import Rates from './components/rated/Rates';
 import styles from './Order.module.css';
 import { UserOutlined, AppstoreAddOutlined, FileTextOutlined } from '@ant-design/icons';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const { Sider, Content } = Layout;
 
 const OrderPage = () => {
-  const [selectedKey, setSelectedKey] = useState('1');
+
+
+  const nav = useNavigate();
+  const location = useLocation()
+
+  const selectedKey = location.pathname.split('/')[2] || 'bought'
 
   const handleMenuClick = (e) => {
-    setSelectedKey(e.key);
+    nav(`/order/${e.key}`)
   };
 
   const renderContent = () => {
     switch (selectedKey) {
-      case '1':
+      case 'bought':
         return <Bought />;
-      case '2':
+      case 'canceled':
         return <Canceled />;
-      case '3':
+      case 'delivered':
         return <Delivered />;
       default:
         return <Rates />;
@@ -41,16 +47,16 @@ const OrderPage = () => {
           onClick={handleMenuClick}
           className={`${styles.customTabsHeight1} w-full border-none`}
         >
-          <Menu.Item key="1" icon={<UserOutlined />}>
+          <Menu.Item key="bought" icon={<UserOutlined />}>
             Chưa duyệt
           </Menu.Item>
-          <Menu.Item key="2" icon={<AppstoreAddOutlined />}>
+          <Menu.Item key="canceled" icon={<AppstoreAddOutlined />}>
             Đã hủy
           </Menu.Item>
-          <Menu.Item key="3" icon={<AppstoreAddOutlined />}>
+          <Menu.Item key="delivered" icon={<AppstoreAddOutlined />}>
             Đang vận chuyển
           </Menu.Item>
-          <Menu.Item key="4" icon={<FileTextOutlined />}>
+          <Menu.Item key="rates" icon={<FileTextOutlined />}>
             Đánh giá
           </Menu.Item>
         </Menu>

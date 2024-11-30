@@ -4,9 +4,14 @@ import { IoMdClose } from "react-icons/io";
 import { useState } from "react";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { GetAllUserAdmin } from "../store/admin/PageAdmin/getAllUser";
 
-const ChangeUserRole = ({ name, email, role, onClose, userId, callFunc }) => {
+const ChangeUserRole = ({ name, email, role, onClose, userId }) => {
   const [userRole, setUserRole] = useState(role);
+
+  const dispatch = useDispatch()
+
 
   const handleOnChangeSelect = (e) => {
     setUserRole(e.target.value);
@@ -27,7 +32,7 @@ const ChangeUserRole = ({ name, email, role, onClose, userId, callFunc }) => {
     if (dataApi.success) {
       toast.success(dataApi.message);
       onClose();
-      callFunc();
+      dispatch(GetAllUserAdmin())
     }
     if (dataApi.status === "error") {
       toast.error(dataApi.message);

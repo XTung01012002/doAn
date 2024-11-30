@@ -1,30 +1,37 @@
 import React, { useState } from 'react'
 import { Layout, Menu } from 'antd';
-
-import styles from './Warehouse.module.css';
+import styles from './pageAdmin.module.css';
 import { UserOutlined, AppstoreAddOutlined, FileTextOutlined } from '@ant-design/icons';
-import Warehouse from './components/Warehouse';
-import ListInventory from './components/ListInventory';
 import { useLocation, useNavigate } from 'react-router-dom';
+import AllUser from '../../../AllUser';
+import AllProduct from '../../../AllProduct';
+import AllUserAdmin from './components/AllUsersAdmin';
+
 
 const { Sider, Content } = Layout;
 
-const WarehouseAdmin = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
+const PageAdmin = () => {
 
-    const selectedKey = location.pathname.split('/')[2] || 'warehouse';
+
+    const nav = useNavigate();
+    const location = useLocation()
+
+    const selectedKey = location.pathname.split('/')[2] || 'statistical'
 
     const handleMenuClick = (e) => {
-        navigate(`/admin-warehouse/${e.key}`);
+        nav(`/admin-panel/${e.key}`)
     };
 
     const renderContent = () => {
         switch (selectedKey) {
-            case 'warehouse':
-                return <Warehouse />;
+
+            case 'statistical':
+                return 'Chưa có thống kê'
+            case 'all-users':
+                return <AllUserAdmin />
+            // return <AllUser />;
             default:
-                return <ListInventory />;
+                return <AllProduct />;
         }
     };
 
@@ -32,7 +39,7 @@ const WarehouseAdmin = () => {
         <Layout className={styles.customTabsHeight}>
             <Sider width={250} className={`${styles.customTabsHeight} bg-white `}  >
                 <div className='text-center text-[24px] font-bold py-4'>
-                    Kho hàng
+                    Admin
                 </div>
                 <Menu
                     mode="inline"
@@ -40,11 +47,14 @@ const WarehouseAdmin = () => {
                     onClick={handleMenuClick}
                     className={`${styles.customTabsHeight1} w-full border-none`}
                 >
-                    <Menu.Item key="warehouse" icon={<UserOutlined />}>
-                        Kho hàng
+                    <Menu.Item key="statistical" icon={<FileTextOutlined />}>
+                        Thống kê
                     </Menu.Item>
-                    <Menu.Item key="listInventory" icon={<AppstoreAddOutlined />}>
-                        Danh sách phiếu nhập
+                    <Menu.Item key="all-users" icon={<UserOutlined />}>
+                        Quản lý tài khoản
+                    </Menu.Item>
+                    <Menu.Item key="all-products" icon={<AppstoreAddOutlined />}>
+                        Danh sách sản phẩm
                     </Menu.Item>
 
                 </Menu>
@@ -67,5 +77,4 @@ const WarehouseAdmin = () => {
     );
 };
 
-export default WarehouseAdmin
-
+export default PageAdmin

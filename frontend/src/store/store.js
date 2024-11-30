@@ -8,6 +8,11 @@ import GetAllInfoShipOrderReducer from './shipinfo/GetAllOrderShipInfo'
 import PutProductStaffReducer from './staff/EditProduct'
 import PostUploadProductReducer from './admin/upProduct/UpProductReducer'
 import CanceledOrderReducer from './createCart/CreateCartSlice'
+import PutCancelOrderReducer from './bought/PutCancelOrder'
+import PostInventoryreceiptCreateReducer from './admin/createBill/CreateBill'
+import GetBillReducer from './admin/getBill/GetBill'
+import GetAllUserAdminReducer from './admin/PageAdmin/getAllUser'
+
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +24,10 @@ export const store = configureStore({
     getAllShipInfo: GetAllInfoShipOrderReducer,
     putProductStaff: PutProductStaffReducer,
     postUpProduct: PostUploadProductReducer,
-    statusCanceled: CanceledOrderReducer
+    statusCanceled: CanceledOrderReducer,
+    statusPutCancel: PutCancelOrderReducer,
+    createBill: PostInventoryreceiptCreateReducer,
+    getBill: GetBillReducer,
+    getAllUserAdmin: GetAllUserAdminReducer
   },
 })
