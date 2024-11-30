@@ -211,7 +211,7 @@ const ModalDelivered = ({ open, setOpen, data }) => {
                         </Col>
                     </Row>
                 </Col>
-                <Col
+                {/* <Col
                     className='flex justify-end'
                     span={24}
                 >
@@ -222,7 +222,7 @@ const ModalDelivered = ({ open, setOpen, data }) => {
                     >
                         Mua lại
                     </Button>
-                </Col>
+                </Col> */}
             </Row >
         </Modal >
     )
