@@ -48,7 +48,11 @@ class PaymentInfoController {
   };
 
   updateByUser = async (req, res) => {
-    const paymentInfo = await PaymentInfoService.updateByUser(req.body, req.params.id, req);
+    const paymentInfo = await PaymentInfoService.updateByUser(
+      req.body,
+      req.params.id,
+      req
+    );
     new SuccessResponse({
       message: "Cập nhật thông tin thanh toán thành công",
       data: paymentInfo,
@@ -56,7 +60,10 @@ class PaymentInfoController {
   };
 
   cancelOrderByUser = async (req, res) => {
-    const paymentInfo = await PaymentInfoService.cancelOrderByUser(req, req.params.id);
+    const paymentInfo = await PaymentInfoService.cancelOrderByUser(
+      req,
+      req.params.id
+    );
     new SuccessResponse({
       message: "Hủy đơn hàng thành công",
       data: paymentInfo,
@@ -64,7 +71,10 @@ class PaymentInfoController {
   };
 
   confirmOrderByUser = async (req, res) => {
-    const paymentInfo = await PaymentInfoService.confirmOrderByUser(req, req.params.id);
+    const paymentInfo = await PaymentInfoService.confirmOrderByUser(
+      req,
+      req.params.id
+    );
     new SuccessResponse({
       message: "Xác nhận đơn hàng thành công",
       data: paymentInfo,
@@ -98,11 +108,11 @@ class PaymentInfoController {
   };
 
   deleteCanceledOrder = async (req, res) => {
-    await PaymentInfoService.deleteCanceledOrder(req,req.params.id);
+    await PaymentInfoService.deleteCanceledOrder(req, req.params.id);
     new SuccessResponse({
       message: "Xóa đơn hàng đã hủy thành công",
     }).send(res);
-  }
+  };
 
   // đối với sale
   getAllConfirmedOrderSale = async (req, res) => {
@@ -126,6 +136,22 @@ class PaymentInfoController {
       message: "Lấy danh sách đơn hàng chưa xác nhận thành công",
       data: paymentInfos,
     }).send(res);
-}
+  };
+
+  getAllShippingOrder = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllShippingOrder(req);
+    new SuccessResponse({
+      message: "Lấy danh sách đơn hàng đang giao hàng thành công",
+      data: paymentInfos,
+    }).send(res);
+  };
+
+  getAllDeliveredOrder = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllDeliveredOrder(req);
+    new SuccessResponse({
+      message: "Lấy danh sách đơn hàng đã giao thành công",
+      data: paymentInfos,
+    }).send(res);
+  }
 }
 module.exports = new PaymentInfoController();

@@ -173,5 +173,35 @@ class ProductService {
     });
     return categories;
   };
+
+  // tạo comment cho sản phẩm
+  static createComment = async (data, id) => {
+    const { comment } = data;
+    const product = await productSchema.findById(id);
+    if (!product) {
+      throw new BadRequestError("Sản phẩm không tồn tại");
+    }
+    product.comments.push(comment);
+    await product.save();
+    return product;
+  };
+
+  // lấy ra tất cả comment của sản phẩm theo thời gian mới nhất
+  static getCommentById = async (id) => {
+    const product = await productSchema.findById(id);
+    if (!product) {
+      throw new BadRequestError("Sản phẩm không tồn tại");
+    }
+    if (!product.comments || product.comments.length === 0) {
+      return []; // Nếu không có comment nào, trả về mảng rỗng
+    }
+
+    // Sắp xếp và lấy 5 comment mới nhất
+    const latestComments = product.comments
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 5); // Lấy 5 phần tử đầu tiên
+
+    return latestComments;
+  };
 }
 module.exports = ProductService;
