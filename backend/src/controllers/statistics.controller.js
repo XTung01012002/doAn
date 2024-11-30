@@ -3,7 +3,7 @@ const StatisticsService = require("../services/statistics.service");
 
 class StatisticsController {
     getMonthlyStatistics = async (req, res, next) => {
-        const statistics = await StatisticsService.getMonthlyStatistics(req.body);
+        const statistics = await StatisticsService.getMonthlyStatistics(req.query);
         new SuccessResponse({
             message: "Lấy thông tin thống kê thành công",
             data: statistics,
@@ -11,7 +11,7 @@ class StatisticsController {
     };
 
     getRangeStatistics = async (req, res, next) => {
-        const statistics = await StatisticsService.getRangeStatistics(req.body);
+        const statistics = await StatisticsService.getRangeStatistics(req.query);
         new SuccessResponse({
             message: "Lấy thông tin thống kê thành công",
             data: statistics,

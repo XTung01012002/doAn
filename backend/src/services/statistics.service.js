@@ -5,12 +5,41 @@ const { paymentInfoSchema } = require("../models/paymentinfo.model");
 const { shippingInfoSchema } = require("../models/shippinginfo.model");
 const moment = require("moment");
 
+const validateMonthYear = ({ month, year }) => {
+  if (!month || !year) {
+      throw new Error("Vui lòng cung cấp đầy đủ month và year");
+  }
+
+  const parsedMonth = parseInt(month, 10);
+  const parsedYear = parseInt(year, 10);
+
+  if (
+      isNaN(parsedMonth) || 
+      isNaN(parsedYear) || 
+      parsedMonth < 1 || 
+      parsedMonth > 12
+  ) {
+      throw new Error("month phải từ 1 đến 12 và year phải là số hợp lệ");
+  }
+
+  return { parsedMonth, parsedYear }; // Trả về giá trị đã được kiểm tra
+};
+
 class StatisticsService {
   // Tính doanh thu, thu nhập, lợi nhuận, số lượng sản phẩm bán ra trong tháng
-  static getMonthlyStatistics = async (data) => {
-    const { month, year } = data;
-    const startDate = moment().year(year).month(month - 1).startOf("month").toDate();
-    const endDate = moment().year(year).month(month - 1).endOf("month").toDate();
+  static getMonthlyStatistics = async ({ month, year }) => {
+    const { parsedMonth, parsedYear } = validateMonthYear({ month, year });
+
+    const startDate = moment()
+      .year(parsedMonth)
+      .month(parsedYear - 1)
+      .startOf("month")
+      .toDate();
+    const endDate = moment()
+      .year(parsedMonth)
+      .month(parsedYear - 1)
+      .endOf("month")
+      .toDate();
 
     // Lấy danh sách các đơn hàng đã giao trong tháng
     const shippingInfos = await shippingInfoSchema
@@ -67,8 +96,8 @@ class StatisticsService {
     };
   };
 
-  static getRangeStatistics = async (data) => {
-    const { startDate, endDate } = data;
+  static getRangeStatistics = async ({ startDate, endDate }) => {
+    
 
     const start = moment(startDate).startOf("day").toDate();
     const end = moment(endDate).endOf("day").toDate();
