@@ -97,6 +97,22 @@ class ProductController {
       data: products,
     }).send(res);
   }
+
+  createComment = async (req, res) => {
+    const product = await ProductService.createComment(req.body, req.params.id);
+    new SuccessResponse({
+      message: "Create comment success",
+      data: product,
+    }).send(res);
+  }
+
+  getCommentById = async (req, res) => {
+    const product = await ProductService.getCommentById(req.params.id);
+    new SuccessResponse({
+      message: "Get all comment success",
+      data: product,
+    }).send(res);
+  }
 }
 
 module.exports = new ProductController();
