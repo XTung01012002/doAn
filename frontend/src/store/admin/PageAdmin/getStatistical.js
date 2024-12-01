@@ -6,7 +6,7 @@ import SummaryApi from "../../../common";
 export const GetStatistical = createAsyncThunk(
     'GetStatistical', async (data, { rejectWithValue }) => {
         try {
-            const res = await axios.get(`${SummaryApi.getStatistical.url}?startDate=${data.startDate}&endDate=${data.endDate}`, {
+            const res = await axios.get(`${SummaryApi.getStatistical.url}`, data, {
                 withCredentials: true
             })
             return res.data.data

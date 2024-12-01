@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Button, Card, Col, Image, Row } from 'antd'
+import { Avatar, Button, Card, Col, Image, Rate, Row } from 'antd'
 import styles from '../CustomScrollY.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { GetRate } from '../../../../../store/rate/getRate';
-import ModalRate from './ModalRate';
-import ModalRate1 from './ModalRate1';
 
+const actions = [
+    <div></div>,
+    <div></div>,
+    <div></div>,
+    <div></div>,
+    <div key='check' className='flex items-center'>
+        <p className='mr-2 text-black'>Đánh giá nhanh</p>
+        <Rate />
+    </div>,
 
+];
 
 const Rates = () => {
 
     const dispatch = useDispatch()
     const data = useSelector(state => state.getRate.data)
-    const [open, setOpen] = useState(false)
-    const [dataDetal, setDataDetal] = useState([])
     const [expandedIndices, setExpandedIndices] = useState([]);
     const toggleExpanded = (index) => {
         setExpandedIndices((prev) => {
@@ -39,6 +45,8 @@ const Rates = () => {
                         <Col className="gutter-row" span={24} key={index}>
                             <Card
                                 className='relative'
+
+                                actions={actions}
                             >
                                 <span
                                     className='absolute right-6 top-4 text-[16px] font-semibold text-[#3145f7]'
@@ -121,10 +129,6 @@ const Rates = () => {
                                                 <Button
                                                     color='primary'
                                                     variant="solid"
-                                                    onClick={() => {
-                                                        setDataDetal(items.productList);
-                                                        setOpen(true)
-                                                    }}
                                                 >
                                                     Viết đánh giá
                                                 </Button>
@@ -143,7 +147,7 @@ const Rates = () => {
                                                         className={styles.noHover}
                                                         color="default"
                                                         variant="text"
-                                                        onClick={() => toggleExpanded(index)}
+                                                    onClick={() => toggleExpanded(index)}
                                                     >
                                                         Xem thêm
                                                     </Button>
@@ -155,7 +159,7 @@ const Rates = () => {
                                                         className={styles.noHover}
                                                         color="default"
                                                         variant="text"
-                                                        onClick={() => toggleExpanded(index)}
+                                                    onClick={() => toggleExpanded(index)}
                                                     >
                                                         Thu gọn
                                                     </Button>
@@ -170,12 +174,6 @@ const Rates = () => {
                     )
                 })}
             </Row>
-            {dataDetal.length === 1 ?
-                <ModalRate1 open={open} setOpen={setOpen} data={dataDetal} />
-                :
-                <ModalRate open={open} setOpen={setOpen} data={dataDetal} />
-
-            }
         </div>
     )
 }
