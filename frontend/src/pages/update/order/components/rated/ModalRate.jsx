@@ -1,30 +1,40 @@
 
 import { Avatar, Divider, Modal, Rate, Input, Button } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { CommnetOrder } from '../../../../../store/delivered/modeldeli';
 
 const { TextArea } = Input;
 
 const ModalRate = ({ open, setOpen, data }) => {
+    const dispatch = useDispatch()
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [rating, setRating] = useState(0);
     const [reviewContent, setReviewContent] = useState('');
     const [open1, setOpen1] = useState(false)
-
+    const sub = useSelector(state => state.createComment.sub)
 
     const handleRateChange = (value, product) => {
         setSelectedProduct(product);
         setRating(value);
         setOpen1(true);
     };
-// code moi
+    // code moi
     const handleSubmit = () => {
-        // Gửi đánh giá (rating và reviewContent) của sản phẩm `selectedProduct`.
-        console.log('Submitted review:', { product: selectedProduct, rating, content: reviewContent });
-        // Reset form sau khi submit.
-        setReviewContent('');
-        setRating(0);
-        setOpen1(false);
+        const comment = {
+            comment: reviewContent,
+            rate: rating
+        }
+        dispatch(CommnetOrder({ id: selectedProduct.productId._id, data: comment }))
     };
+
+    useEffect(() => {
+        if (sub) {
+            setReviewContent('');
+            setRating(0);
+            setOpen1(false);
+        }
+    }, [sub])
 
     return (
         <>
@@ -43,18 +53,25 @@ const ModalRate = ({ open, setOpen, data }) => {
                 {
                     data.length > 0 &&
                     data.map((item, index) => (
-                        <div className='flex w-full mb-6' key={index}>
+                        <div className='flex w-full ml-6 mb-6' key={index}>
                             <Avatar
                                 src={item?.productId?.productImage[0]}
                                 shape="square"
-                                size={100}
+                                size={150}
                                 className='mr-4'
                             />
-                            <div className='w-full'>
-                                <div className='font-bold'>{item.productId.productName}</div>
-                                <div className='text-sm'>Phân loại: {item.productId.category}</div>
-                                <div className='text-sm'>Thương hiệu: {item.productId.brandName}</div>
-                                <div className='mt-2'>
+                            <div className='w-full mt-5'>
+                                <div className='font-bold text-[16px]'>{item.productId.productName}</div>
+                                <div className='text-sm my-2'>
+                                    <span className='font-medium mr-[35px]'>Phân loại: </span>
+                                    {item.productId.category}
+                                </div>
+                                <div className='text-sm '>
+                                    <span className='font-medium mr-3 '>Thương hiệu: </span>
+                                    {item.productId.brandName}
+                                </div>
+                                <div className='mt-2 flex items-center'>
+                                    <span className='font-medium mr-[35px]'>Đánh giá: </span>
                                     <Rate
                                         onChange={(value) => handleRateChange(value, item)}
                                     />
@@ -93,8 +110,8 @@ const ModalRate = ({ open, setOpen, data }) => {
                             </div>
                         </div>
                         <Divider />
-                        <div className='mb-4'>
-                            <p className='font-semibold mb-2'>Đánh giá</p>
+                        <div className='mb-4 flex items-center'>
+                            <p className='font-semibold mr-4'>Đánh giá</p>
                             <Rate value={rating} onChange={(value) => setRating(value)} />
                         </div>
                         <div className='mb-4'>

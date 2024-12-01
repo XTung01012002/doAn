@@ -101,6 +101,9 @@ const SummaryApi = {
     url: `${backendDomin}/api/paymentinfo/all-canceled-order-sale`,
     method: "get"
   },
+  createCommentOrder: {
+    url: `${backendDomin}/api/product/createComment`
+  },
   postCreateCart: {
     url: `${backendDomin}/api/paymentinfo/create`,
     method: 'post'
@@ -146,7 +149,15 @@ const SummaryApi = {
   },
   getRate: {
     url: `${backendDomin}/api/paymentinfo/all-DeliveredOrder`
-  }
+  },
+  createQr: {
+    url: `${backendDomin}/api/paymentinfo/createQr`
+  },
+  paymentOrder: {
+    // thanh toan nhan hang
+    url: `${backendDomin}/api/paymentinfo/choosePaymentMethod`
+  },
+  
 };
 
 export default SummaryApi;

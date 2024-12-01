@@ -1,21 +1,36 @@
 
 import { Avatar, Divider, Modal, Rate, Input, Button } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { CommnetOrder } from '../../../../../store/delivered/modeldeli';
+import { useDispatch, useSelector } from 'react-redux';
 
 const { TextArea } = Input;
 
 const ModalRate1 = ({ open, setOpen, data }) => {
+    const dispatch = useDispatch()
     const [rating, setRating] = useState(0);
     const [reviewContent, setReviewContent] = useState('');
     const productDetal = data[0]
+    const sub = useSelector(state => state.createComment.sub)
     const handleSubmit = () => {
-        // Gửi đánh giá (rating và reviewContent) của sản phẩm `selectedProduct`.
-        console.log('Submitted review:', { product: data, rating, content: reviewContent });
-        // Reset form sau khi submit.
-        setReviewContent('');
-        setRating(0);
-        setOpen(false);
+        
+        const comment = {
+            comment: reviewContent,
+            rate: rating
+        }
+        dispatch(CommnetOrder({ id: productDetal.productId._id, data: comment }))
+        // setReviewContent('');
+        // setRating(0);
+        // setOpen(false);
     };
+    useEffect(() => {
+        if (sub) {
+            setReviewContent('');
+            setRating(0);
+            setOpen(false);
+        }
+    }, [sub])
+
     // code moi
     
     return (
@@ -48,8 +63,8 @@ const ModalRate1 = ({ open, setOpen, data }) => {
                             </div>
                         </div>
                         <Divider />
-                        <div className='mb-4'>
-                            <p className='font-semibold mb-2'>Đánh giá</p>
+                        <div className='mb-4 flex items-center'>
+                            <p className='font-semibold mr-4'>Đánh giá</p>
                             <Rate value={rating} onChange={(value) => setRating(value)} />
                         </div>
                         <div className='mb-4'>
