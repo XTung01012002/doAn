@@ -99,7 +99,7 @@ class ProductController {
   }
 
   createComment = async (req, res) => {
-    const product = await ProductService.createComment(req.body, req.params.id);
+    const product = await ProductService.createComment(req, req.body, req.params.id);
     new SuccessResponse({
       message: "Create comment success",
       data: product,
