@@ -16,7 +16,8 @@ const ModalRate1 = ({ open, setOpen, data }) => {
         setRating(0);
         setOpen(false);
     };
-
+    // code moi
+    
     return (
         <>
             <Modal
