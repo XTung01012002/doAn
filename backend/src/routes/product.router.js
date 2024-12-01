@@ -19,8 +19,9 @@ router.delete("/delete-product", asyncHandle(ProductController.deleteProduct));
 router.get("/product-not-active", asyncHandle(ProductController.productNotActive));
 router.put("/update-active/:id", asyncHandle(ProductController.updateProductActive));
 router.get("/category", asyncHandle(ProductController.getCategory));
-router.post("/createComment/:id", asyncHandle(ProductController.createComment));
+
 router.get("/comment/:id", asyncHandle(ProductController.getCommentById));
+router.use(authToken);
 
-
+router.post("/createComment/:id", asyncHandle(ProductController.createComment));
 module.exports = router;
