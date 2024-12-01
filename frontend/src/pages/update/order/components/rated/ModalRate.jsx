@@ -16,7 +16,7 @@ const ModalRate = ({ open, setOpen, data }) => {
         setRating(value);
         setOpen1(true);
     };
-
+// code moi
     const handleSubmit = () => {
         // Gửi đánh giá (rating và reviewContent) của sản phẩm `selectedProduct`.
         console.log('Submitted review:', { product: selectedProduct, rating, content: reviewContent });
