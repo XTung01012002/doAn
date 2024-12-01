@@ -47,15 +47,18 @@ const ProductManager = () => {
         }
     }, [sub])
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 6;
 
     const column = [
         {
             key: '_id',
             dataIndex: '_id',
             title: 'ID',
-            render: (text) => (
-                <span className="truncate block max-w-[50px]">{text.length > 15 ? `${text.slice(0, 15)}...` : text}</span>
-            ),
+            render: (_text, _record, index) => {
+                return (currentPage - 1) * pageSize + index + 1
+            }
+
         },
         {
             key: 'createdAt',
@@ -186,7 +189,11 @@ const ProductManager = () => {
             <Table
                 columns={column}
                 dataSource={dataSource}
-                pagination={{ pageSize: 7 }}
+                pagination={{
+                    pageSize: pageSize,
+                    current: currentPage,
+                    onChange: (page) => setCurrentPage(page),
+                }}
 
             />
             <EditProductModal open={open} setOpen={setOpen} id={id} />

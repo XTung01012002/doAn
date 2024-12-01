@@ -23,7 +23,9 @@ const AcceptOrder = () => {
         {
             key: 'stt',
             title: 'STT',
-            render: (_text, _record, index) => (currentPage - 1) * pageSize + index + 1,
+            render: (_text, _record, index) => {
+                return (currentPage - 1) * pageSize + index + 1
+            }
         },
         {
             key: 'createdAt',
