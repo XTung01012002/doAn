@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetAllInfoShipOrder } from '../../../../../store/shipinfo/GetAllOrderShipInfo';
-import { Button, Table } from 'antd';
+import { Button, Table, Tag } from 'antd';
 import formatAmount from '../../../../../components/formatNumber/FormatNumber';
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 
@@ -68,7 +68,23 @@ const AcceptedOrder = () => {
             dataIndex: 'paymentInfo',
             title: 'Trạng thái thanh toán',
             render: (paymentInfo) => {
-                return paymentInfo?.paymentStatus
+                return <Tag bordered={false}
+                    color={
+                        paymentInfo?.paymentStatus === 'Chưa thanh toán'
+                            ? 'error'
+                            : paymentInfo?.paymentStatus === 'Đã thanh toán'
+                                ? 'blue'
+                                : paymentInfo?.paymentStatus === 'thanh toán khi nhận hàng'
+                                    ? 'cyan'
+                                    : 'error'}
+                >
+                    {
+                        paymentInfo?.paymentStatus
+                        ? paymentInfo?.paymentStatus
+                        : 'Chưa chọn phương thức thanh toán'
+                    }
+                </Tag>
+
             }
         },
         {
