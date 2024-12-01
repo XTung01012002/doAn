@@ -15,6 +15,9 @@ import GetAllUserAdminReducer from './admin/PageAdmin/getAllUser'
 import GetStatisticalReducer from './admin/PageAdmin/getStatistical'
 import GetDeliveredReducer from './delivered/Delivered'
 import GetRateReducer from './rate/getRate'
+import CreateQRReducer from './QRcode/CreateQR'
+import PaymentOrderReducer from './thanhtoan/PaymentOrder'
+import CommnetOrderReducer from './delivered/modeldeli'
 
 export const store = configureStore({
   reducer: {
@@ -33,6 +36,9 @@ export const store = configureStore({
     getAllUserAdmin: GetAllUserAdminReducer,
     getStatistical: GetStatisticalReducer,
     getDeliver: GetDeliveredReducer,
-    getRate: GetRateReducer
+    getRate: GetRateReducer,
+    createQR: CreateQRReducer,
+    nhanhang: PaymentOrderReducer,
+    createComment: CommnetOrderReducer
   },
 })
