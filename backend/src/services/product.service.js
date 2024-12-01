@@ -174,34 +174,48 @@ class ProductService {
     return categories;
   };
 
-  // tạo comment cho sản phẩm
-  static createComment = async (data, id) => {
-    const { comment } = data;
+  // tạo comment và dánh giá cho sản phẩm đã mua
+  static createComment = async (req, data, id) => {
+    const sessionUser = req.user;
+    const { comment, rate } = data;
+    if (rate < 1 || rate > 5) {
+      throw new BadRequestError("Số sao phải nằm trong khoảng từ 1 đến 5");
+    }
+
     const product = await productSchema.findById(id);
     if (!product) {
       throw new BadRequestError("Sản phẩm không tồn tại");
     }
-    product.comments.push(comment);
+    product.listComment.push({ userId: sessionUser, comment, rate });
     await product.save();
     return product;
   };
 
-  // lấy ra tất cả comment của sản phẩm theo thời gian mới nhất
+  // lấy ra tất cả comment và số sao trung bình của sản phẩm
   static getCommentById = async (id) => {
     const product = await productSchema.findById(id);
+
     if (!product) {
       throw new BadRequestError("Sản phẩm không tồn tại");
     }
-    if (!product.comments || product.comments.length === 0) {
-      return []; // Nếu không có comment nào, trả về mảng rỗng
-    }
+    // Tính số sao trung bình và tổng số đánh giá
+    let totalRate = 0;
+    product.listComment.forEach((comment) => {
+      totalRate += comment.rate;
+    });
+    product.totalRate = product.listComment.length
+      ? totalRate / product.listComment.length
+      : 0;
 
-    // Sắp xếp và lấy 5 comment mới nhất
-    const latestComments = product.comments
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      .slice(0, 5); // Lấy 5 phần tử đầu tiên
+    product.totalRate = Math.round(product.totalRate * 10) / 10;
 
-    return latestComments;
+    await product.populate({
+      path: "listComment.userId",
+      select: "name email profilePic -_id",
+    });
+
+    await product.save();
+    return product;
   };
 }
 module.exports = ProductService;

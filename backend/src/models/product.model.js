@@ -31,11 +31,25 @@ const productSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    comments: [
+    // danh sách bình luận và dánh giá của sản phẩm
+    listComment: [
       {
-        type: String,
+        userId: {
+          type: Schema.Types.ObjectId,
+          ref: "user",
+        },
+        comment: String,
+        rate: {
+          type: Number,
+          min: 1,
+          max: 5,
+        },
       },
     ],
+    totalRate: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

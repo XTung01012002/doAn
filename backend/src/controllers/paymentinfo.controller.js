@@ -153,5 +153,12 @@ class PaymentInfoController {
       data: paymentInfos,
     }).send(res);
   }
+
+  choosePaymentMethod = async (req, res) => {
+    await PaymentInfoService.choosePaymentMethod(req, req.params.id);
+    new SuccessResponse({
+      message: "Chọn phương thức thanh toán khi nhận hàng thành công",
+    }).send(res);
+  }
 }
 module.exports = new PaymentInfoController();
