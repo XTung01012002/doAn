@@ -12,12 +12,13 @@ const AcceptedOrder = () => {
 
     const dispatch = useDispatch();
     const dataSource = useSelector(state => state.getAllShipInfo.data)
-    const [id, setId] = useState(null)
     useEffect(() => {
         dispatch(GetAllInfoShipOrder())
     }, [dispatch])
 
-    console.log(dataSource);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
+
 
 
     const column = [
@@ -25,8 +26,8 @@ const AcceptedOrder = () => {
             key: '_id',
             dataIndex: '_id',
             title: 'STT',
-            render: (_text, _object, index) => {
-                return index + 1
+            render: (_text, _record, index) => {
+                return (currentPage - 1) * pageSize + index + 1
             }
         },
         {
@@ -95,25 +96,6 @@ const AcceptedOrder = () => {
                 return `${formatAmount(totalAmount)} đ`
             }
         },
-        // {
-        //     key: 'action',
-        //     dataIndex: 'action',
-        //     title: 'Xem chi tiết',
-        //     render: (_value, data) => {
-        //         return (
-        //             <Button
-        //                 variant='text'
-        //                 color='default'
-        //                 onClick={() => setId(data._id)}
-        //             >
-        //                 <MdOutlineRemoveRedEye
-        //                     color='blue'
-        //                     size={20}
-        //                 />
-        //             </Button>
-        //         )
-        //     }
-        // }
     ]
 
     return (
@@ -121,7 +103,11 @@ const AcceptedOrder = () => {
             <Table
                 columns={column}
                 dataSource={dataSource}
-                pagination={{ pageSize: 10 }}
+                pagination={{
+                    pageSize: pageSize,
+                    current: currentPage,
+                    onChange: (page) => setCurrentPage(page),
+                }}
             />
         </div>
     )

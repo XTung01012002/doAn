@@ -15,13 +15,14 @@ const ListInventory = () => {
 
     const [open, setOpen] = useState(false)
     const [dataDital, setDataDital] = useState()
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
     const column = [
         {
             key: 'stt',
             title: 'STT',
-            render: (_value, _object, index) => {
-                return index + 1
+            render: (_text, _record, index) => {
+                return (currentPage - 1) * pageSize + index + 1
             }
         },
         {
@@ -93,7 +94,11 @@ const ListInventory = () => {
             <Table
                 columns={column}
                 dataSource={data}
-                pagination={{ pageSize: 10 }}
+                pagination={{
+                    pageSize: pageSize,
+                    current: currentPage,
+                    onChange: (page) => setCurrentPage(page),
+                }}
             />
             <ModalListInventory open={open} setOpen={setOpen} dataDital={dataDital} />
         </>
