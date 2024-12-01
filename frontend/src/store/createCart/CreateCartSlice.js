@@ -67,7 +67,11 @@ const CanceledOrderReducer = createSlice({
 
     name: 'canceledOrder',
     initialState,
-    reducers: {},
+    reducers: {
+        setSubCreate(state, action) {
+            state.subCreateOrder = action.payload
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(CreateOrder.pending, state => {
@@ -109,5 +113,5 @@ const CanceledOrderReducer = createSlice({
     }
 })
 
-
+export const { setSubCreate } = CanceledOrderReducer.actions
 export default CanceledOrderReducer.reducer

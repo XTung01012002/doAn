@@ -5,9 +5,12 @@ import displayVNDCurrency from "../helpers/displayVNDCurrency";
 import { toast } from "react-toastify";
 import Context from "../context";
 import { useContext } from "react";
-import { useDispatch } from "react-redux";
-import { CreateCart, CreateOrder } from "../store/createCart/CreateCartSlice";
-import { Button, Modal, notification } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { CreateCart, CreateOrder, setSubCreate } from "../store/createCart/CreateCartSlice";
+import { Avatar, Button, Modal, notification, Space } from "antd";
+import { CreateQR } from "../store/QRcode/CreateQR";
+import { fetchDataBoughtUser } from "../store/bought/BoughtUser";
+import { PaymentOrder } from "../store/thanhtoan/PaymentOrder";
 
 const Payment = () => {
   const nav = useNavigate()
@@ -27,6 +30,11 @@ const Payment = () => {
     address: '',
     productList: []
   })
+  const dataBought = useSelector(state => state.bought.data)
+  console.log('dataBought', dataBought.length > 0 && dataBought[dataBought.length - 1]._id);
+  const subasd = useSelector(state => state.statusCanceled.subCreateOrder)
+  console.log('subasd', subasd);
+
 
   const [open, setOpen] = useState(false)
 
@@ -37,11 +45,10 @@ const Payment = () => {
   const handleCancel = () => {
     setOpen(false)
   }
-
+  const qr = useSelector(state => state.createQR.data)
   const navigate = useNavigate();
   const totalPrice = localStorage.getItem("totalPrice");
-  console.log("totalPrice: ", totalPrice);
-
+  console.log("totalPrice: ", typeof totalPrice);
   const fetchData = async () => {
     const dataResponse = await fetch(SummaryApi.addProductToCartView.url, {
       method: SummaryApi.addProductToCartView.method,
@@ -69,6 +76,10 @@ const Payment = () => {
     setPaymentMethod(value);
 
     if (value === "bank-transfer") {
+      const tmp = {
+        totalAmount: Number(totalPrice)
+      }
+      dispatch(CreateQR(tmp))
       setShowQRCode(true);
     } else {
       setShowQRCode(false);
@@ -147,7 +158,6 @@ const Payment = () => {
   const openNotification = (pauseOnHover, color) => {
     api.open({
       message: <span className="text-black">{error}</span>,
-      // description: 'This is the content of the notification.',
       style: {
         border: `2px solid #FC9291`,
         backgroundColor: '#FEC9C4',
@@ -169,28 +179,37 @@ const Payment = () => {
       return openNotification(true, 'red');
     }
 
-    // Đặt lại error nếu tất cả đều hợp lệ
     setError("");
+    dispatch(CreateOrder(formSubmit))
 
-    dispatch(CreateCart(formSubmit))
-    // if (paymentMethod === "bank-transfer") {
-    //   setShowQRCode(true);
-    // } else {
-    //   setShowQRCode(false);
-    // }
-    setOpen(true)
   }
+
+
+  useEffect(() => {
+    if (subasd) {
+      dispatch(fetchDataBoughtUser());
+      setOpen(true)
+    }
+  }, [subasd])
 
   console.log('formSubmit', formSubmit);
 
 
   const handleClose = () => {
-    dispatch(CreateOrder(formSubmit))
     setOpen(false)
     nav('/order')
   }
 
-
+  const handleClickPay = () => {
+    if (paymentMethod === 'cash-on-delivery') {
+      dispatch(PaymentOrder(dataBought[dataBought.length - 1]._id))
+      dispatch(setSubCreate(false))
+      nav('/order')
+      setOpen(false)
+    } else {
+      dispatch(setSubCreate(false))
+    }
+  }
 
   return (
     <div className="container mx-auto p-6 bg-gray-100">
@@ -247,7 +266,7 @@ const Payment = () => {
 
       </fieldset>
 
-    
+
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-2">Tóm tắt đơn hàng:</h3>
         {cartData.map((product) => (
@@ -285,6 +304,7 @@ const Payment = () => {
         onCancel={handleCancel}
         footer={false}
         closable={false}
+        centered
       >
         <div>
           <div className="flex items-center mb-2">
@@ -318,13 +338,10 @@ const Payment = () => {
             </label>
           </div>
           {showQRCode ? (
-            <div className="mb-6 text-center">
+            <div className="text-center">
               <img
-                src="https://img.vietqr.io/image/TCB-19037144050012-compact.png"
-                alt="QR Code"
-                width="256"
-                height="256"
-                className="mx-auto"
+                src={qr.qrUrl}
+                alt=""
               />
               <p className="mt-2 text-gray-700">
                 Quét mã QR để thực hiện thanh toán chuyển khoản
@@ -335,15 +352,23 @@ const Payment = () => {
             <></>
           }
         </div>
-        <div>
-          <Button
-            onClick={handleClose}
-          >
-            Đóng
-          </Button>
-          <Button>
-            Xác nhận
-          </Button>
+        <div className="flex justify-end">
+          <Space>
+            <Button
+              onClick={handleClose}
+            >
+              Đóng
+            </Button>
+            {paymentMethod === "cash-on-delivery" &&
+              <Button
+                type="primary"
+                onClick={handleClickPay}
+              >
+                Xác nhận
+              </Button>
+            }
+
+          </Space>
         </div>
       </Modal>
     </div>
