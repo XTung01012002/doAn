@@ -14,16 +14,16 @@ const AcceptOrder = () => {
     useEffect(() => {
         dispatch(fetchDataBoughtUser());
     }, [dispatch]);
-    
+
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 4; 
+    const pageSize = 9;
 
 
     const column = [
         {
             key: 'stt',
             title: 'STT',
-            render: (_text, _record, index) => (currentPage - 1) * pageSize + index + 1, // Tính STT dựa trên trang hiện tại
+            render: (_text, _record, index) => (currentPage - 1) * pageSize + index + 1,
         },
         {
             key: 'createdAt',
@@ -138,7 +138,8 @@ const AcceptOrder = () => {
                 dataSource={dataSource}
                 pagination={{
                     pageSize: pageSize,
-                    onChange: (page) => setCurrentPage(page), // Cập nhật trang hiện tại
+                    current: currentPage,
+                    onChange: (page) => setCurrentPage(page),
                 }}
             />
 

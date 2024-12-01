@@ -157,6 +157,12 @@ const SummaryApi = {
     // thanh toan nhan hang
     url: `${backendDomin}/api/paymentinfo/choosePaymentMethod`
   },
+  getCommentProduct: {
+    url: `${backendDomin}/api/product/comment`
+  },
+  getallcancelordersale: {
+    url: `${backendDomin}/api/paymentinfo/all-cancel-order-sale`
+  }
   
 };
 
