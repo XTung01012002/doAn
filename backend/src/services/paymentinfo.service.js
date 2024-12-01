@@ -258,6 +258,24 @@ class PaymentInfoService {
       .exec();
   };
 
+  // chon phương thức thanh toán khi nhận hàng
+  static choosePaymentMethod = async (req, id) => {
+    const sessionUser = req.user;
+    const paymentInfo = await paymentInfoSchema
+      .findOne({
+        userId: sessionUser,
+        _id: id,
+      })
+      .populate("productList.productId")
+      .exec();
+    if (!paymentInfo) {
+      throw new BadRequestError("Không tìm thấy đơn hàng");
+    }
+    paymentInfo.paymentStatus = "thanh toán khi nhận hàng";
+    await paymentInfo.save();
+    
+  };
+
   // lấy tất cả đơn hàng đã giao của user
   static getAllDeliveredOrder = async (req) => {
     const sessionUser = req.user;

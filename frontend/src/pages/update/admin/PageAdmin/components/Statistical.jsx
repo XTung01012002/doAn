@@ -4,7 +4,7 @@ import { GetStatistical } from '../../../../../store/admin/PageAdmin/getStatisti
 import { format } from 'date-fns';
 import { Card } from "antd";
 import { BarChartOutlined, ShoppingCartOutlined, LineChartOutlined } from "@ant-design/icons";
-import {  XAxis, YAxis, Tooltip, CartesianGrid, LineChart, Line, Legend } from 'recharts';
+import { XAxis, YAxis, Tooltip, CartesianGrid, LineChart, Line, Legend } from 'recharts';
 
 const formatNumber = (num) =>
     Number(num).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
@@ -46,7 +46,7 @@ const Statistical = () => {
 
 
     return (
-        
+
         <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <Card
@@ -115,7 +115,7 @@ const Statistical = () => {
                         </div>
                     </div>
                 </Card>
-               
+
             </div>
             <Card className='mt-2'>
                 <LineChart

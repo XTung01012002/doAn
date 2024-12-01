@@ -21,6 +21,7 @@ router.get("/by/:id", asyncHandle(PaymentInfoController.getById));
 router.delete("/deleteCanceledOrder/:id", asyncHandle(PaymentInfoController.deleteCanceledOrder));
 router.get("/all-ShippingOrder", asyncHandle(PaymentInfoController.getAllShippingOrder));
 router.get("/all-DeliveredOrder", asyncHandle(PaymentInfoController.getAllDeliveredOrder));
+router.put("/choosePaymentMethod/:id", asyncHandle(PaymentInfoController.choosePaymentMethod));
 // đối với sale
 router.get("/all-confirm-order-sale", asyncHandle(PaymentInfoController.getAllConfirmedOrderSale));
 router.get("/all-cancel-order-sale", asyncHandle(PaymentInfoController.getAllCanceledOrderSale));
