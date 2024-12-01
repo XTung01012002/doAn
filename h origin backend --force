@@ -1,0 +1,109 @@
+[33me67e8c2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mbackend[m[33m)[m update
+[33m1e8776c[m update
+[33m8cb0390[m Delete package-lock.json
+[33me9399ae[m Delete package.json
+[33m671582d[m Delete node_modules directory
+[33mbb02f23[m Merge pull request #31 from XTung01012002/quan
+[33m3f2178e[m Merge branch 'main' into quan
+[33m5cf3ec7[m update
+[33m4a670cd[m Merge pull request #30 from XTung01012002/backend
+[33mef4f462[m update
+[33m3f6a1d6[m Merge pull request #29 from XTung01012002/quan
+[33m2f1e4da[m update
+[33mcfd5ff7[m update
+[33m3da5f3e[m Merge branch 'main' into quan
+[33mcdb39a0[m update
+[33m1bb1b9b[m Merge pull request #28 from XTung01012002/backend
+[33m1cc1d7b[m update
+[33mef12c40[m Merge pull request #27 from XTung01012002/quan
+[33mf18f995[m Merge branch 'main' into quan
+[33m4d94c04[m update
+[33m99db2b6[m Merge pull request #26 from XTung01012002/backend
+[33mc8e282b[m Merge branch 'main' into backend
+[33mcaa9197[m update
+[33meb87683[m Merge pull request #25 from XTung01012002/backend
+[33m3fb06cb[m Merge branch 'main' into backend
+[33ma010d70[m update
+[33m97be655[m Merge pull request #24 from XTung01012002/quan
+[33m6ccc4b0[m Merge branch 'main' into quan
+[33mee8fedc[m update
+[33m30b408e[m Merge pull request #23 from XTung01012002/quan
+[33m7987408[m Merge branch 'main' into quan
+[33ma5b2668[m update
+[33m7f0ab8f[m Merge pull request #22 from XTung01012002/backend
+[33mfe68a9e[m Merge branch 'main' into backend
+[33m380511b[m update
+[33m6d3a28f[m Merge pull request #21 from XTung01012002/backend
+[33m8c314fd[m update
+[33m357996c[m sửa thêm thông tin
+[33md65fb77[m Merge branch 'main' into backend
+[33m1da39fa[m thêm nhiều sản phẩm
+[33mfbea58f[m Merge pull request #20 from XTung01012002/backend
+[33m415991b[m Merge branch 'main' into backend
+[33m721f9d4[m update
+[33mf03b37f[m Merge pull request #19 from XTung01012002/backend
+[33m9580193[m Merge branch 'main' into backend
+[33m0aff5f3[m update
+[33m0bde6d2[m Merge pull request #18 from XTung01012002/quan
+[33m1bad328[m update
+[33m3242c0a[m Merge branch 'main' into quan
+[33m27d0d27[m update
+[33mbb6f8f1[m Merge pull request #17 from XTung01012002/backend
+[33mb88276e[m update
+[33m3c503f4[m update
+[33m42c22f6[m update
+[33mbbdd811[m Merge pull request #16 from XTung01012002/quan
+[33m650d448[m update
+[33m02ec229[m Merge pull request #15 from XTung01012002/quan
+[33m46ee8bb[m update
+[33ma40bde1[m Merge branch 'main' into quan
+[33m20a7767[m update
+[33mb54bef4[m Merge pull request #14 from XTung01012002/backend
+[33ma32a3d3[m update
+[33m3d2259e[m Merge branch 'main' into quan
+[33m0de5ca5[m update
+[33m655cbdc[m Merge branch 'main' into backend
+[33m583b9cc[m update
+[33m6f57b87[m Merge branch 'main' into quan
+[33mde46d06[m update
+[33mc42a545[m Merge pull request #13 from XTung01012002/backend
+[33mbc96b18[m Merge branch 'main' into backend
+[33m23d6bf2[m update
+[33mbc08618[m Merge pull request #12 from XTung01012002/backend
+[33m681aad4[m Merge branch 'main' into backend
+[33m2df52a6[m update
+[33m06d47a2[m Merge branch 'main' into quan
+[33me9bda17[m update
+[33m4181cc3[m Merge pull request #11 from XTung01012002/backend
+[33m5649599[m Merge branch 'main' into backend
+[33m2712fd8[m updat
+[33m78eff29[m Merge branch 'main' into quan
+[33me69ecdf[m update
+[33m14b3ec0[m Merge pull request #10 from XTung01012002/backend
+[33mb712f4e[m Merge branch 'main' of https://github.com/XTung01012002/doAn
+[33mdea43e1[m updateBackend
+[33m8a2dee6[m Merge pull request #9 from XTung01012002/quan
+[33m7c4c41e[m updateFE
+[33m1d1160f[m Merge pull request #8 from XTung01012002/frontend
+[33m00be3aa[m[33m ([m[1;31morigin/frontend[m[33m, [m[1;32mfrontend[m[33m)[m new
+[33mf61d143[m Merge pull request #7 from XTung01012002/frontend
+[33ma388181[m update
+[33m646a5d8[m Merge pull request #6 from XTung01012002/quan
+[33mca0ab92[m update
+[33mbf4057a[m Merge branch 'main' into quan
+[33mc71aab7[m update
+[33mb4d5398[m Merge pull request #5 from XTung01012002/revert-4-frontend
+[33mea50f35[m Revert "Frontend"
+[33maee22e5[m Merge pull request #4 from XTung01012002/frontend
+[33m8dce118[m sửa giá bán
+[33m2628e6c[m thêm chi tiết sản phẩm
+[33mfd61e6d[m Merge pull request #3 from XTung01012002/quan
+[33m943c713[m[33m ([m[1;32mquan[m[33m)[m update
+[33m9151264[m Update index.js
+[33ma4f098c[m Merge pull request #2 from XTung01012002/frontend
+[33m5226c92[m Merge branch 'frontend' of https://github.com/XTung01012002/doAn into frontend
+[33mcb9de4e[m thêm frontend
+[33mfb50448[m Merge pull request #1 from XTung01012002/frontend
+[33m9348d88[m update
+[33md8c5960[m sửa tính năng
+[33md1a9bd6[m first commit
