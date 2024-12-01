@@ -1,0 +1,26 @@
+/* Tùy chỉnh thanh cuộn */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    /* Thanh cuộn mỏng */
+    scrollbar-color: #a0aec0 #edf2f7;
+    /* Màu thanh cuộn và nền */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    /* Độ rộng thanh cuộn */
+    border-radius: 999px;
+}
+
+s .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #a0aec0;
+    /* Màu thanh cuộn */
+    border-radius: 999px;
+    /* Bo góc */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #edf2f7;
+    /* Màu nền */
+    border-radius: 999px;
+}

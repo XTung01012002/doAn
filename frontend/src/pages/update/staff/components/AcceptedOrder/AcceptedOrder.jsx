@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetAllInfoShipOrder } from '../../../../../store/shipinfo/GetAllOrderShipInfo';
-import { Button, Table } from 'antd';
+import { Button, Table, Tag } from 'antd';
 import formatAmount from '../../../../../components/formatNumber/FormatNumber';
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 
@@ -12,12 +12,13 @@ const AcceptedOrder = () => {
 
     const dispatch = useDispatch();
     const dataSource = useSelector(state => state.getAllShipInfo.data)
-    const [id, setId] = useState(null)
     useEffect(() => {
         dispatch(GetAllInfoShipOrder())
     }, [dispatch])
 
-    console.log(dataSource);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
+
 
 
     const column = [
@@ -25,8 +26,8 @@ const AcceptedOrder = () => {
             key: '_id',
             dataIndex: '_id',
             title: 'STT',
-            render: (_text, _object, index) => {
-                return index + 1
+            render: (_text, _record, index) => {
+                return (currentPage - 1) * pageSize + index + 1
             }
         },
         {
@@ -68,7 +69,23 @@ const AcceptedOrder = () => {
             dataIndex: 'paymentInfo',
             title: 'Trạng thái thanh toán',
             render: (paymentInfo) => {
-                return paymentInfo?.paymentStatus
+                return <Tag bordered={false}
+                    color={
+                        paymentInfo?.paymentStatus === 'Chưa thanh toán'
+                            ? 'error'
+                            : paymentInfo?.paymentStatus === 'Đã thanh toán'
+                                ? 'blue'
+                                : paymentInfo?.paymentStatus === 'thanh toán khi nhận hàng'
+                                    ? 'cyan'
+                                    : 'error'}
+                >
+                    {
+                        paymentInfo?.paymentStatus
+                        ? paymentInfo?.paymentStatus
+                        : 'Chưa chọn phương thức thanh toán'
+                    }
+                </Tag>
+
             }
         },
         {
@@ -79,25 +96,6 @@ const AcceptedOrder = () => {
                 return `${formatAmount(totalAmount)} đ`
             }
         },
-        // {
-        //     key: 'action',
-        //     dataIndex: 'action',
-        //     title: 'Xem chi tiết',
-        //     render: (_value, data) => {
-        //         return (
-        //             <Button
-        //                 variant='text'
-        //                 color='default'
-        //                 onClick={() => setId(data._id)}
-        //             >
-        //                 <MdOutlineRemoveRedEye
-        //                     color='blue'
-        //                     size={20}
-        //                 />
-        //             </Button>
-        //         )
-        //     }
-        // }
     ]
 
     return (
@@ -105,7 +103,11 @@ const AcceptedOrder = () => {
             <Table
                 columns={column}
                 dataSource={dataSource}
-                pagination={{ pageSize: 10 }}
+                pagination={{
+                    pageSize: pageSize,
+                    current: currentPage,
+                    onChange: (page) => setCurrentPage(page),
+                }}
             />
         </div>
     )

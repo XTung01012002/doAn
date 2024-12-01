@@ -10,7 +10,11 @@ import displayVNDCurrency from "../helpers/displayVNDCurrency";
 import CategoryWiseProductDisplay from "../components/CategoryWiseProductDisplay";
 import addToCart from "../helpers/addToCart";
 import Context from "../context";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { GetCommentProduct } from "../store/delivered/getCommnetproduct";
+import './ProductDetail.css'
+import { Avatar, Badge, Rate } from "antd";
+import { UserOutlined } from '@ant-design/icons';
 const ProductDetails = () => {
   const [data, setData] = useState({
     productName: "",
@@ -22,6 +26,14 @@ const ProductDetails = () => {
     sellingPrice: "",
   });
   const params = useParams();
+  const dispatch = useDispatch()
+  const dataComment = useSelector(state => state.getComment.data)
+
+  useEffect(() => {
+    dispatch(GetCommentProduct(params.id))
+  }, [dispatch])
+
+
   const [loading, setLoading] = useState(true);
   const productImageListLoading = new Array(4).fill(null);
   const [activeImage, setActiveImage] = useState("");
@@ -115,9 +127,8 @@ const ProductDetails = () => {
                   style={{
                     background: `url(${activeImage})`,
                     backgroundRepeat: "no-repeat",
-                    backgroundPosition: `${zoomImageCoordinate.x * 100}% ${
-                      zoomImageCoordinate.y * 100
-                    }% `,
+                    backgroundPosition: `${zoomImageCoordinate.x * 100}% ${zoomImageCoordinate.y * 100
+                      }% `,
                   }}
                 ></div>
               </div>
@@ -212,7 +223,7 @@ const ProductDetails = () => {
 
             <div className="flex items-center gap-3 my-2">
               <button className="border-2 border-red-600 rounded px-3 py-1 min-w-[120px] text-red-600 font-medium hover:bg-red-600 hover:text-white"
-               onClick={(e) => handleBuyProduct(e, data?._id)}>
+                onClick={(e) => handleBuyProduct(e, data?._id)}>
                 Buy
               </button>
               <button
@@ -228,14 +239,50 @@ const ProductDetails = () => {
               <p className="text-slate-600 font-medium my-1">Description : </p>
               <p>{data?.description}</p>
             </div>
+
+
           </div>
         )}
+
+        <div className="w-full ml-80">
+          <div className="flex">
+            <p className="text-2xl font-semibold">Đánh giá</p>
+            <Badge count={dataComment.listComment && dataComment.listComment.length} overflowCount={[99, 0]} />
+          </div>
+          <div className="space-y-6 mt-6 max-h-[35vh] overflow-y-auto custom-scrollbar">
+            {dataComment?.listComment?.map((comment, index) => (
+              <div
+                key={index}
+                className="flex items-start space-x-4 border-b pb-4"
+              >
+                <Avatar
+                  src={comment.userId.profilePic}
+                  icon={comment.userId.profilePic === null && <UserOutlined />}
+                  alt={`${comment.name} avatar`}
+                  className="w-12 h-12 rounded-full"
+                />
+                <div>
+                  <div className="flex items-center ">
+                    <p className="font-medium text-lg mr-3">{comment.userId.name}</p>
+                    <Rate value={comment.rate} disabled />
+                  </div>
+
+                  <p className="text-gray-700 mt-2">{comment.comment}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
+
+
+
+
 
       {data.category && (
         <CategoryWiseProductDisplay
           category={data?.category}
-          heading={"Recommended Product"}
+          heading={"Đề xuất"}
         />
       )}
     </div>

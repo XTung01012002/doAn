@@ -17,10 +17,10 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
             values.shippingFee = parseFloat(values.shippingFee.replace(/,/g, ''));
         }
         console.log("values:::", values.shippingFee);
-        console.log('Form data:', id,values);
-      // dispatch(CreateShipInfo({id, values}))
-      dispatch(CreateShipInfo({ id, values: form.getFieldsValue() }));
-      
+        console.log('Form data:', id, values);
+        // dispatch(CreateShipInfo({id, values}))
+        dispatch(CreateShipInfo({ id, values: values }));
+
 
     };
 

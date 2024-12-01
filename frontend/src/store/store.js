@@ -18,6 +18,10 @@ import GetRateReducer from './rate/getRate'
 import CreateQRReducer from './QRcode/CreateQR'
 import PaymentOrderReducer from './thanhtoan/PaymentOrder'
 import CommnetOrderReducer from './delivered/modeldeli'
+import GetCommentProductReducer from './delivered/getCommnetproduct'
+import GetAllCancelOrderSaleReducer from './getAllCancelOrderSale/GetAllCancelOrderSale'
+
+
 
 export const store = configureStore({
   reducer: {
@@ -39,6 +43,8 @@ export const store = configureStore({
     getRate: GetRateReducer,
     createQR: CreateQRReducer,
     nhanhang: PaymentOrderReducer,
-    createComment: CommnetOrderReducer
+    createComment: CommnetOrderReducer,
+    getComment: GetCommentProductReducer,
+    getAllCancelSale: GetAllCancelOrderSaleReducer
   },
 })

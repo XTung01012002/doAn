@@ -20,11 +20,15 @@ const AllUserAdmin = () => {
         dispatch(GetAllUserAdmin())
     }, [dispatch])
 
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 9;
+
     const column = [
         {
             title: 'STT',
-            render: (_value, _data, index) => {
-                return index + 1
+            render: (_text, _record, index) => {
+                return (currentPage - 1) * pageSize + index + 1
             }
         },
         {
@@ -73,6 +77,11 @@ const AllUserAdmin = () => {
             <Table
                 dataSource={data}
                 columns={column}
+                pagination={{
+                    pageSize: pageSize,
+                    current: currentPage,
+                    onChange: (page) => setCurrentPage(page),
+                }}
             />
             {open && (
                 <ChangeUserRole

@@ -29,7 +29,7 @@ const CreateShipInfoSlice = createSlice({
     name: 'createShipInfo',
     initialState: {
         loading: false,
-        sub: true,
+        sub: false,
         error: null
     },
     reducers: {},
@@ -37,17 +37,17 @@ const CreateShipInfoSlice = createSlice({
         builder
             .addCase(CreateShipInfo.pending, (state) => {
                 state.loading = true;
-                state.sub = true;
+                state.sub = false;
                 state.error = null
             })
             .addCase(CreateShipInfo.fulfilled, (state) => {
                 state.loading = false;
-                state.sub = false;
+                state.sub = true;
                 state.error = null
             })
             .addCase(CreateShipInfo.rejected, (state, action) => {
                 state.loading = false;
-                state.sub = true;
+                state.sub = false;
                 state.error = action.error.message;
             });
     },
