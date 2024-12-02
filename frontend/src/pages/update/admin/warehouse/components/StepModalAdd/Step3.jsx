@@ -1,10 +1,10 @@
 import { Avatar, Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import accept from '../../../../../../assest/accepted.png'
+import { useDispatch } from 'react-redux'
 const Step3 = ({ setData, setOpen, setCurrent }) => {
 
-  const [count, setCount] = useState(5)
-
+  const [count, setCount] = useState(3)
   useEffect(() => {
     const interval = setInterval(() => {
       setCount(prev => {
@@ -15,6 +15,7 @@ const Step3 = ({ setData, setOpen, setCurrent }) => {
           setCurrent(0)
           setOpen(false)
           clearInterval(interval);
+
           return prev;
         }
       });

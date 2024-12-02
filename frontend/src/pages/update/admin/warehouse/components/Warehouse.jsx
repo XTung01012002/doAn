@@ -6,6 +6,7 @@ import { fetchDataWarehouse } from '../../../../../store/admin/warehouse/Warahou
 import WareHouseModal from './WareHouseModal';
 import ModalAddProduct from './ModalAddProduct';
 import { LoadingOutlined } from '@ant-design/icons';
+import formatAmount from '../../../../../components/formatNumber/FormatNumber';
 const maxLength = 20;
 
 
@@ -19,6 +20,7 @@ const Warehouse = () => {
         dispatch(fetchDataWarehouse());
     }, [dispatch]);
     const [loading, setLoading] = useState(true)
+    console.log('dataa', dataWH);
 
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 6;
@@ -87,11 +89,11 @@ const Warehouse = () => {
         },
         {
             title: <span >Giá nhập hàng</span>,
-            dataIndex: 'price',
-            key: 'price',
-            render: (text) => (
-                <span className="truncate block max-w-[100px]">{text.length > 15 ? `${text.slice(0, 15)}...` : text}</span>
-            ),
+            dataIndex: 'priceInventory',
+            key: 'priceInventory',
+            render: (values) => {
+                return formatAmount(values)
+            }
         },
         // {
         //     title: <span >Giá khuyến mãi</span>,
@@ -99,16 +101,16 @@ const Warehouse = () => {
         //     key: 'sellingPrice',
         //     render: (sellingPrice) => sellingPrice || 'Không có dữ liệu',
         // },
-        {
-            title: <span >Mô tả</span>,
-            dataIndex: 'description',
-            key: 'description',
-            render: (text) => (
-                <span className="truncate block max-w-[200px]">
-                    {text && text.length > maxLength ? `${text.slice(0, maxLength)}...` : text || 'Không có dữ liệu'}
-                </span>
-            ),
-        },
+        // {
+        //     title: <span >Mô tả</span>,
+        //     dataIndex: 'description',
+        //     key: 'description',
+        //     render: (text) => (
+        //         <span className="truncate block max-w-[200px]">
+        //             {text && text.length > maxLength ? `${text.slice(0, maxLength)}...` : text || 'Không có dữ liệu'}
+        //         </span>
+        //     ),
+        // },
         {
             title: <span >Số lượng</span>,
             dataIndex: 'quantityInStock',

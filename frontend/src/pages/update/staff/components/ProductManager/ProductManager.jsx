@@ -28,9 +28,13 @@ const ProductManager = () => {
             duration: 3,
         });
     };
+console.log('asdasd',dataSource);
 
 
-
+    const getImageSrc = (image) => {
+        
+        return image instanceof File ? URL.createObjectURL(image) : image;
+    };
 
     useEffect(() => {
         dispatch(fetchDataWarehouse())
@@ -83,13 +87,13 @@ const ProductManager = () => {
                             <Image
                                 width={50}
                                 height={50}
-                                src={productImage[0]}
+                                src={typeof productImage[0] === 'string' ? productImage[0] : 'https://imgs.search.brave.com/jt84d5SmMRH9IYwpquW1be6mriU5QEgM7G1ML6O8rsU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oYXlj/YWZlLnZuL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzA2L0hp/bmgtYW5oLUF2YXRh/ci10cmFuZy10cm9u/LTYwMHg2MDAuanBn'}
                             />
                             :
                             <Image
                                 width={50}
                                 height={50}
-                                src=' https://imgs.search.brave.com/jt84d5SmMRH9IYwpquW1be6mriU5QEgM7G1ML6O8rsU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oYXlj/YWZlLnZuL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzA2L0hp/bmgtYW5oLUF2YXRh/ci10cmFuZy10cm9u/LTYwMHg2MDAuanBn'
+                                src='https://imgs.search.brave.com/jt84d5SmMRH9IYwpquW1be6mriU5QEgM7G1ML6O8rsU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oYXlj/YWZlLnZuL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzA2L0hp/bmgtYW5oLUF2YXRh/ci10cmFuZy10cm9u/LTYwMHg2MDAuanBn'
                             />
                         }
                     </div>
@@ -142,6 +146,14 @@ const ProductManager = () => {
             title: 'Trong kho',
             render: (value) => {
                 return Intl.NumberFormat('vi-VN').format(value);
+            }
+        },
+        {
+            title: <span >Mô tả</span>,
+            dataIndex: 'description',
+            key: 'description',
+            render: (text) => {
+                return <span className='truncate block max-w-[100px]'>{text?.length > 15 ? `${text?.slice(0, 15)}...` : text}</span>
             }
         },
         {
