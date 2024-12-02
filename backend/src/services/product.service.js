@@ -8,16 +8,6 @@ class ProductService {
     return products;
   };
 
-  // thêm 1 hoặc nhiều sản phẩm
-  // static uploadProducts = async (productData) => {
-  //   try {
-  //     const products = await productSchema.insertMany(productData);
-  //     return products;
-  //   } catch (error) {
-  //     throw new BadRequestError(`${error.message}`);
-  //   }
-  // };
-
   static getAllProducts = async () => {
     try {
       const products = await productSchema.find().sort({ createdAt: -1 });
@@ -81,7 +71,7 @@ class ProductService {
   static getCategoryWiseProduct = async (Data) => {
     try {
       const { category } = Data;
-      const products = await productSchema.find({ category });
+      const products = await productSchema.find({ category, active: true });
       return products;
     } catch (error) {
       throw new BadRequestError(`${error.message}`);
