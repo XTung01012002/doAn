@@ -273,21 +273,55 @@ class PaymentInfoService {
     }
     paymentInfo.paymentStatus = "thanh toán khi nhận hàng";
     await paymentInfo.save();
-    
   };
 
   // lấy tất cả đơn hàng đã giao của user
   static getAllDeliveredOrder = async (req) => {
     const sessionUser = req.user;
-    return await paymentInfoSchema
-      .find({
-        userId: sessionUser,
-        orderStatus: "Đã giao hàng",
-      })
-      .populate("productList.productId")
-      .populate({ path: "userId", select: "name profilePic -_id" })
-      .exec();
-    };
+
+    try {
+      // Lấy tất cả đơn hàng đã giao
+      const orders = await paymentInfoSchema
+        .find({
+          userId: sessionUser,
+          orderStatus: "Đã giao hàng",
+        })
+        .populate("productList.productId") // Populate thông tin sản phẩm
+        .populate({ path: "userId", select: "name profilePic -_id" })
+        .exec();
+
+      // Lọc sản phẩm chưa được đánh giá
+      const filteredOrders = orders.map((order) => {
+        const filteredProductList = order.productList.filter((productItem) => {
+          const product = productItem.productId;
+
+          // Kiểm tra nếu người dùng chưa đánh giá sản phẩm
+          const userHasNotReviewed = !product.listComment.some(
+            (comment) => comment.userId.toString() === sessionUser.toString()
+          );
+
+          return userHasNotReviewed;
+        });
+        console.log("filteredProductList:::", filteredProductList);
+
+        return {
+          ...order.toObject(), // Chuyển đổi sang object để xử lý
+          productList: filteredProductList, // Cập nhật danh sách sản phẩm đã lọc
+        };
+      });
+
+      // Loại bỏ đơn hàng rỗng (không còn sản phẩm nào chưa đánh giá)
+      const nonEmptyOrders = filteredOrders.filter(
+        (order) => order.productList.length > 0
+      );
+      console.log("nonEmptyOrders:::", nonEmptyOrders); 
+
+      return nonEmptyOrders;
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách đơn hàng đã giao:", error);
+      throw new Error("Không thể lấy danh sách đơn hàng đã giao");
+    }
+  };
 
   // SALE
   // lấy tất cả đơn hàng đã xác nhận
