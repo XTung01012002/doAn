@@ -8,16 +8,6 @@ class ProductService {
     return products;
   };
 
-  // thêm 1 hoặc nhiều sản phẩm
-  // static uploadProducts = async (productData) => {
-  //   try {
-  //     const products = await productSchema.insertMany(productData);
-  //     return products;
-  //   } catch (error) {
-  //     throw new BadRequestError(`${error.message}`);
-  //   }
-  // };
-
   static getAllProducts = async () => {
     try {
       const products = await productSchema.find().sort({ createdAt: -1 });
@@ -81,7 +71,7 @@ class ProductService {
   static getCategoryWiseProduct = async (Data) => {
     try {
       const { category } = Data;
-      const products = await productSchema.find({ category });
+      const products = await productSchema.find({ category, active: true });
       return products;
     } catch (error) {
       throw new BadRequestError(`${error.message}`);
@@ -194,11 +184,15 @@ class ProductService {
   // lấy ra tất cả comment và số sao trung bình của sản phẩm
   static getCommentById = async (id) => {
     const product = await productSchema.findById(id);
-
+  
     if (!product) {
       throw new BadRequestError("Sản phẩm không tồn tại");
     }
-    // Tính số sao trung bình và tổng số đánh giá
+  
+    // Sắp xếp danh sách bình luận theo thời gian giảm dần
+    product.listComment.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+    // Tính số sao trung bình
     let totalRate = 0;
     product.listComment.forEach((comment) => {
       totalRate += comment.rate;
@@ -206,16 +200,20 @@ class ProductService {
     product.totalRate = product.listComment.length
       ? totalRate / product.listComment.length
       : 0;
-
+  
     product.totalRate = Math.round(product.totalRate * 10) / 10;
-
+  
+    // Populate thông tin user
     await product.populate({
       path: "listComment.userId",
       select: "name email profilePic -_id",
     });
-
+  
     await product.save();
+  
     return product;
   };
+
+  
 }
 module.exports = ProductService;
