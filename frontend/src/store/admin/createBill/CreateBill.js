@@ -28,7 +28,11 @@ const initialState = {
 const PostInventoryreceiptCreateReducer = createSlice({
     name: 'PostInventoryreceiptCreateReducer',
     initialState,
-    reducers: {},
+    reducers: {
+        setSubmit(state, action) {
+            state.submit = action.payload
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(PostInventoryreceiptCreate.pending, state => {
@@ -50,5 +54,5 @@ const PostInventoryreceiptCreateReducer = createSlice({
 
 })
 
-
+export const { setSubmit } = PostInventoryreceiptCreateReducer.actions
 export default PostInventoryreceiptCreateReducer.reducer

@@ -1,10 +1,12 @@
-import { Col, Image, Modal, Row, Avatar, Button, Input, Typography, message } from 'antd'
+import { Col, Image, Modal, Row, Avatar, Button, Input, Typography, message, Collapse, Radio, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styles from '../bought/ButtonStyles.module.css'
 import { CreateOrder, DeleteOrder } from '../../../../../store/createCart/CreateCartSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { fetchDataCanceledUser } from '../../../../../store/canceled/CanceledUser'
+import { PaymentOrder } from '../../../../../store/thanhtoan/PaymentOrder'
+import { CreateQR } from '../../../../../store/QRcode/CreateQR'
 
 
 const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduct, phone, setPhone, address, setAddress, setTotalAllAmount, totleAllAmount }) => {
@@ -12,6 +14,7 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
     const dispatch = useDispatch()
     const [open1, setOpen1] = useState(false)
     const [open2, setOpen2] = useState(false)
+    const [open3, setOpen3] = useState(false)
     const [fix, setFix] = useState(false)
     const [formData, setFormData] = useState()
     const [showQRCode, setShowQRCode] = useState(false);
@@ -21,16 +24,21 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
     const subCreate = useSelector(state => state.statusCanceled.subCreateOrder)
     const nav = useNavigate()
     const subDele = useSelector(state => state.statusCanceled.subDeleteOrder)
-
+    const [methodPayment, setMethodPayment] = useState(1);
     console.log(data);
-
+    const qr = useSelector(state => state.createQR.data)
+    const subCreateOrder = useSelector(state => state.statusCanceled.subCreateOrder)
 
     // console.log('quantityProductdata', data);
     // console.log('quantityProduct123123123', quantityProduct);
     // console.log('quantityProduct', quantityProduct[0]?.quantity);
 
 
+    const onChange1 = (e) => {
+        console.log(e.target.value);
 
+        setMethodPayment(e.target.value);
+    };
 
     const info = () => {
         messageApi.info('Xóa sản phẩm thành công!');
@@ -62,7 +70,7 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
         if (subCreate) {
             setOpen(false)
             setOpen1(false)
-            dispatch(DeleteOrder(data._id))
+            dispatch(DeleteOrder(data?._id))
         }
     }, [subCreate])
     useEffect(() => {
@@ -92,9 +100,19 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
 
     const handleClose = () => {
         dispatch(CreateOrder(formData))
-        // setOpen1(false)
-        // nav('/order')
     }
+
+    useEffect(() => {
+        if (subCreateOrder) {
+            if (methodPayment === 'cash-on-delivery') {
+                dispatch(PaymentOrder({ id: data._id }))
+            } else {
+                dispatch(CreateQR({ totalAmount: data.totalAmount }))
+                setOpen3(true)
+            }
+        }
+    }, [subCreateOrder, dispatch])
+
     const handleOK = () => {
         setOpen1(false)
     }
@@ -145,8 +163,37 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
 
     const handleBuy = () => {
         console.log('formData', formData);
-        setOpen1(true)
+        dispatch(CreateOrder(formData))
     }
+
+
+
+    const onChange = (key) => {
+        console.log(key);
+    };
+
+
+    const items = [
+        {
+            key: '1',
+            label:
+                <div className='flex justify-between items-center'>
+                    <div className='font-bold text-[16px]'>Hình thức thanh toán</div>
+                </div>,
+            children:
+                <>
+                    <Radio.Group onChange={onChange1} value={methodPayment}>
+                        <Space direction="vertical">
+                            <Radio value={'cash-on-delivery'}>Thanh toán khi nhận hàng</Radio>
+                            <Radio value={'bank-transfer'}>Chuyển khoản ngân hàng</Radio>
+                        </Space>
+                    </Radio.Group>
+                </>
+
+            ,
+        },
+
+    ];
 
 
 
@@ -335,18 +382,19 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
                             })}
                         </Row>
                     </Col>
-                    {/* <Col span={24}>
+                    <Col span={24}>
                         <hr />
                     </Col>
                     <Col className="gutter-row" span={24}>
                         <Collapse
                             onChange={onChange}
+                            defaultActiveKey={'1'}
                             ghost
                             expandIconPosition={'end'}
                             items={items}
                             className={styles.customCollapseHeader}
                         />
-                    </Col> */}
+                    </Col>
                     <Col span={24}>
                         <hr />
                     </Col>
@@ -382,83 +430,21 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
                 </Row >
             </Modal >
             <Modal
-                open={open1}
-                onOk={handleOK}
-                onCancel={handleCancel}
+                open={open3}
+                onCancel={() => setOpen3(false)}
+                centered
                 footer={false}
-                closable={false}
+                closeIcon={false}
             >
-                <div>
-                    <div className="flex items-center mb-2">
-                        <input
-                            type="radio"
-                            id="bank-transfer"
-                            name="payment-method"
-                            value="bank-transfer"
-                            checked={paymentMethod === "bank-transfer"}
-                            onChange={handlePaymentMethodChange}
-                            className="mr-2"
-                            required
-                        />
-                        <label htmlFor="bank-transfer" className="text-gray-700">
-                            Chuyển khoản ngân hàng
-                        </label>
-                    </div>
-                    <div className="flex items-center mb-2">
-                        <input
-                            type="radio"
-                            id="cash-on-delivery"
-                            name="payment-method"
-                            value="cash-on-delivery"
-                            checked={paymentMethod === "cash-on-delivery"}
-                            onChange={handlePaymentMethodChange}
-                            className="mr-2"
-                            required
-                        />
-                        <label htmlFor="cash-on-delivery" className="text-gray-700">
-                            Thanh toán khi nhận hàng
-                        </label>
-                    </div>
-                    {showQRCode ? (
-                        <div className="mb-6 text-center">
-                            <img
-                                src="https://img.vietqr.io/image/TCB-19037144050012-compact.png"
-                                alt="QR Code"
-                                width="256"
-                                height="256"
-                                className="mx-auto"
-                            />
-                            <p className="mt-2 text-gray-700">
-                                Quét mã QR để thực hiện thanh toán chuyển khoản
-                            </p>
-                        </div>
-                    )
-                        :
-                        <></>
-                    }
+                <div className="text-center">
+                    <img
+                        src={qr.qrUrl}
+                        alt=""
+                    />
+                    <p className="mt-2 text-gray-700">
+                        Quét mã QR để thực hiện thanh toán chuyển khoản
+                    </p>
                 </div>
-                <div>
-                    <Button
-                        onClick={handleClose}
-                        loading={loadingCreate}
-                    >
-                        Đóng
-                    </Button>
-                    <Button>
-                        Xác nhận
-                    </Button>
-                </div>
-            </Modal>
-
-
-            <Modal
-                open={open2}
-                onOk={handleOK1}
-                onCancel={handleCancel1}
-                footer={false}
-                closable={false}
-            >
-
             </Modal>
         </>
     )

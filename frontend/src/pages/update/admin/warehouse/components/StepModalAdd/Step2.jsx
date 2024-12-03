@@ -1,7 +1,8 @@
 import { Badge, Button, Form, Input, Select, Space, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { PostInventoryreceiptCreate } from '../../../../../../store/admin/createBill/CreateBill';
+import { PostInventoryreceiptCreate, setSubmit } from '../../../../../../store/admin/createBill/CreateBill';
+import { fetchDataWarehouse } from '../../../../../../store/admin/warehouse/Warahouse';
 
 
 const Step2 = ({ current, setCurrent, data, setData }) => {
@@ -80,21 +81,20 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
 
         const merge = { ...data, productList: updatedProducts };
         setData(merge)
+        dispatch(PostInventoryreceiptCreate(merge))
 
     };
 
-    useEffect(() => {
-        if (data?.productList?.length > 0) {
-            dispatch(PostInventoryreceiptCreate(data))
-        }
-    }, [data]);
+   
 
     useEffect(() => {
         if (submit) {
             setCurrent(current + 1);
             form.resetFields();
+            dispatch(fetchDataWarehouse());
+            dispatch(setSubmit(false))
         }
-    }, [submit])
+    }, [submit, dispatch])
 
     const onFinish = (value) => {
         form.validateFields()
