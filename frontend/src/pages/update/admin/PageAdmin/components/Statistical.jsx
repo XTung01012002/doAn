@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import dayjs from 'dayjs'; 
 import { GetStatistical } from '../../../../../store/admin/PageAdmin/getStatistical';
-import { format } from 'date-fns';
-import { Card } from "antd";
+import { Card, DatePicker } from "antd";
 import { BarChartOutlined, ShoppingCartOutlined, LineChartOutlined } from "@ant-design/icons";
-import { XAxis, YAxis, Tooltip, CartesianGrid, LineChart, Line, Legend } from 'recharts';
 
 const formatNumber = (num) =>
     Number(num).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
@@ -14,40 +13,44 @@ const Statistical = () => {
     const dispatch = useDispatch();
     const data = useSelector(state => state.getStatistical.data)
 
-    const date = new Date();
-    const twoMonthsBeforeToday = new Date(date);
-    twoMonthsBeforeToday.setMonth(date.getMonth() - 2);
+    const date = dayjs();
+    const twoMonthsBeforeToday = dayjs().subtract(1, 'month');
 
-    const [startDate, setStartDate] = useState(format(new Date(twoMonthsBeforeToday), 'yyyy-MM-dd'));
-    const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-
-    console.log('data', startDate, endDate);
-    console.log('data1', data);
-
-
+    const [startDate, setStartDate] = useState(twoMonthsBeforeToday.format('YYYY-MM-DD'));
+    const [endDate, setEndDate] = useState(date.format('YYYY-MM-DD'));
 
     useEffect(() => {
         const dateApi = {
-            startDate: "2024-10-01",
-            endDate: "2024-10-29"
+            startDate,
+            endDate
         };
         dispatch(GetStatistical(dateApi));
     }, [dispatch, endDate, startDate]);
 
+    const handleStartDateChange = (date, dateString) => {
+        setStartDate(dateString);
+    };
 
-    const chartData = [
-        { name: "Doanh thu", value: data.totalRevenue },
-        { name: "Số lượng đã bán", value: data.totalQuantity },
-        { name: "Lợi nhuận", value: data.totalProfit },
-        { name: "Giá trị hàng tồn", value: data.totalAmountInventory },
-        { name: "Phí vận chuyển", value: data.totalShippingFee }
-    ];
-
-
+    const handleEndDateChange = (date, dateString) => {
+        setEndDate(dateString);
+    };
 
     return (
-
         <>
+            <div className="mb-6 flex gap-4 justify-end">
+                <DatePicker
+                    onChange={handleStartDateChange}
+                    defaultValue={twoMonthsBeforeToday}
+                    format="YYYY-MM-DD"
+                    placeholder="Chọn ngày bắt đầu"
+                />
+                <DatePicker
+                    onChange={handleEndDateChange}
+                    defaultValue={date}
+                    format="YYYY-MM-DD"
+                    placeholder="Chọn ngày kết thúc"
+                />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <Card
                     className="shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 bg-white rounded-lg"
@@ -117,7 +120,7 @@ const Statistical = () => {
                 </Card>
 
             </div>
-            <Card className='mt-2'>
+            {/* <Card className='mt-2'>
                 <LineChart
                     width={1300}
                     height={350}
@@ -133,12 +136,9 @@ const Statistical = () => {
                     <Legend />
                     <Line type="monotone" dataKey="value" stroke="#82ca9d" />
                 </LineChart>
-            </Card>
+            </Card> */}
         </>
-
     )
 }
 
-export default Statistical
-
-
+export default Statistical;

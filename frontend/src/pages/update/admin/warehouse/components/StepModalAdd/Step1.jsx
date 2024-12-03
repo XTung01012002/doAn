@@ -82,7 +82,16 @@ const Step1 = ({ current, setCurrent, data, setData }) => {
                     <Form.Item
                         name="phoneNumber"
                         label="Số điện thoại"
-                        rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập số điện thoại'
+                            },
+                            {
+                                pattern: /^[0-9]{10}$/,
+                                message: 'Số điện thoại phải có 10 chữ số'
+                            }
+                        ]}
                     >
                         <Input placeholder="Nhập số điện thoại . . ." />
                     </Form.Item>

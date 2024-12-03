@@ -5,7 +5,7 @@ import SummaryApi from '../../common/index';
 
 
 
-export const CreateShipInfo = createAsyncThunk('data/createShipInfo', async ({ id, values }) => {
+export const CreateShipInfo = createAsyncThunk('data/createShipInfo', async ({ id, values }, { rejectWithValue }) => {
     console.log('Dữ liệu truyền vào API:', values);
 
     try {
@@ -13,13 +13,12 @@ export const CreateShipInfo = createAsyncThunk('data/createShipInfo', async ({ i
             {
                 withCredentials: true
             })
-       // console.log('resultData: ', response.data.data);
-       console.log('Dữ liệu trả về từ server:', response.data.data);
+        console.log('Dữ liệu trả về từ server:', response.data.data);
         return response.data.data;
     } catch (error) {
-       // throw new Error(error.response?.data?.message || "Error fetching data");
-       console.error('Lỗi từ server:', error.response?.data);
-       throw new Error(error.response?.data?.message || "Error fetching data");
+        //    console.error('Lỗi từ server:', error.response?.data);
+        //    throw new Error(error.response?.data?.message || "Error fetching data");
+        return rejectWithValue(error.response.data)
     }
 });
 

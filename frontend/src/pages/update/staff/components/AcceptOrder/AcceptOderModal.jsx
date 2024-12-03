@@ -7,7 +7,7 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.createShipInfo.loading)
-    const sub = useSelector((state) => state.createShipInfo.sub)
+    const sub = useSelector((state) => state.createShipInfo.submit)
     const error = useSelector((state) => state.createShipInfo.error)
     const handleSubmit = (values) => {
         if (values.deliveryDate) {
@@ -28,7 +28,7 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
         if (sub) {
             setOpen(false)
         }
-    }, [sub, setOpen])
+    }, [sub])
 
     return (
         <>
