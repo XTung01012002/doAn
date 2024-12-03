@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Card, Col, Dropdown, Image, Row, Space } from 'antd';
+import { Avatar, Button, Card, Col, Dropdown, Image, Modal, Row, Space } from 'antd';
 import styles from '../CustomScrollY.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDataBoughtUser } from '../../../../../store/bought/BoughtUser';
 import BoughtModal from './BoughtModal';
+import { PaymentOrder } from '../../../../../store/thanhtoan/PaymentOrder';
+import { CreateQR } from '../../../../../store/QRcode/CreateQR';
 
 
 
@@ -13,6 +15,11 @@ import BoughtModal from './BoughtModal';
 const Bought = () => {
     const [expandedIndices, setExpandedIndices] = useState([]);
     const [open, setOpen] = useState(false)
+    const [open1, setOpen1] = useState(false)
+    const [paymentMethod, setPaymentMethod] = useState();
+    const [showQRCode, setShowQRCode] = useState(false);
+
+    const qr = useSelector(state => state.createQR.data)
     const dispatch = useDispatch();
     const data = useSelector((state) => state.bought.data);
 
@@ -34,6 +41,44 @@ const Bought = () => {
         });
     };
 
+    const handleSubmit = (items) => {
+        setOpen1(true)
+        setDataModal(items)
+    }
+
+
+    const handleClose = () => {
+        setOpen1(false)
+    }
+
+    const handleClickPay = () => {
+        if (paymentMethod === 'cash-on-delivery') {
+            dispatch(PaymentOrder({ id: dataModal._id }))
+            setOpen(false)
+        } else {
+        }
+    }
+
+    const handlePaymentMethodChange = (e) => {
+        const value = e.target.value;
+        console.log('values', value);
+
+        setPaymentMethod(value);
+
+        if (value === "bank-transfer") {
+            const tmp = {
+                totalAmount: dataModal.totalAmount
+            }
+            dispatch(CreateQR(tmp))
+            setShowQRCode(true);
+        } else {
+            setShowQRCode(false);
+        }
+    };
+
+
+
+
     return (
         <div className={`${styles.customScrollbar}`}>
             <Row gutter={[16, 24]}>
@@ -48,7 +93,7 @@ const Bought = () => {
                                 className='relative'
                             >
                                 <span
-                                    className='absolute right-6 top-4 text-[16px] font-semibold text-[#ff4242]'
+                                    className={`absolute right-6 top-4 text-[16px] font-semibold  ${(items.paymentStatus === 'Chưa chọn phương thức thanh toán' || items.paymentStatus === 'Thanh toán khi nhận hàng') ? 'text-[#ff4242]' : 'text-[#3538fa]'}`}
                                 >
                                     {items.paymentStatus}
                                 </span>
@@ -125,12 +170,16 @@ const Bought = () => {
                                         >
                                             Xem chi tiết
                                         </Button>
-                                        <Button
-                                            variant='solid'
-                                            color='danger'
-                                        >
-                                            Thanh toán ngay
-                                        </Button>
+                                        {(items.paymentStatus === 'Chưa chọn phương thức thanh toán' || items.paymentStatus === 'Thanh toán khi nhận hàng') &&
+                                            <Button
+                                                variant='solid'
+                                                color='danger'
+                                                onClick={() => handleSubmit(items)}
+                                            >
+                                                Thanh toán ngay
+                                            </Button>
+                                        }
+
                                     </Col>
                                 </Row>
 
@@ -176,7 +225,79 @@ const Bought = () => {
                 setOpen={setOpen}
                 data={dataModal}
             />
+            <Modal
+                title={<div className='text-center'>Chọn phương thức thanh toán</div>}
+                open={open1}
+                onCancel={() => setOpen1(false)}
+                footer={false}
+                closable={false}
+                centered
+            >
+                <div>
+                    <div className="flex items-center mb-2">
+                        <input
+                            type="radio"
+                            id="bank-transfer"
+                            name="payment-method"
+                            value="bank-transfer"
+                            checked={paymentMethod === "bank-transfer"}
+                            onChange={handlePaymentMethodChange}
+                            className="mr-2"
+                            required
+                        />
+                        <label htmlFor="bank-transfer" className="text-gray-700">
+                            Chuyển khoản ngân hàng
+                        </label>
+                    </div>
+                    <div className="flex items-center mb-2">
+                        <input
+                            type="radio"
+                            id="cash-on-delivery"
+                            name="payment-method"
+                            value="cash-on-delivery"
+                            checked={paymentMethod === "cash-on-delivery"}
+                            onChange={handlePaymentMethodChange}
+                            className="mr-2"
+                            required
+                        />
+                        <label htmlFor="cash-on-delivery" className="text-gray-700">
+                            Thanh toán khi nhận hàng
+                        </label>
+                    </div>
+                    {showQRCode ? (
+                        <div className="text-center">
+                            <img
+                                src={qr.qrUrl}
+                                alt=""
+                            />
+                            <p className="mt-2 text-gray-700">
+                                Quét mã QR để thực hiện thanh toán chuyển khoản
+                            </p>
+                        </div>
+                    )
+                        :
+                        <></>
+                    }
+                </div>
+                <div className="flex justify-end">
+                    <Space>
+                        <Button
+                            onClick={handleClose}
+                        >
+                            Đóng
+                        </Button>
+                        {paymentMethod === "cash-on-delivery" &&
+                            <Button
+                                type="primary"
+                                onClick={handleClickPay}
+                            >
+                                Xác nhận
+                            </Button>
+                        }
 
+                    </Space>
+                </div>
+            </Modal>
         </div>
     );
 };

@@ -4,23 +4,30 @@ import styles from './ButtonStyles.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDataBoughtUser } from '../../../../../store/bought/BoughtUser';
 import { putCancelOrder } from '../../../../../store/bought/PutCancelOrder';
+import { PaymentOrder } from '../../../../../store/thanhtoan/PaymentOrder';
+import { CreateQR } from '../../../../../store/QRcode/CreateQR';
 import { fetchDataCanceledUser } from '../../../../../store/canceled/CanceledUser';
-import { GetDelivered } from '../../../../../store/delivered/Delivered';
-import { GetRate } from '../../../../../store/rate/getRate';
 
 const BoughtModal = ({ open, setOpen, data }) => {
 
-    const [value, setValue] = useState(1);
+    const [open1, setOpen1] = useState(false)
+    const [methodPayment, setMethodPayment] = useState(1);
     const [fix, setFix] = useState(false)
     const dispatch = useDispatch()
     const loading = useSelector(state => state.statusPutCancel.loadingPut)
     const sub = useSelector(state => state.statusPutCancel.subPut)
 
+    const loadingCreateNhanHang = useSelector(state => state.nhanhang.loading)
 
+    const subCreateNhanHang = useSelector(state => state.nhanhang.sub)
+
+
+    const qr = useSelector(state => state.createQR.data)
 
     const handleCancelOrder = () => {
         dispatch(putCancelOrder(data._id))
     }
+    console.log(data);
 
 
     useEffect(() => {
@@ -28,13 +35,19 @@ const BoughtModal = ({ open, setOpen, data }) => {
             setOpen(false)
             dispatch(fetchDataBoughtUser());
             dispatch(fetchDataCanceledUser())
-            dispatch(GetDelivered())
-            dispatch(GetRate())
         }
     }, [sub])
 
+
+    useEffect(() => {
+        if (subCreateNhanHang) {
+            setOpen(false)
+            dispatch(fetchDataBoughtUser());
+        }
+    }, [subCreateNhanHang, dispatch])
+
     const onChange1 = (e) => {
-        setValue(e.target.value);
+        setMethodPayment(e.target.value);
     };
     if (!data) {
         return null;
@@ -42,12 +55,10 @@ const BoughtModal = ({ open, setOpen, data }) => {
     const handleClickOK = () => {
 
         setOpen(false)
-        setValue(1)
     }
 
     const handleClickCannel = () => {
         setOpen(false)
-        setValue(1)
     }
 
     const onChange = (key) => {
@@ -57,24 +68,19 @@ const BoughtModal = ({ open, setOpen, data }) => {
     const items = [
         {
             key: '1',
-            label: <div className='font-bold text-[16px]'>Hình thức thanh toán</div>,
+            label:
+                <div className='flex justify-between items-center'>
+                    <div className='font-bold text-[16px]'>Hình thức thanh toán</div>
+                    <div className='font-medium text-[14px] text-[#FF4D4F]'>{data.paymentStatus}</div>
+                </div>,
             children:
                 <>
-                    <Radio.Group onChange={onChange1} value={value}>
+                    <Radio.Group onChange={onChange1} value={methodPayment}>
                         <Space direction="vertical">
-                            <Radio value={1}>Thanh toán khi nhận hàng</Radio>
-                            <Radio value={2}>Chuyển khoản ngân hàng</Radio>
+                            <Radio value={'cash-on-delivery'}>Thanh toán khi nhận hàng</Radio>
+                            <Radio value={'bank-transfer'}>Chuyển khoản ngân hàng</Radio>
                         </Space>
                     </Radio.Group>
-                    {value === 2 &&
-                        <img
-                            src="https://img.vietqr.io/image/TCB-19037144050012-compact.png"
-                            alt="QR Code"
-                            width="256"
-                            height="256"
-                            className="mx-auto"
-                        />
-                    }
                 </>
 
             ,
@@ -83,6 +89,15 @@ const BoughtModal = ({ open, setOpen, data }) => {
     ];
 
     const total = data?.totalAmount
+
+    const handleSubmit = () => {
+        if (methodPayment === 'cash-on-delivery') {
+            dispatch(PaymentOrder({ id: data._id }))
+        } else {
+            dispatch(CreateQR({ totalAmount: data.totalAmount }))
+            setOpen1(true)
+        }
+    }
 
     return (
         <>
@@ -94,27 +109,27 @@ const BoughtModal = ({ open, setOpen, data }) => {
                     </div>
                 }
                 open={open}
-                onOk={handleClickOK}
+                // onOk={handleClickOK}
                 onCancel={handleClickCannel}
                 centered
                 width={700}
 
-                okButtonProps={{
-                    style: {
-                        backgroundColor: '#1890ff',
-                        borderColor: '#1890ff',
-                        color: '#fff'
-                    },
-                }}
-                cancelButtonProps={{
-                    style: {
-                        color: '#fff',
-                        borderColor: '#ff4d4f',
-                        backgroundColor: '#ff4d4f'
-                    },
+                // okButtonProps={{
+                //     style: {
+                //         backgroundColor: '#1890ff',
+                //         borderColor: '#1890ff',
+                //         color: '#fff'
+                //     },
+                // }}
+                // cancelButtonProps={{
+                //     style: {
+                //         color: '#fff',
+                //         borderColor: '#ff4d4f',
+                //         backgroundColor: '#ff4d4f'
+                //     },
 
 
-                }}
+                // }}
                 footer={false}
             >
                 <Row
@@ -247,13 +262,30 @@ const BoughtModal = ({ open, setOpen, data }) => {
                         <hr />
                     </Col>
                     <Col className="gutter-row" span={24}>
-                        <Collapse
-                            onChange={onChange}
-                            ghost
-                            expandIconPosition={'end'}
-                            items={items}
-                            className={styles.customCollapseHeader}
-                        />
+                        {data.paymentStatus === 'Chưa chọn phương thức thanh toán' ?
+                            <Collapse
+                                onChange={onChange}
+                                defaultActiveKey={'1'}
+                                ghost
+                                expandIconPosition={'end'}
+                                items={items}
+                                className={styles.customCollapseHeader}
+                            />
+                            :
+                            <div className='flex justify-between items-center'>
+                                <div className='font-bold text-[16px]'>
+                                    Hình thức thanh toán
+                                </div>
+                                <div
+                                    className="font-medium"
+                                    style={{
+                                        color: '#3538fa',
+                                    }}
+                                >
+                                    {data.paymentStatus}
+                                </div>
+                            </div>
+                        }
                     </Col>
                     <Col span={24}>
                         <hr />
@@ -263,14 +295,14 @@ const BoughtModal = ({ open, setOpen, data }) => {
                             <div className='mb-5 font-bold text-[16px]'>
                                 Thanh toán
                             </div>
-                            <div
+                            {/* <div
                                 className="mb-5 font-bold"
                                 style={{
-                                    color: data.paymentStatus === 'Chưa thanh toán' ? '#FF4D4F' : '#3BD80D',
+                                    color: data.paymentStatus === 'Chưa chọn phương thức thanh toán' ? '#FF4D4F' : '#3538fa',
                                 }}
                             >
                                 {data.paymentStatus}
-                            </div>
+                            </div> */}
                         </div>
                         <Row gutter={[16, 24]}>
 
@@ -289,23 +321,43 @@ const BoughtModal = ({ open, setOpen, data }) => {
                     >
                         <Button
                             color='danger'
-                            variant='solid'
+                            variant='filled'
                             className='mr-2'
                             onClick={handleCancelOrder}
                             loading={loading}
                         >
                             Hủy đơn
                         </Button>
-                        <Button
-                            color='primary'
-                            variant='solid'
-                        >
-                            Thanh toán ngay
-                        </Button>
+                        {data.paymentStatus === 'Chưa chọn phương thức thanh toán' &&
+                            <Button
+                                color='danger'
+                                variant='solid'
+                                onClick={handleSubmit}
+                                loading={(loadingCreateNhanHang) ? true : false}
+                            >
+                                Thanh toán ngay
+                            </Button>
+                        }
                     </Col>
                 </Row >
             </Modal >
-
+            <Modal
+                open={open1}
+                onCancel={() => setOpen1(false)}
+                centered
+                footer={false}
+                closeIcon={false}
+            >
+                <div className="text-center">
+                    <img
+                        src={qr.qrUrl}
+                        alt=""
+                    />
+                    <p className="mt-2 text-gray-700">
+                        Quét mã QR để thực hiện thanh toán chuyển khoản
+                    </p>
+                </div>
+            </Modal>
         </>
     )
 }

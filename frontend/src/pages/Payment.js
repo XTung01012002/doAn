@@ -202,7 +202,7 @@ const Payment = () => {
 
   const handleClickPay = () => {
     if (paymentMethod === 'cash-on-delivery') {
-      dispatch(PaymentOrder(dataBought[dataBought.length - 1]._id))
+      dispatch(PaymentOrder({ id: dataBought[dataBought.length - 1]._id }))
       dispatch(setSubCreate(false))
       nav('/order')
       setOpen(false)
@@ -299,6 +299,7 @@ const Payment = () => {
       </button>
 
       <Modal
+        title={<div className='text-center'>Chọn phương thức thanh toán</div>}
         open={open}
         onOk={handleOK}
         onCancel={handleCancel}
