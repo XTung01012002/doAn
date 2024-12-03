@@ -271,7 +271,7 @@ class PaymentInfoService {
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
     }
-    paymentInfo.paymentStatus = "thanh toán khi nhận hàng";
+    paymentInfo.paymentStatus = "Thanh toán khi nhận hàng";
     await paymentInfo.save();
   };
 
