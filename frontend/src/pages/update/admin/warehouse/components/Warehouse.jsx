@@ -7,7 +7,6 @@ import WareHouseModal from './WareHouseModal';
 import ModalAddProduct from './ModalAddProduct';
 import { LoadingOutlined } from '@ant-design/icons';
 import formatAmount from '../../../../../components/formatNumber/FormatNumber';
-const maxLength = 20;
 
 
 
@@ -23,7 +22,7 @@ const Warehouse = () => {
     console.log('dataa', dataWH);
 
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 6;
+    const pageSize = 5;
     const columns = [
         {
             title: 'STT',
@@ -139,7 +138,7 @@ const Warehouse = () => {
     return (
         <>
             <div
-                className='flex justify-end pb-2'
+                className='flex justify-end pb-6'
             >
                 <Space>
                     <Button

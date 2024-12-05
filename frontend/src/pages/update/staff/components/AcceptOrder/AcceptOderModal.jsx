@@ -90,7 +90,7 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Ngày giao hàng"
+                        label="Ngày giao hàng dự kiến"
                         name="deliveryDate"
                         rules={[
                             { required: true, message: 'Vui lòng chọn ngày giao hàng!' },
