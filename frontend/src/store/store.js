@@ -20,7 +20,7 @@ import PaymentOrderReducer from './thanhtoan/PaymentOrder'
 import CommnetOrderReducer from './delivered/modeldeli'
 import GetCommentProductReducer from './delivered/getCommnetproduct'
 import GetAllCancelOrderSaleReducer from './getAllCancelOrderSale/GetAllCancelOrderSale'
-
+import FetchDataAcceptReducer from './staff/FetchDataAccept'
 
 
 export const store = configureStore({
@@ -45,6 +45,7 @@ export const store = configureStore({
     nhanhang: PaymentOrderReducer,
     createComment: CommnetOrderReducer,
     getComment: GetCommentProductReducer,
-    getAllCancelSale: GetAllCancelOrderSaleReducer
+    getAllCancelSale: GetAllCancelOrderSaleReducer,
+    fetchAccept: FetchDataAcceptReducer
   },
 })

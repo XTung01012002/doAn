@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetBill } from '../../../../../store/admin/getBill/GetBill'
 import { Button, Space, Table } from 'antd'
-import { AiOutlineEdit } from 'react-icons/ai'
+import { FaRegEye } from "react-icons/fa";
 import ModalListInventory from './ModalListInventory'
 
 const ListInventory = () => {
@@ -16,7 +16,7 @@ const ListInventory = () => {
     const [open, setOpen] = useState(false)
     const [dataDital, setDataDital] = useState()
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 10;
+    const pageSize = 9;
     const column = [
         {
             key: 'stt',
@@ -80,7 +80,7 @@ const ListInventory = () => {
                         className='border-none '
                         color='primary'
                         shape="circle"
-                        icon={<AiOutlineEdit size={20} />}
+                        icon={<FaRegEye size={20} />}
                         onClick={() => { setOpen(true); setDataDital(object) }}
                     />
                 )

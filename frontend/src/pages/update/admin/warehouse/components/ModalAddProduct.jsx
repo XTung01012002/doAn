@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { PostUploadProduct } from '../../../../../store/admin/upProduct/UpProductReducer'
 import { fetchDataWarehouse } from '../../../../../store/admin/warehouse/Warahouse'
+import { LuPencilLine } from 'react-icons/lu'
+import { MdOutlineDelete } from 'react-icons/md'
 
 
 const formItem = [
@@ -61,155 +63,166 @@ const ModalAddProduct = ({ open, setOpen }) => {
         // setSelectedId(product.id);
         setEditingIndex(index);
     };
+    const handleDelete = (index) => {
+        const tmp = [...products]
+        tmp.splice(index, 1)
+        setProducts(tmp)
+        
+    }   
 
-    const handleSubmit = () => {
-        console.log('Danh sách sản phẩm:', products);
-        dispatch(PostUploadProduct(products))
-        // setOpen(false)
-        // form.resetFields();
-        // setProducts([])
-    };
+const handleSubmit = () => {
+    console.log('Danh sách sản phẩm:', products);
+    dispatch(PostUploadProduct(products))
+    // setOpen(false)
+    // form.resetFields();
+    // setProducts([])
+};
 
-    useEffect(() => {
-        if (sub) {
-            setOpen(false)
-            success()
-            dispatch(fetchDataWarehouse());
-            form.resetFields();
-            setProducts([])
-        }
-    }, [sub])
-
-    const handleClose = () => {
+useEffect(() => {
+    if (sub) {
         setOpen(false)
-        // form.resetFields();
-        // setProducts([]);
+        success()
+        dispatch(fetchDataWarehouse());
+        form.resetFields();
+        setProducts([])
     }
-    const onFinish = (value) => {
-        form.validateFields()
-            .then((values) => {
-                const newProduct = { ...values };
-                if (editingIndex !== null) {
-                    const updatedProducts = [...products];
-                    updatedProducts[editingIndex] = newProduct;
-                    setProducts(updatedProducts);
-                    setEditingIndex(null);
-                } else {
-                    setProducts((prevProducts) => [...prevProducts, newProduct]);
-                }
+}, [sub])
 
-                form.resetFields();
-                // setSelectedId(null);
-            })
-            .catch((info) => {
-                console.error('Validate Failed:', info);
-            });
-        console.log('Danh sách sản phẩm1:', value);
-    };
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+const handleClose = () => {
+    setOpen(false)
+    // form.resetFields();
+    // setProducts([]);
+}
+const onFinish = (value) => {
+    form.validateFields()
+        .then((values) => {
+            const newProduct = { ...values };
+            if (editingIndex !== null) {
+                const updatedProducts = [...products];
+                updatedProducts[editingIndex] = newProduct;
+                setProducts(updatedProducts);
+                setEditingIndex(null);
+            } else {
+                setProducts((prevProducts) => [...prevProducts, newProduct]);
+            }
+
+            form.resetFields();
+            // setSelectedId(null);
+        })
+        .catch((info) => {
+            console.error('Validate Failed:', info);
+        });
+    console.log('Danh sách sản phẩm1:', value);
+};
+const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+};
 
 
-    const columns = [
-        {
-            title: 'Tên sản phẩm',
-            dataIndex: 'productName',
-            key: 'productName',
-        },
-        {
-            title: 'Nhãn hàng',
-            dataIndex: 'brandName',
-            key: 'brandName',
-        },
-        {
-            title: 'Phân loại',
-            dataIndex: 'category',
-            key: 'category',
-        },
-        {
-            title: 'Hành động',
-            key: 'action',
-            render: (_, record, index) => (
-                <Button type="link" onClick={() => handleEditProduct(index)}>
-                    Chỉnh sửa
+const columns = [
+    {
+        title: 'Tên sản phẩm',
+        dataIndex: 'productName',
+        key: 'productName',
+    },
+    {
+        title: 'Nhãn hàng',
+        dataIndex: 'brandName',
+        key: 'brandName',
+    },
+    {
+        title: 'Phân loại',
+        dataIndex: 'category',
+        key: 'category',
+    },
+    {
+        title: 'Hành động',
+        key: 'action',
+        render: (_, record, index) => (
+            <Space>
+                <Button className='px-0' variant="link" color='primary' onClick={() => handleEditProduct(index)}>
+                    <LuPencilLine size={18} />
                 </Button>
-            ),
-        },
-    ];
+                <Button className='px-2' variant="link" color='danger' onClick={() => handleDelete(index)}>
+                    <MdOutlineDelete size={18} />
+                </Button>
+            </Space>
+        ),
+    },
+];
 
-    return (
-        <>
-            {contextHolder}
-            <Modal
-                open={open}
-                onClose={handleClose}
-                onCancel={handleClose}
-                title={<div className='text-center'>Thêm sản phẩm mới</div>}
-                footer={false}
-                closeIcon={false}
-                centered
-                width={900}
+return (
+    <>
+        {contextHolder}
+        <Modal
+            open={open}
+            onClose={handleClose}
+            onCancel={handleClose}
+            title={<div className='text-center'>Thêm sản phẩm mới</div>}
+            footer={false}
+            closeIcon={false}
+            centered
+            width={900}
+        >
+            <Form
+                form={form}
+                name='basic'
+                layout="vertical"
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
             >
-                <Form
-                    form={form}
-                    name='basic'
-                    layout="vertical"
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
-                >
-                    {formItem.map((item, index) => {
+                {formItem.map((item, index) => {
 
-                        return (
-                            <Form.Item
-                                name={item.name}
-                                key={index}
-                                label={item.label}
-                                rules={[{ required: true, message: item.message }]}
-                            >
-                                <Input placeholder={item.placeholder} />
-                            </Form.Item>
-                        )
-                    })}
-                    <Form.Item label={null}>
-                        <Space className="flex justify-end" size="middle">
+                    return (
+                        <Form.Item
+                            name={item.name}
+                            key={index}
+                            label={item.label}
+                            rules={[{ required: true, message: item.message }]}
+                        >
+                            <Input placeholder={item.placeholder} />
+                        </Form.Item>
+                    )
+                })}
+                <Form.Item label={null}>
+                    <Space className="flex justify-end" size="middle">
+                        <Button
+                            htmlType='submit'
+                            variant='outlined'
+                            color='primary'
+                        >
+                            {editingIndex !== null ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm'}
+                        </Button>
+                        {products.length > 0 &&
                             <Button
-                                htmlType='submit'
-                                variant='outlined'
-                                color='primary'
+                                type="primary"
+                                onClick={handleSubmit}
+                                loading={loading}
                             >
-                                {editingIndex !== null ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm'}
+                                Xác nhận
                             </Button>
-                            {products.length > 0 &&
-                                <Button
-                                    type="primary"
-                                    onClick={handleSubmit}
-                                    loading={loading}
-                                >
-                                    Xác nhận
-                                </Button>
-                            }
-                        </Space>
-                    </Form.Item>
+                        }
+                    </Space>
+                </Form.Item>
 
-                </Form>
+            </Form>
 
-                {products.length > 0 &&
-                    <div className='mt-1'>
-                        <p className='text-[18px] font-medium mb-2'>Danh sách sản phẩm đã thêm: <Badge count={products.length} showZero color="blue" /></p>
-                        <Table
-                            dataSource={products.map((product, index) => ({
-                                ...product,
-                                key: index,
-                            }))}
-                            columns={columns}
-                            pagination={{ pageSize: 2 }}
-                        />
-                    </div>
-                }
-            </Modal>
-        </>
-    )
+            {products.length > 0 &&
+                <div className='mt-1'>
+                    <p className='text-[18px] font-medium mb-2'>Danh sách sản phẩm đã thêm: <Badge count={products.length} showZero color="blue" /></p>
+                    <Table
+                        dataSource={products.map((product, index) => ({
+                            ...product,
+                            key: index,
+                        }))}
+                        columns={columns}
+                        pagination={{ pageSize: 2 }}
+                    />
+                </div>
+            }
+        </Modal>
+    </>
+)
 }
 
 export default ModalAddProduct

@@ -6,14 +6,14 @@ import SummaryApi from "../../common";
 export const PaymentOrder = createAsyncThunk(
     'paymentOrder', async (id, { rejectWithValue }) => {
         try {
-            const res = await axios.post(`${SummaryApi.paymentOrder.url}/${id}`, {
+            const res = await axios.put(`${SummaryApi.paymentOrder.url}/${id}`, {}, {
                 withCredentials: true
             })
 
             return res.data.data
 
         } catch (error) {
-            return rejectWithValue(error.res.data)
+            return rejectWithValue(error?.res?.data?.message)
 
         }
     }
@@ -31,7 +31,14 @@ const initialState = {
 const PaymentOrderReducer = createSlice({
     name: 'PaymentOrderReducer',
     initialState,
-    reducers: {},
+    reducers: {
+        setErrorNhanhang(state) {
+            state.error = null
+        },
+        setSubNhanhang(state) {
+            state.sub = false
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(PaymentOrder.pending, state => {
@@ -55,4 +62,5 @@ const PaymentOrderReducer = createSlice({
     }
 })
 
+export const { setSubNhanhang, setErrorNhanhang } = PaymentOrderReducer.actions
 export default PaymentOrderReducer.reducer

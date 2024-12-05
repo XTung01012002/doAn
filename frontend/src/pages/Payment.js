@@ -199,11 +199,11 @@ const Payment = () => {
   };
 
   const handleClickPay = () => {
-    if (paymentMethod === "cash-on-delivery") {
-      dispatch(PaymentOrder(dataBought[dataBought.length - 1]._id));
-      dispatch(setSubCreate(false));
-      nav("/order");
-      setOpen(false);
+    if (paymentMethod === 'cash-on-delivery') {
+      dispatch(PaymentOrder(dataBought[dataBought.length - 1]._id))
+      dispatch(setSubCreate(false))
+      nav('/order')
+      setOpen(false)
     } else {
       dispatch(setSubCreate(false));
     }

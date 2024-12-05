@@ -105,7 +105,7 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
     useEffect(() => {
         if (subCreateOrder) {
             if (methodPayment === 'cash-on-delivery') {
-                dispatch(PaymentOrder({ id: data._id }))
+                dispatch(PaymentOrder(data._id))
             } else {
                 dispatch(CreateQR({ totalAmount: data.totalAmount }))
                 setOpen3(true)
@@ -113,20 +113,20 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
         }
     }, [subCreateOrder, dispatch])
 
-    const handleOK = () => {
-        setOpen1(false)
-    }
+    // const handleOK = () => {
+    //     setOpen1(false)
+    // }
 
-    const handleCancel = () => {
-        setOpen1(false)
-    }
-    const handleOK1 = () => {
-        setOpen2(false)
-    }
+    // const handleCancel = () => {
+    //     setOpen1(false)
+    // }
+    // const handleOK1 = () => {
+    //     setOpen2(false)
+    // }
 
-    const handleCancel1 = () => {
-        setOpen2(false)
-    }
+    // const handleCancel1 = () => {
+    //     setOpen2(false)
+    // }
 
     const totalAmountProduct = (amount, quantity) => {
         return amount * quantity

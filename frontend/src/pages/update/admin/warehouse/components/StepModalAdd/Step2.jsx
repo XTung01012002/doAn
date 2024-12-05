@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PostInventoryreceiptCreate, setSubmit } from '../../../../../../store/admin/createBill/CreateBill';
 import { fetchDataWarehouse } from '../../../../../../store/admin/warehouse/Warahouse';
+import { LuPencilLine } from "react-icons/lu";
+import { MdOutlineDelete } from "react-icons/md";
 
 
 const Step2 = ({ current, setCurrent, data, setData }) => {
@@ -19,6 +21,8 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
 
     const loading = useSelector(state => state.createBill.loading)
     const submit = useSelector(state => state.createBill.submit)
+
+
 
 
     const columns = [
@@ -46,9 +50,14 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
             title: 'Hành động',
             key: 'action',
             render: (_, record, index) => (
-                <Button type="link" onClick={() => handleEditProduct(index)}>
-                    Chỉnh sửa
-                </Button>
+                <Space>
+                    <Button className='px-0' variant="link" color='primary' onClick={() => handleEditProduct(index)}>
+                        <LuPencilLine size={18} />
+                    </Button>
+                    <Button className='px-2' variant="link" color='danger' onClick={() => handleDelete(index)}>
+                        <MdOutlineDelete size={18} />
+                    </Button>
+                </Space>
             ),
         },
     ];
@@ -71,6 +80,13 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
         setEditingIndex(index);
     };
 
+    const handleDelete = (index) => {
+        const tmp = [...products]
+        tmp.splice(index, 1)
+        setProducts(tmp)
+
+    }
+
     const handleSubmit = () => {
         console.log('Danh sách sản phẩm:', products);
         const updatedProducts = products.map(product => ({
@@ -85,7 +101,7 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
 
     };
 
-   
+
 
     useEffect(() => {
         if (submit) {
@@ -120,24 +136,6 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
-    // const handleSearch = (value) => {
-    //     if (value && !options.find((option) => option.value === value)) {
-    //         const newOption = {
-    //             value: value,
-    //             label: value,
-    //             productId: null,
-    //         };
-
-    //         setOptions((prev) => [...prev, newOption]);
-
-    //         form.setFieldsValue({
-    //             nameProduct: value,
-    //             brand: null,
-    //             category: null,
-    //         });
-    //     }
-    // };
-
     const handleChange = (value) => {
         const selectedOption = dataWH.find((item) => item.productName === value);
 
