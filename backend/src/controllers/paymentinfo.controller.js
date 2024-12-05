@@ -99,7 +99,8 @@ class PaymentInfoController {
 
   checkTransactionStatus = async (req, res) => {
     const transaction = await PaymentInfoService.checkTransactionStatus(
-      req.params.transactionId
+      req.params.transactionId,
+      rep.body
     );
     new SuccessResponse({
       message: "Kiểm tra trạng thái giao dịch thành công",
