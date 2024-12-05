@@ -20,6 +20,7 @@ const AcceptedOrder = () => {
     const pageSize = 10;
 
 
+console.log('ádasd', dataSource);
 
     const column = [
         {
@@ -95,6 +96,14 @@ const AcceptedOrder = () => {
             render: (totalAmount) => {
                 return `${formatAmount(totalAmount)} đ`
             }
+        },
+        {
+            key: 'shippingStatus',
+            dataIndex: 'shippingStatus',
+            title: 'Trạng thái đơn',
+            // render: (totalAmount) => {
+            //     return `${formatAmount(totalAmount)} đ`
+            // }
         },
     ]
 
