@@ -4,6 +4,8 @@ import { AntDesignOutlined, PlusOutlined, UploadOutlined, UserOutlined } from '@
 import { useDispatch, useSelector } from 'react-redux';
 import { PutProductStaff } from '../../../../../store/staff/EditProduct';
 import { fetchDataWarehouse } from '../../../../../store/admin/warehouse/Warahouse';
+import uploadImage from '../../../../../helpers/uploadImage';
+
 
 const EditProductModal = ({ open, setOpen, id }) => {
 
@@ -33,13 +35,14 @@ const EditProductModal = ({ open, setOpen, id }) => {
 
             if (product) {
                 form.setFieldsValue({
-                    productName: product.productName,
-                    brandName: product.brandName,
-                    category: product.category,
-                    priceInventory: product.priceInventory,
-                    quantitySold: product.quantitySold,
-                    description: product.description,
-                    productImage: product.productImage
+                    productName: product.productName || '',
+                    brandName: product.brandName || '',
+                    category: product.category || '',
+                    priceInventory: product.priceInventory || '',
+                    price: product.price || '',
+                    sellingPrice: product.sellingPrice || '',
+                    description: product.description || '',
+                    productImage: product.productImage || ''
                 });
 
                 setFileList(product.productImage)
@@ -48,16 +51,17 @@ const EditProductModal = ({ open, setOpen, id }) => {
     }, [id]);
 
     const handleSubmit = (value) => {
+        const { priceInventory, ...rest } = value;
 
         const convertedValue = {
-            ...value,
-            priceInventory: typeof value.priceInventory === 'string'
-                ? parseInt(value.priceInventory.replace(/\./g, ''), 10)
-                : value.priceInventory,
-            quantitySold: typeof value.quantitySold === 'string'
-                ? parseInt(value.quantitySold.replace(/\./g, ''), 10)
-                : value.quantitySold,
-            productImage: value.productImage.length > 0 ? value.productImage : fileList1.length === 0 ? [] : fileList1
+            ...rest,
+            price: typeof rest.price === 'string'
+                ? parseInt(rest.price.replace(/\./g, ''), 10)
+                : rest.price,
+            sellingPrice: typeof rest.sellingPrice === 'string'
+                ? parseInt(rest.sellingPrice.replace(/\./g, ''), 10)
+                : rest.sellingPrice,
+            productImage: rest.productImage.length > 0 ? rest.productImage : fileList1.length === 0 ? [] : fileList1,
         };
 
         console.log(convertedValue);
@@ -83,30 +87,49 @@ const EditProductModal = ({ open, setOpen, id }) => {
         }
     };
 
-    const handleUploadChange = ({ fileList: newFileList }) => {
-        const files = newFileList.map((file) =>
-            file.originFileObj ? file.originFileObj : file
-        );
+    // const handleUploadChange = ({ fileList: newFileList }) => {
+    //     const files = newFileList.map((file) =>
+    //         file.originFileObj ? file.originFileObj : file
+    //     );
 
-        console.log('uploadanhFileList', newFileList);
-        console.log('uploadanhFileList1', files);
+    //     const uniqueFileList = [...fileList];
+    //     const uniqueFileList1 = [...fileList1];
 
+    //     newFileList.forEach(item => uniqueFileList.push(item))
+    //     files.forEach(item => uniqueFileList1.push(item))
 
+    //     setFileList(uniqueFileList);
+    //     setFileList1(uniqueFileList1);
 
-        const uniqueFileList = [...fileList];
-        const uniqueFileList1 = [...fileList1];
+    //     form.setFieldsValue({
+    //         productImage: uniqueFileList,
+    //     });
+    // };
 
-        newFileList.forEach(item => uniqueFileList.push(item))
-        files.forEach(item => uniqueFileList1.push(item))
+    const handleUploadChange = async ({ fileList: newFileList }) => {
+        const updatedFileList = [...fileList];
+        const updatedFileList1 = [...fileList1];
 
-        setFileList(uniqueFileList);
-        setFileList1(uniqueFileList1);
+        for (const file of newFileList) {
+            if (file.originFileObj) {
+                try {
+                    const response = await uploadImage(file.originFileObj); 
+                    updatedFileList.push(response.secure_url);
+                    updatedFileList1.push(response.secure_url);
+                } catch (error) {
+                    console.error("Error uploading image:", error);
+                    message.error("Không thể tải ảnh lên Cloudinary.");
+                }
+            }
+        }
+
+        setFileList(updatedFileList);
+        setFileList1(updatedFileList1);
 
         form.setFieldsValue({
-            productImage: uniqueFileList,
+            productImage: updatedFileList,
         });
     };
-
 
     const handleRemoveImage = (index) => {
         const updatedFileList = [...fileList];
@@ -180,13 +203,13 @@ const EditProductModal = ({ open, setOpen, id }) => {
                                     <div style={{ position: 'relative', display: 'inline-block' }}>
                                         <Avatar
                                             src={
-                                                typeof fileList[0] === 'string'
-                                                    ? fileList[0]
-                                                    : 'https://imgs.search.brave.com/jt84d5SmMRH9IYwpquW1be6mriU5QEgM7G1ML6O8rsU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oYXlj/YWZlLnZuL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzA2L0hp/bmgtYW5oLUF2YXRh/ci10cmFuZy10cm9u/LTYwMHg2MDAuanBn'
+                                                // typeof fileList[0] === 'string'
+                                                //     ? fileList[0]
+                                                //     : 'https://imgs.search.brave.com/jt84d5SmMRH9IYwpquW1be6mriU5QEgM7G1ML6O8rsU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oYXlj/YWZlLnZuL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzA2L0hp/bmgtYW5oLUF2YXRh/ci10cmFuZy10cm9u/LTYwMHg2MDAuanBn'
 
-                                                // fileList[0].originFileObj
-                                                //     ? URL.createObjectURL(fileList[0].originFileObj)
-                                                //     : null
+                                                fileList[0].originFileObj
+                                                    ? URL.createObjectURL(fileList[0].originFileObj)
+                                                    : null
                                             }
                                             shape="square"
                                             size={200}

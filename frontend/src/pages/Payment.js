@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from "react";
 import SummaryApi from "../common";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import displayVNDCurrency from "../helpers/displayVNDCurrency";
 import { toast } from "react-toastify";
 import Context from "../context";
 import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CreateCart, CreateOrder, setSubCreate } from "../store/createCart/CreateCartSlice";
+import {
+  CreateCart,
+  CreateOrder,
+  setSubCreate,
+} from "../store/createCart/CreateCartSlice";
 import { Avatar, Button, Modal, notification, Space } from "antd";
 import { CreateQR } from "../store/QRcode/CreateQR";
 import { fetchDataBoughtUser } from "../store/bought/BoughtUser";
 import { PaymentOrder } from "../store/thanhtoan/PaymentOrder";
 
 const Payment = () => {
-  const nav = useNavigate()
-  const dispatch = useDispatch()
+  const nav = useNavigate();
+  const dispatch = useDispatch();
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -26,29 +31,24 @@ const Payment = () => {
   const [cartData, setCartData] = useState([]);
   const context = useContext(Context);
   const [formSubmit, setFormSubmit] = useState({
-    phone: '',
-    address: '',
-    productList: []
-  })
-  const dataBought = useSelector(state => state.bought.data)
-  console.log('dataBought', dataBought.length > 0 && dataBought[dataBought.length - 1]._id);
-  const subasd = useSelector(state => state.statusCanceled.subCreateOrder)
-  console.log('subasd', subasd);
-
-
-  const [open, setOpen] = useState(false)
-
+    phone: "",
+    address: "",
+    productList: [],
+  });
+  const dataBought = useSelector((state) => state.bought.data);
+  const subasd = useSelector((state) => state.statusCanceled.subCreateOrder);
+  const [transactionStatus, setTransactionStatus] = useState("Đang xử lý...");
+  const [intervalId, setIntervalId] = useState(null);
+  const [open, setOpen] = useState(false);
   const handleOK = () => {
-    setOpen(false)
-  }
-
+    setOpen(false);
+  };
   const handleCancel = () => {
-    setOpen(false)
-  }
-  const qr = useSelector(state => state.createQR.data)
-  const navigate = useNavigate();
+    setOpen(false);
+  };
+  const qr = useSelector((state) => state.createQR.data);
   const totalPrice = localStorage.getItem("totalPrice");
-  console.log("totalPrice: ", typeof totalPrice);
+  
   const fetchData = async () => {
     const dataResponse = await fetch(SummaryApi.addProductToCartView.url, {
       method: SummaryApi.addProductToCartView.method,
@@ -56,79 +56,85 @@ const Payment = () => {
     });
     const dataApi = await dataResponse.json();
     setCartData(dataApi.data);
-    console.log(dataApi.data);
   };
 
-  console.log('tesstData: ', formSubmit);
-
-  // const deleteCountCart = async () => {
-  //   const dataResponse = await fetch(SummaryApi.deleteAllProductInCart.url, {
-  //     method: SummaryApi.deleteAllProductInCart.method,
-  //     credentials: "include",
-  //   });
-  //   const dataApi = await dataResponse.json();
-  // };
-
-  const handlePaymentMethodChange = (e) => {
+  const handlePaymentMethodChange = async (e) => {
     const value = e.target.value;
-    console.log('values', value);
+    console.log("Phương thức thanh toán:", value);
 
     setPaymentMethod(value);
 
     if (value === "bank-transfer") {
-      const tmp = {
-        totalAmount: Number(totalPrice)
+      const payload = {
+        totalAmount: Number(totalPrice),
+      };
+      console.log("payload", payload);
+      try {
+        const result = await dispatch(CreateQR(payload)).unwrap();
+        const transactionId = result?.transactionId;
+        if (transactionId) {
+          setShowQRCode(true);
+          startTransactionCheck(transactionId); // Bắt đầu kiểm tra giao dịch
+        } else {
+          toast.error("Không tạo được mã QR. Vui lòng thử lại.");
+        }
+      } catch (error) {
+        console.error("Lỗi khi tạo QR:", error);
+        toast.error("Đã xảy ra lỗi khi tạo mã QR.");
       }
-      dispatch(CreateQR(tmp))
-      setShowQRCode(true);
     } else {
       setShowQRCode(false);
+      clearTransactionCheck();
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
+  const startTransactionCheck = (transactionId) => {
+    clearTransactionCheck(); // Xóa interval cũ nếu tồn tại
+    const id = setInterval(() => {
+      checkTransactionStatus(transactionId);
+    }, 10000); // Kiểm tra mỗi 5 giây
+    setIntervalId(id);
+  };
 
-  //   try {
-  //     const dataResponse = await fetch(SummaryApi.checkPaymentQrCode.url, {
-  //       method: SummaryApi.checkPaymentQrCode.method,
-  //       credentials: "include",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         phone,
-  //         address,
-  //         paymentMethod,
-  //         product: cartData.map((product) => ({
-  //           productId: product.productId._id,
-  //           quantity: product.quantity,
-  //         })),
-  //       }),
-  //     });
+  const clearTransactionCheck = () => {
+    if (intervalId) clearInterval(intervalId);
+    setIntervalId(null);
+  };
 
-  //     const dataApi = await dataResponse.json();
-  //     console.log(dataApi);
+  const checkTransactionStatus = async (transactionId) => {
+    try {
+      console.log("Kiểm tra trạng thái giao dịch với ID:", transactionId);
+      setLoading(true);
+      const response = await axios.get(
+        `${SummaryApi.checkTransactionStatus.url}/${transactionId}`,
+        {
+          withCredentials: true,
+        }
+      );
 
-  //     if (dataApi.success) {
-  //       toast.success("Đặt hàng thành công!");
-  //       setTimeout(
-  //         () => {
-  //           navigate("/notification");
-  //           context.fetchUserAddToCart();
-  //         },
-  //         paymentMethod === "cash-on-delivery" ? 3000 : 7000
-  //       );
-  //       deleteCountCart();
-  //     }
-  //   } catch (err) {
-  //     setError("Đã xảy ra lỗi kết nối.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      const  status  = response.data.data.status;
+      console.log("Kết quả trả về từ API:", response.data.message);
+      console.log(status);
 
+      if (status === "Đã thanh toán") {
+        setTransactionStatus("Đã thanh toán");
+        clearTransactionCheck();
+        toast.success("Thanh toán thành công!");
+      } else if (status === "Đang xử lí") {
+        setTransactionStatus("Đang xử lý...");
+
+      }
+    } catch (error) {
+      console.error("Lỗi khi kiểm tra giao dịch:", error);
+      setTransactionStatus("Lỗi khi kiểm tra giao dịch");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    return () => clearTransactionCheck(); // Dọn dẹp interval khi component unmount
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -137,20 +143,20 @@ const Payment = () => {
   }, []);
 
   useEffect(() => {
-    const data = []
-    cartData.forEach(item => data.push(
-      {
+    const data = [];
+    cartData.forEach((item) =>
+      data.push({
         productId: item.productId._id,
-        quantity: item.quantity
-      }))
+        quantity: item.quantity,
+      })
+    );
 
     setFormSubmit({
       phone: phone,
       address: address,
-      productList: data
-    })
-  }, [phone, address, cartData])
-
+      productList: data,
+    });
+  }, [phone, address, cartData]);
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -160,7 +166,7 @@ const Payment = () => {
       message: <span className="text-black">{error}</span>,
       style: {
         border: `2px solid #FC9291`,
-        backgroundColor: '#FEC9C4',
+        backgroundColor: "#FEC9C4",
       },
       showProgress: true,
       pauseOnHover,
@@ -168,37 +174,29 @@ const Payment = () => {
   };
 
   const handleClick = () => {
-
     if (!phone || phone.trim().length === 0) {
       setError("Vui lòng nhập số điện thoại hợp lệ.");
-
-      return openNotification(true, 'red');
+      return openNotification(true, "red");
     }
     if (!address || address.trim().length === 0) {
       setError("Vui lòng nhập địa chỉ hợp lệ.");
-      return openNotification(true, 'red');
+      return openNotification(true, "red");
     }
-
     setError("");
-    dispatch(CreateOrder(formSubmit))
-
-  }
-
+    dispatch(CreateOrder(formSubmit));
+  };
 
   useEffect(() => {
     if (subasd) {
       dispatch(fetchDataBoughtUser());
-      setOpen(true)
+      setOpen(true);
     }
-  }, [subasd])
-
-  console.log('formSubmit', formSubmit);
-
+  }, [subasd]);
 
   const handleClose = () => {
-    setOpen(false)
-    nav('/order')
-  }
+    setOpen(false);
+    nav("/order");
+  };
 
   const handleClickPay = () => {
     if (paymentMethod === 'cash-on-delivery') {
@@ -207,9 +205,9 @@ const Payment = () => {
       nav('/order')
       setOpen(false)
     } else {
-      dispatch(setSubCreate(false))
+      dispatch(setSubCreate(false));
     }
-  }
+  };
 
   return (
     <div className="container mx-auto p-6 bg-gray-100">
@@ -263,9 +261,7 @@ const Payment = () => {
         <legend className="text-gray-700 text-sm font-semibold mb-2">
           Phương thức thanh toán:
         </legend>
-
       </fieldset>
-
 
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-2">Tóm tắt đơn hàng:</h3>
@@ -299,7 +295,7 @@ const Payment = () => {
       </button>
 
       <Modal
-        title={<div className='text-center'>Chọn phương thức thanh toán</div>}
+        title={<div className="text-center">Chọn phương thức thanh toán</div>}
         open={open}
         onOk={handleOK}
         onCancel={handleCancel}
@@ -340,35 +336,26 @@ const Payment = () => {
           </div>
           {showQRCode ? (
             <div className="text-center">
-              <img
-                src={qr.qrUrl}
-                alt=""
-              />
+              <img src={qr.qrUrl} alt="" />
               <p className="mt-2 text-gray-700">
                 Quét mã QR để thực hiện thanh toán chuyển khoản
               </p>
+              <p className="text-green-600 font-semibold mt-2">
+                {transactionStatus}
+              </p>
             </div>
-          )
-            :
+          ) : (
             <></>
-          }
+          )}
         </div>
         <div className="flex justify-end">
           <Space>
-            <Button
-              onClick={handleClose}
-            >
-              Đóng
-            </Button>
-            {paymentMethod === "cash-on-delivery" &&
-              <Button
-                type="primary"
-                onClick={handleClickPay}
-              >
+            <Button onClick={handleClose}>Đóng</Button>
+            {paymentMethod === "cash-on-delivery" && (
+              <Button type="primary" onClick={handleClickPay}>
                 Xác nhận
               </Button>
-            }
-
+            )}
           </Space>
         </div>
       </Modal>
@@ -377,4 +364,3 @@ const Payment = () => {
 };
 
 export default Payment;
-

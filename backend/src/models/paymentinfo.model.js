@@ -16,7 +16,7 @@ const paymentInfoSchema = new Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ["Đã thanh toán", "Chưa chọn phương thức thanh toán", "thanh toán khi nhận hàng"],
+      enum: ["Đã thanh toán", "Chưa chọn phương thức thanh toán", "Thanh toán khi nhận hàng"],
       default: "Chưa chọn phương thức thanh toán",
     },
     productList: [
