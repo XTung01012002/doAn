@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react'
 import styles from './ButtonStyles.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDataBoughtUser } from '../../../../../store/bought/BoughtUser';
-import { putCancelOrder } from '../../../../../store/bought/PutCancelOrder';
-import { PaymentOrder } from '../../../../../store/thanhtoan/PaymentOrder';
+import { putCancelOrder, setErrorPut, setSubPut } from '../../../../../store/bought/PutCancelOrder';
+import { PaymentOrder, setErrorNhanhang, setSubNhanhang } from '../../../../../store/thanhtoan/PaymentOrder';
 import { CreateQR } from '../../../../../store/QRcode/CreateQR';
 import { fetchDataCanceledUser } from '../../../../../store/canceled/CanceledUser';
+import CustomNotification from '../../../../../components/notification/CustomNotifacation';
 
 const BoughtModal = ({ open, setOpen, data }) => {
 
@@ -16,25 +17,39 @@ const BoughtModal = ({ open, setOpen, data }) => {
     const dispatch = useDispatch()
     const loading = useSelector(state => state.statusPutCancel.loadingPut)
     const sub = useSelector(state => state.statusPutCancel.subPut)
+    const error = useSelector(state => state.statusPutCancel.errorPut)
 
     const loadingCreateNhanHang = useSelector(state => state.nhanhang.loading)
 
     const subCreateNhanHang = useSelector(state => state.nhanhang.sub)
+    const errorCreateNhanHang = useSelector(state => state.nhanhang.error)
 
+    console.log(error);
 
     const qr = useSelector(state => state.createQR.data)
 
     const handleCancelOrder = () => {
         dispatch(putCancelOrder(data._id))
     }
-    console.log(data);
 
+    useEffect(() => {
+        if (error !== null) {
+            dispatch(setErrorPut())
+        }
+    }, [dispatch, error])
+
+    useEffect(() => {
+        if (errorCreateNhanHang !== null) {
+            dispatch(setErrorNhanhang())
+        }
+    }, [dispatch, errorCreateNhanHang])
 
     useEffect(() => {
         if (sub) {
             setOpen(false)
             dispatch(fetchDataBoughtUser());
             dispatch(fetchDataCanceledUser())
+            dispatch(setSubPut())
         }
     }, [sub])
 
@@ -43,6 +58,7 @@ const BoughtModal = ({ open, setOpen, data }) => {
         if (subCreateNhanHang) {
             setOpen(false)
             dispatch(fetchDataBoughtUser());
+            dispatch(setSubNhanhang())
         }
     }, [subCreateNhanHang, dispatch])
 
@@ -52,10 +68,7 @@ const BoughtModal = ({ open, setOpen, data }) => {
     if (!data) {
         return null;
     }
-    const handleClickOK = () => {
 
-        setOpen(false)
-    }
 
     const handleClickCannel = () => {
         setOpen(false)
@@ -92,7 +105,8 @@ const BoughtModal = ({ open, setOpen, data }) => {
 
     const handleSubmit = () => {
         if (methodPayment === 'cash-on-delivery') {
-            dispatch(PaymentOrder({ id: data._id }))
+            dispatch(PaymentOrder(data._id))
+            // console.log(data._id)
         } else {
             dispatch(CreateQR({ totalAmount: data.totalAmount }))
             setOpen1(true)
@@ -101,6 +115,16 @@ const BoughtModal = ({ open, setOpen, data }) => {
 
     return (
         <>
+            <CustomNotification
+                success={sub && 'Hủy đơn thành công'}
+                error={error}
+            />
+
+            <CustomNotification
+                success={subCreateNhanHang && 'Thay đổi thành công'}
+                error={errorCreateNhanHang}
+            />
+
             <Modal
                 title={
                     <div className='text-center font-bold text-[18px]'>
@@ -113,23 +137,6 @@ const BoughtModal = ({ open, setOpen, data }) => {
                 onCancel={handleClickCannel}
                 centered
                 width={700}
-
-                // okButtonProps={{
-                //     style: {
-                //         backgroundColor: '#1890ff',
-                //         borderColor: '#1890ff',
-                //         color: '#fff'
-                //     },
-                // }}
-                // cancelButtonProps={{
-                //     style: {
-                //         color: '#fff',
-                //         borderColor: '#ff4d4f',
-                //         backgroundColor: '#ff4d4f'
-                //     },
-
-
-                // }}
                 footer={false}
             >
                 <Row
@@ -139,7 +146,7 @@ const BoughtModal = ({ open, setOpen, data }) => {
                     <Col className="gutter-row" span={24}>
                         <div className='flex justify-between items-center'>
                             <div className='mb-5 font-bold text-[16px]'>
-                                Thông tin khách và vận chuyển
+                                Thông tin khách hàng
                             </div>
                             <div>
                                 <Button

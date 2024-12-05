@@ -16,9 +16,8 @@ export const CreateShipInfo = createAsyncThunk('data/createShipInfo', async ({ i
         console.log('Dữ liệu trả về từ server:', response.data.data);
         return response.data.data;
     } catch (error) {
-        //    console.error('Lỗi từ server:', error.response?.data);
         //    throw new Error(error.response?.data?.message || "Error fetching data");
-        return rejectWithValue(error.response.data)
+        return rejectWithValue(error?.response?.data?.message || "Error fetching data")
     }
 });
 
@@ -31,7 +30,14 @@ const CreateShipInfoSlice = createSlice({
         sub: false,
         error: null
     },
-    reducers: {},
+    reducers: {
+        setSub(state) {
+            state.sub = false
+        },
+        setError(state) {
+            state.error = null
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(CreateShipInfo.pending, (state) => {
@@ -52,4 +58,5 @@ const CreateShipInfoSlice = createSlice({
     },
 });
 
+export const { setSub, setError } = CreateShipInfoSlice.actions
 export default CreateShipInfoSlice.reducer;

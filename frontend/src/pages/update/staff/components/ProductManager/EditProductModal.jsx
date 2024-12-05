@@ -10,7 +10,7 @@ const EditProductModal = ({ open, setOpen, id }) => {
     const data = useSelector(state => state.warehouse.data)
     const loading = useSelector(state => state.putProductStaff.loading)
     const sub = useSelector(state => state.putProductStaff.sub)
-    // console.log('ada', data);
+    console.log('ada', data);
     const dispatch = useDispatch()
 
     const [form] = Form.useForm();
@@ -183,10 +183,10 @@ const EditProductModal = ({ open, setOpen, id }) => {
                                                 typeof fileList[0] === 'string'
                                                     ? fileList[0]
                                                     : 'https://imgs.search.brave.com/jt84d5SmMRH9IYwpquW1be6mriU5QEgM7G1ML6O8rsU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oYXlj/YWZlLnZuL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzA2L0hp/bmgtYW5oLUF2YXRh/ci10cmFuZy10cm9u/LTYwMHg2MDAuanBn'
-                                                    
-                                                    // fileList[0].originFileObj
-                                                    //     ? URL.createObjectURL(fileList[0].originFileObj)
-                                                    //     : null
+
+                                                // fileList[0].originFileObj
+                                                //     ? URL.createObjectURL(fileList[0].originFileObj)
+                                                //     : null
                                             }
                                             shape="square"
                                             size={200}
@@ -210,57 +210,13 @@ const EditProductModal = ({ open, setOpen, id }) => {
                                     </div>
                                 )}
                             </Space>
-                            {/* <Space
-                                className='flex justify-center'
-                                style={{
-                                    overflowX: 'auto',
-                                    whiteSpace: 'nowrap',
-                                    width: '90%',
-                                }}
-                            >
-                                {fileList.slice(1).map((file, index) => {
-                                    const src = typeof file === 'string'
-                                        ? file
-                                        : file.originFileObj instanceof File
-                                            ? URL.createObjectURL(file.originFileObj)
-                                            : null;
 
-                                    return (
-                                        <div key={index} style={{ position: 'relative', display: 'inline-block' }}>
-                                            {src && (
-                                                <Avatar
-                                                    src={src}
-                                                    alt={`thumbnail-${index}`}
-                                                    style={{ borderRadius: 4 }}
-                                                    size={60}
-                                                />
-                                            )}
-                                            <Button
-                                                type="text"
-                                                danger
-                                                shape="circle"
-                                                size="small"
-                                                icon={<PlusOutlined rotate={45} />}
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: -5,
-                                                    right: -5,
-                                                    backgroundColor: 'white',
-                                                    border: '1px solid lightgray',
-                                                    zIndex: 10,
-                                                }}
-                                                onClick={() => handleRemoveImage(index + 1)}
-                                            />
-                                        </div>
-                                    );
-                                })}
-                            </Space> */}
                             <div
                                 className="flex justify-center overflow-x-scroll "
                                 style={{
-                                    maxWidth: "100%", // Giới hạn chiều rộng
-                                    width: "300px",   // Tùy chọn đặt chiều rộng cố định
-                                    whiteSpace: "nowrap" // Đảm bảo không xuống dòng
+                                    maxWidth: "100%",
+                                    width: "300px",
+                                    whiteSpace: "nowrap"
                                 }}
                             >
                                 {fileList.slice(1).map((file, index) => {
@@ -276,7 +232,7 @@ const EditProductModal = ({ open, setOpen, id }) => {
                                             style={{
                                                 position: 'relative',
                                                 display: 'inline-block',
-                                                marginRight: 8, // Khoảng cách giữa các hình
+                                                marginRight: 8,
                                             }}
                                         >
                                             {src && (
@@ -356,15 +312,35 @@ const EditProductModal = ({ open, setOpen, id }) => {
                             placeholder='Nhập giá nhập sản phẩm...'
                             suffix="VNĐ"
                             onInput={handleInput}
+                            readOnly
                         />
                     </Form.Item>
                     <Form.Item
-                        label='Giá bán sản phẩm'
-                        name='quantitySold'
-
+                        label='Giá gốc sản phẩm'
+                        name='price'
+                        rules={[{
+                            required: true,
+                            message: 'Giá gốc không được trống'
+                        }]}
                     >
                         <Input
                             placeholder='Nhập giá bán..'
+                            suffix="VNĐ"
+                            onInput={handleInput}
+
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label='Giá khuyến mãi'
+                        name='sellingPrice'
+                        rules={[{
+                            required: true,
+                            message: 'Giá khuyến mãi không được trống'
+                        }]}
+
+                    >
+                        <Input
+                            placeholder='Nhập giá khuyến mãi..'
                             suffix="VNĐ"
                             onInput={handleInput}
                         />
