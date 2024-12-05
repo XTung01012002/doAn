@@ -178,9 +178,10 @@ class PaymentInfoService {
     )}&accountName=${encodeURIComponent(config.bankInfo.accountName)}`;
 
     this.transactions[transactionId] = {
-      status: "đang xử lý",
+      status: "Đang xử lý",
       totalAmount,
     };
+    console.log(this.transactions);
 
     return { qrUrl, transactionId };
   };
@@ -188,41 +189,45 @@ class PaymentInfoService {
   static checkTransactionStatus = async (transactionId, paymentInfoId) => {
     const paymentInfo = await paymentInfoSchema.findById(paymentInfoId);
     if (!paymentInfo) {
-      throw new BadRequestError("Thông tin thanh toán không tồn tại");
+      throw new BadRequestError("Không tìm thấy đơn hàng");
     }
-
     const transaction = this.transactions[transactionId];
     if (!transaction) {
       throw new Error("Giao dịch không tồn tại");
     }
 
-    try {
-      const response = await axios.get(`${config.casso.apiUrl}/transactions`, {
-        headers: {
-          Authorization: `Apikey ${config.casso.apiKey}`,
-          "Content-Type": "application/json",
-        },
-      });
-      const transactionsData = response.data.data.records;
-      const updatedTransaction = transactionsData.find((t) =>
-        t.description.includes(transactionId)
-      );
+    if (transaction) {
+      try {
+        const response = await axios.get(
+          `${config.casso.apiUrl}/transactions`,
+          {
+            headers: {
+              Authorization: `Apikey ${config.casso.apiKey}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-      if (updatedTransaction) {
-        this.transactions[transactionId].status = "success";
-        paymentInfo.paymentStatus = "Đã thanh toán";
-        paymentInfo.confirmOrder = true;
-        await paymentInfo.save();
-        return { status: "Đã thanh toán", transaction: updatedTransaction };
-      } else {
-        return { status: "Đang xử lí" };
+        const transactionsData = response.data.data.records;
+        const updatedTransaction = transactionsData.find((t) =>
+          t.description.includes(transactionId)
+        );
+
+        if (updatedTransaction) {
+          this.transactions[transactionId].status = "success";
+          paymentInfo.paymentStatus = "Đã thanh toán";
+          await paymentInfo.save();
+          return { status: "Đã thanh toán", transaction: updatedTransaction };
+        } else {
+          return { status: "Đang xử lí" };
+        }
+      } catch (error) {
+        console.error(
+          "Error checking transaction status:",
+          error.response ? error.response.data : error.message
+        );
+        throw new Error("Error checking transaction status");
       }
-    } catch (error) {
-      console.error(
-        "Error checking transaction status:",
-        error.response ? error.response.data : error.message
-      );
-      throw new Error("Error checking transaction status");
     }
   };
 
@@ -314,7 +319,7 @@ class PaymentInfoService {
       const nonEmptyOrders = filteredOrders.filter(
         (order) => order.productList.length > 0
       );
-      console.log("nonEmptyOrders:::", nonEmptyOrders); 
+      console.log("nonEmptyOrders:::", nonEmptyOrders);
 
       return nonEmptyOrders;
     } catch (error) {

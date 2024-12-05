@@ -157,11 +157,15 @@ class ProductService {
     let categories = await productSchema.distinct("category", {
       active: true,
     });
-    // viết hoa mỗi chữ cái đầu của category
+   // trả về mảng các category và header là các category đã viết hoa chữ cái đầu
     categories = categories.map((category) => {
-      return category.charAt(0).toUpperCase() + category.slice(1);
+      return {
+        header: category.charAt(0).toUpperCase() + category.slice(1),
+        category,
+      };
     });
     return categories;
+   
   };
 
   // tạo comment và dánh giá cho sản phẩm đã mua

@@ -162,7 +162,11 @@ const SummaryApi = {
   },
   getallcancelordersale: {
     url: `${backendDomin}/api/paymentinfo/all-cancel-order-sale`
-  }
+  },
+  checkTransactionStatus: {
+    // kiểm tra trạng thái giao dịch
+    url: `${backendDomin}/api/paymentinfo/check`
+  },
   
 };
 
