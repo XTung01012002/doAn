@@ -13,7 +13,7 @@ export const GetBill = createAsyncThunk(
             return res.data.data
 
         } catch (error) {
-            return rejectWithValue(error.res.data)
+            return rejectWithValue(error.response?.data?.message);
         }
     }
 )

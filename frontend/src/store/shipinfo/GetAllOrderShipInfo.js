@@ -4,7 +4,7 @@ import SummaryApi from "../../common";
 
 
 export const GetAllInfoShipOrder = createAsyncThunk(
-    'get/GetAllInfoShipOrder', async () => {
+    'get/GetAllInfoShipOrder', async (_,{rejectWithValue}) => {
         console.log('GetAllInfoShipOrder');
         try {
             const res = await axios.get(`${SummaryApi.getAllOrderShipInfor.url}`)
@@ -12,7 +12,7 @@ export const GetAllInfoShipOrder = createAsyncThunk(
 
             return res.data.data
         } catch (error) {
-            throw new Error(error.response?.data?.message || "Error fetching data");
+            return rejectWithValue(error.response?.data?.message);
         }
     }
 )

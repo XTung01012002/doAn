@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import SummaryApi from '../../../common/index';
 
-export const fetchDataWarehouse = createAsyncThunk('data/fetchDataWarehouse', async () => {
+export const fetchDataWarehouse = createAsyncThunk('data/fetchDataWarehouse', async (_,{rejectWithValue}) => {
     // const response = await axios.get(`${SummaryApi.allProducts.url}`);
     // return response.data;
 
@@ -14,7 +14,7 @@ export const fetchDataWarehouse = createAsyncThunk('data/fetchDataWarehouse', as
 
         return response.data.data;
     } catch (error) {
-        throw new Error(error.response?.data?.message || "Error fetching data");
+        return rejectWithValue(error.response?.data?.message);
     }
 });
 

@@ -25,12 +25,10 @@ const PageAdmin = () => {
 
     const renderContent = () => {
         switch (selectedKey) {
-
             case 'statistical':
                 return <Statistical />
             case 'all-users':
                 return <AllUserAdmin />
-            // return <AllUser />;
             default:
                 return <AllProduct />;
         }

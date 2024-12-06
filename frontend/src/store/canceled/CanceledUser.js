@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import SummaryApi from '../../common/index';
 
-export const fetchDataCanceledUser = createAsyncThunk('data/fetchDataCanceledUser', async () => {
+export const fetchDataCanceledUser = createAsyncThunk('data/fetchDataCanceledUser', async (_,{rejectWithValue}) => {
 
     try {
         const response = await axios.get(`${SummaryApi.getAllProductCanceledOrder.url}`,
@@ -13,7 +13,7 @@ export const fetchDataCanceledUser = createAsyncThunk('data/fetchDataCanceledUse
         return response.data.data;
     } catch (error) {
 
-        throw new Error(error.response?.data?.message || "Error fetching data");
+        return rejectWithValue(error.response?.data?.message);
     }
 });
 

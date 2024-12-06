@@ -13,7 +13,7 @@ export const putCancelOrder = createAsyncThunk(
             })
             return res
         } catch (error) {
-            return rejectWithValue(error?.res?.data.message)
+            return rejectWithValue(error.response?.data?.message);
         }
     }
 )

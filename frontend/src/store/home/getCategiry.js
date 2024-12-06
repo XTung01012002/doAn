@@ -1,17 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import SummaryApi from "../../../common";
+import SummaryApi from "../../common";
 
 
-export const GetStatistical = createAsyncThunk(
-    'GetStatistical', async (data, { rejectWithValue }) => {
+export const GetCategoryHome = createAsyncThunk(
+    'GetCategoryHome', async (_, { rejectWithValue }) => {
         try {
-            const res = await axios.get(`${SummaryApi.getStatistical.url}?startDate=${data.startDate}&endDate=${data.endDate}`, {
+            const res = await axios.get(`${SummaryApi.getCategory.url}`, {
                 withCredentials: true
             })
+
             return res.data.data
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message);
+            return rejectWithValue(error.response?.data?.message)
         }
     }
 )
@@ -23,23 +24,21 @@ const initialState = {
     error: null
 }
 
-
-const GetStatisticalReducer = createSlice({
-    name: 'getStatistical',
+const GetCategoryHomeReducer = createSlice({
+    name: 'getCategoryHomeReducer',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(GetStatistical.pending, state => {
+            .addCase(GetCategoryHome.pending, state => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(GetStatistical.fulfilled, (state, action) => {
+            .addCase(GetCategoryHome.fulfilled, (state, action) => {
                 state.loading = false
                 state.data = action.payload
-                state.error = null
             })
-            .addCase(GetStatistical.rejected, (state, action) => {
+            .addCase(GetCategoryHome.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })
@@ -47,4 +46,4 @@ const GetStatisticalReducer = createSlice({
 })
 
 
-export default GetStatisticalReducer.reducer
+export default GetCategoryHomeReducer.reducer

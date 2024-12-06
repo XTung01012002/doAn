@@ -159,7 +159,6 @@ const Bought = () => {
                                         <span className=' ml-1 font-medium'>{items.totalAmount.toLocaleString('vi-VN')} đ</span>
                                     </Col>
                                 </Row>
-
                                 <Row gutter={[16, 24]} className='flex mt-4 items-center justify-end'>
                                     <Col className='gutter-row flex items-center justify-end' span={24}>
                                         <Button
@@ -170,7 +169,7 @@ const Bought = () => {
                                         >
                                             Xem chi tiết
                                         </Button>
-                                        {(items.paymentStatus === 'Chưa chọn phương thức thanh toán' || items.paymentStatus === 'Thanh toán khi nhận hàng') &&
+                                        {(items.paymentStatus === 'Chưa chọn phương thức thanh toán') &&
                                             <Button
                                                 variant='solid'
                                                 color='danger'
@@ -179,7 +178,6 @@ const Bought = () => {
                                                 Thanh toán ngay
                                             </Button>
                                         }
-
                                     </Col>
                                 </Row>
 

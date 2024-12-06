@@ -12,7 +12,7 @@ export const PostUploadProduct = createAsyncThunk(
             console.log('Thanh công');
             return res
         } catch (error) {
-            return rejectWithValue(error.res.data)
+            return rejectWithValue(error.response?.data?.message);
         }
     }
 )

@@ -11,7 +11,7 @@ export const PostInventoryreceiptCreate = createAsyncThunk(
             })
             return res
         } catch (error) {
-            return rejectWithValue(error.res.data)
+            return rejectWithValue(error.response?.data?.message);
         }
     }
 )

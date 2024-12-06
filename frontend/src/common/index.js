@@ -169,6 +169,16 @@ const SummaryApi = {
   },
   fetchDataAccept: {
     url: `${backendDomin}/api/paymentinfo/all-not-confirm-order-sale`
+  },
+  putInfoOrder: {
+    url: `${backendDomin}/api/paymentinfo/update`
+  },
+  getCategory: {
+    url: `${backendDomin}/api/product/category`
+  },
+  deleteInCart: {
+
+    url: `${backendDomin}/api/cartproduct/delete-all-product-in-cart`
   }
 };
 

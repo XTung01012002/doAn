@@ -8,7 +8,7 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.createShipInfo.loading)
-    const sub = useSelector((state) => state.createShipInfo.submit)
+    const sub = useSelector((state) => state.createShipInfo.sub)
     const error = useSelector((state) => state.createShipInfo.error)
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
     return (
         <>
             <CustomNotification
-                success={sub}
+                success={sub && "Thành công"}
                 error={error}
             />
             <Modal
