@@ -53,7 +53,7 @@ const Bought = () => {
 
     const handleClickPay = () => {
         if (paymentMethod === 'cash-on-delivery') {
-            dispatch(PaymentOrder({ id: dataModal._id }))
+            dispatch(PaymentOrder(dataModal._id))
             setOpen(false)
         } else {
         }

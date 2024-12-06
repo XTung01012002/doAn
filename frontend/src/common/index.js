@@ -167,7 +167,9 @@ const SummaryApi = {
     // kiểm tra trạng thái giao dịch
     url: `${backendDomin}/api/paymentinfo/check`
   },
-  
+  fetchDataAccept: {
+    url: `${backendDomin}/api/paymentinfo/all-not-confirm-order-sale`
+  }
 };
 
 export default SummaryApi;

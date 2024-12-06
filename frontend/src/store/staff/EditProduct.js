@@ -24,17 +24,16 @@ export const PutProductStaff = createAsyncThunk(
 
 export const PutUpdateActive = createAsyncThunk(
     'PutUpdateActive', async ({ id, data }, { rejectWithValue }) => {
-
         try {
-
             const res = await axios.put(`${SummaryApi.putUpdateActive.url}/${id}`, data, {
                 withCredentials: true
             });
-
             return res
         } catch (error) {
-            console.log(rejectWithValue(error.res.data));
-            return rejectWithValue(error.res.data)
+            const errorMessage =
+                error.response?.data?.message || 'Có lỗi xảy ra từ phía server (500).';
+            console.error('Lỗi cập nhật trạng thái:', errorMessage);
+            return rejectWithValue(errorMessage);
         }
     }
 )
@@ -53,7 +52,14 @@ const initialState = {
 const PutProductStaffReducer = createSlice({
     name: 'PutProductStaffReducer',
     initialState,
-    reducers: {},
+    reducers: {
+        setSubPut(state) {
+            state.sub1 = false
+        },
+        setErrorPut(state) {
+            state.error1 = null
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(PutProductStaff.pending, (state) => {
@@ -78,16 +84,16 @@ const PutProductStaffReducer = createSlice({
             })
             .addCase(PutUpdateActive.fulfilled, (state) => {
                 state.error1 = null
-                state.loading = false
+                state.loading1 = false
                 state.sub1 = true
             })
             .addCase(PutUpdateActive.rejected, (state, action) => {
                 state.error1 = action.payload
-                state.loading = false
+                state.loading1 = false
                 state.sub1 = false
             })
     }
 })
 
-
+export const { setSubPut, setErrorPut } = PutProductStaffReducer.actions
 export default PutProductStaffReducer.reducer

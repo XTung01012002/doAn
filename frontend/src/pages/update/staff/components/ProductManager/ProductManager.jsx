@@ -5,7 +5,8 @@ import { Button, Image, message, Space, Switch, Table, Tag } from 'antd';
 import { CiTrash } from "react-icons/ci";
 import EditProductModal from './EditProductModal';
 import { AiOutlineEdit } from "react-icons/ai";
-import { PutUpdateActive } from '../../../../../store/staff/EditProduct';
+import { PutUpdateActive, setErrorPut, setSubPut } from '../../../../../store/staff/EditProduct';
+import CustomNotification from '../../../../../components/notification/CustomNotifacation';
 
 
 const ProductManager = () => {
@@ -18,38 +19,28 @@ const ProductManager = () => {
 
     const loading = useSelector(state => state.putProductStaff.loading1)
     const sub = useSelector(state => state.putProductStaff.sub1)
+    const error = useSelector(state => state.putProductStaff.error1)
 
+    useEffect(() => {
+        if (error !== null) dispatch(setErrorPut())
+    }, [error, dispatch])
 
-    const [messageApi, contextHolder] = message.useMessage();
-    const success = () => {
-        messageApi.open({
-            type: 'success',
-            content: 'Cập nhật thành công.',
-            duration: 3,
-        });
-    };
-console.log('asdasd',dataSource);
-
-
-    const getImageSrc = (image) => {
-        
-        return image instanceof File ? URL.createObjectURL(image) : image;
-    };
+   
+    console.log('asdasd', dataSource);
 
     useEffect(() => {
         dispatch(fetchDataWarehouse())
     }, [dispatch])
 
     const onChange = (checked, data) => {
-        console.log(`switch to ${checked}`);
         dispatch(PutUpdateActive({ id: data._id, data: { active: checked } }))
     };
     useEffect(() => {
         if (sub) {
-            success();
             dispatch(fetchDataWarehouse())
+            dispatch(setSubPut())
         }
-    }, [sub])
+    }, [sub, dispatch])
 
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 6;
@@ -82,23 +73,24 @@ console.log('asdasd',dataSource);
             title: 'Ảnh sản phẩm',
             render: (productImage) => {
                 return (
-                    <div className=''>
-                        {productImage.length > 0 ?
+                    <div>
+                        {Array.isArray(productImage) && productImage.length > 0 ? (
                             <Image
                                 width={50}
                                 height={50}
-                                src={typeof productImage[0] === 'string' ? productImage[0] : 'https://imgs.search.brave.com/jt84d5SmMRH9IYwpquW1be6mriU5QEgM7G1ML6O8rsU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oYXlj/YWZlLnZuL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzA2L0hp/bmgtYW5oLUF2YXRh/ci10cmFuZy10cm9u/LTYwMHg2MDAuanBn'}
+                                src={typeof productImage[0] === 'string' ? productImage[0] : 'default_image_url'}
                             />
-                            :
+                        ) : (
                             <Image
                                 width={50}
                                 height={50}
-                                src='https://imgs.search.brave.com/jt84d5SmMRH9IYwpquW1be6mriU5QEgM7G1ML6O8rsU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oYXlj/YWZlLnZuL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzA2L0hp/bmgtYW5oLUF2YXRh/ci10cmFuZy10cm9u/LTYwMHg2MDAuanBn'
+                                src="default_image_url"
                             />
-                        }
+                        )}
                     </div>
-                )
+                );
             }
+
         },
         {
             key: 'productName',
@@ -165,13 +157,16 @@ console.log('asdasd',dataSource);
             }
         },
         {
-            key: 'action',
+            key: 'active',
+            dataIndex: 'active',
             title: 'Hành động',
-            render: (_, data) => {
+            render: (value, data) => {
                 return (
                     <Space>
                         <Switch size="small"
-                            defaultChecked={data.active}
+                            defaultChecked={value}
+                            loading={loading}
+                            value={value}
                             onChange={(e) => onChange(e, data)}
                         />
                         <Button
@@ -182,13 +177,7 @@ console.log('asdasd',dataSource);
                             icon={<AiOutlineEdit size={20} />}
                             onClick={() => { setOpen(true); setID(data._id) }}
                         />
-                        {/* <Button
-                            variant='text'
-                            className='border-none '
-                            color='danger'
-                            shape="circle"
-                            icon={<CiTrash size={20} />}
-                        /> */}
+
                     </Space>
                 )
             }
@@ -197,7 +186,10 @@ console.log('asdasd',dataSource);
 
     return (
         <>
-            {contextHolder}
+            <CustomNotification
+                error={error}
+                success={sub ? 'Cập nhật thành công!' : ''}
+            />
             <Table
                 columns={column}
                 dataSource={dataSource}

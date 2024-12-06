@@ -2,21 +2,24 @@ import { Button, Image, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import AcceptOderModal from './AcceptOderModal'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchDataBoughtUser } from '../../../../../store/bought/BoughtUser'
 import { IoCheckmarkDone } from "react-icons/io5";
 import formatAmount from '../../../../../components/formatNumber/FormatNumber'
+import { FetchDataAccept } from '../../../../../store/staff/FetchDataAccept'
 
 const AcceptOrder = () => {
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false)
     const [id, setId] = useState(null)
-    const dataSource = useSelector(state => state.bought.data)
+    const dataSource = useSelector(state => state.fetchAccept.data)
     useEffect(() => {
-        dispatch(fetchDataBoughtUser());
+        dispatch(FetchDataAccept());
     }, [dispatch]);
 
+    console.log('abac',dataSource);
+    
+
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 9;
+    const pageSize = 6;
 
 
     const column = [
@@ -44,7 +47,7 @@ const AcceptOrder = () => {
             dataIndex: 'productList',
             title: 'Hình ảnh',
             render: (productList) => {
-                const firstImage = productList.productId?.productImage?.[0];
+                const firstImage = productList[0].productId?.productImage?.[0];
                 console.log('Status  firstImage', firstImage);
                 return (
                     <div>
@@ -105,11 +108,6 @@ const AcceptOrder = () => {
             key: 'paymentStatus',
             dataIndex: 'paymentStatus',
             title: 'Thanh toán'
-        },
-        {
-            key: 'status',
-            dataIndex: 'orderStatus',
-            title: 'Đơn hàng'
         },
         {
             key: 'action',

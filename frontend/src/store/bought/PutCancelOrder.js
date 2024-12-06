@@ -8,12 +8,12 @@ export const putCancelOrder = createAsyncThunk(
     'put1CancelOrder', async (id, { rejectWithValue }) => {
         try {
             const res = await axios.put(`${SummaryApi.putCancelOrder.url}/${id}`,
-                {},{
-                    withCredentials: true
-                })
+                {}, {
+                withCredentials: true
+            })
             return res
         } catch (error) {
-            return rejectWithValue(error.res.data)
+            return rejectWithValue(error?.res?.data.message)
         }
     }
 )
@@ -25,7 +25,14 @@ const PutCancelOrderReducer = createSlice({
         subPut: false,
         errorPut: null
     },
-    reducers: {},
+    reducers: {
+        setSubPut(state) {
+            state.subPut = false
+        },
+        setErrorPut(state) {
+            state.errorPut = null
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(putCancelOrder.pending, (state) => {
@@ -45,5 +52,8 @@ const PutCancelOrderReducer = createSlice({
             });
     },
 });
+
+
+export const { setSubPut, setErrorPut } = PutCancelOrderReducer.actions
 
 export default PutCancelOrderReducer.reducer;
