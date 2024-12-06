@@ -26,5 +26,6 @@ router.put("/choosePaymentMethod/:id", asyncHandle(PaymentInfoController.chooseP
 router.get("/all-confirm-order-sale", asyncHandle(PaymentInfoController.getAllConfirmedOrderSale));
 router.get("/all-cancel-order-sale", asyncHandle(PaymentInfoController.getAllCanceledOrderSale));
 router.get("/all-not-confirm-order-sale", asyncHandle(PaymentInfoController.getAllNotConfirmOrderSale));
+// router.put("/update-Shipping-Status/:id", asyncHandle(PaymentInfoController.updateShippingStatus));
 
 module.exports = router;
