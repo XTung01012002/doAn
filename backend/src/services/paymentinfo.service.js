@@ -186,7 +186,8 @@ class PaymentInfoService {
     return { qrUrl, transactionId };
   };
 
-  static checkTransactionStatus = async (transactionId, paymentInfoId) => {
+  static checkTransactionStatus = async (data, transactionId) => {
+    const { paymentInfoId } = data;
     const paymentInfo = await paymentInfoSchema.findById(paymentInfoId);
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
@@ -280,8 +281,8 @@ class PaymentInfoService {
     await paymentInfo.save();
   };
 
-  // lấy tất cả đơn hàng đã giao của user
-  static getAllDeliveredOrder = async (req) => {
+  // lấy tất cả đơn hàng đã giao của user để đánh giá
+  static getAllDeliveredOrdersForReview = async (req) => {
     const sessionUser = req.user;
 
     try {
@@ -328,6 +329,22 @@ class PaymentInfoService {
     }
   };
 
+  // lấy danh sách đơn hàng đã giao của user không cần đánh giá
+  static getAllDeliveredOrders = async (req) => {
+    const sessionUser = req.user;
+
+    const orders = await paymentInfoSchema
+      .find({
+        userId: sessionUser,
+        orderStatus: "Đã giao hàng",
+      })
+      .populate("productList.productId") // Populate thông tin sản phẩm
+      .populate({ path: "userId", select: "name profilePic -_id" })
+      .exec();
+
+    return orders;
+  };
+
   // SALE
   // lấy tất cả đơn hàng đã xác nhận
   static getAllConfirmedOrderSale = async () => {
@@ -349,11 +366,49 @@ class PaymentInfoService {
   // lấy tất cả các đơn hàng chưa xác nhận
   static getAllNotConfirmOrderSale = async () => {
     return await paymentInfoSchema
-      .find({ confirmOrder: false })
+      .find({
+        confirmOrder: false,
+        paymentStatus: { $ne: "Chưa chọn phương thức thanh toán" },
+        orderStatus: { $ne: "Đã hủy" },
+      })
       .populate("productList.productId")
       .populate({ path: "userId", select: "name profilePic -_id" })
       .exec();
   };
+
+  // chỉnh sửa trạng thái vận chuyển
+  // static updateShippingStatus = async (data, paymentInfoId) => {
+  //   const { shippingStatus } = data;
+  //   const paymentInfo = await paymentInfoSchema
+  //     .findById(paymentInfoId)
+  //     .populate("productList.productId")
+  //     .exec();
+  //   if (!paymentInfo) {
+  //     throw new BadRequestError("Không tìm thấy đơn hàng");
+  //   }
+  //   const statusMap = {
+  //     "Đã giao": "Đã giao hàng",
+  //     "Đã hủy": "Đã hủy",
+  //     "Đang chờ đơn vị vận chuyển": "Đang chờ đơn vị vận chuyển",
+  //     "Đã lấy hàng": "Đang giao hàng",
+  //   };
+  //   const newOrderStatus = statusMap[shippingStatus];
+  //   if (paymentInfo.orderStatus !== newOrderStatus) {
+  //     paymentInfo.orderStatus = newOrderStatus;
+  //     await paymentInfo.save();
+  //   }
+  //   // chỉnh sửa trạng thái vận chuyển ở shippingInfo
+  //   const shippingInfo = await shippingInfoSchema.findOne({
+  //     paymentInfo: paymentInfoId,
+  //   });
+  //   if (!shippingInfo) {
+  //     throw new BadRequestError("Không tìm thấy thông tin vận chuyển");
+  //   }
+  //   shippingInfo.shippingStatus = shippingStatus;
+  //   await shippingInfo.save();
+
+  //   return paymentInfo;
+  // }
 }
 
 module.exports = PaymentInfoService;
