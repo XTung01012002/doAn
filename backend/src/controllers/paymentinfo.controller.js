@@ -99,8 +99,7 @@ class PaymentInfoController {
 
   checkTransactionStatus = async (req, res) => {
     const transaction = await PaymentInfoService.checkTransactionStatus(
-      req.params.transactionId,
-      rep.body
+      req.body, req.params.transactionId,
     );
     new SuccessResponse({
       message: "Kiểm tra trạng thái giao dịch thành công",
@@ -147,8 +146,8 @@ class PaymentInfoController {
     }).send(res);
   };
 
-  getAllDeliveredOrder = async (req, res) => {
-    const paymentInfos = await PaymentInfoService.getAllDeliveredOrder(req);
+  getAllDeliveredOrdersForReview = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllDeliveredOrdersForReview(req);
     new SuccessResponse({
       message: "Lấy danh sách đơn hàng đã giao thành công",
       data: paymentInfos,
@@ -161,5 +160,15 @@ class PaymentInfoController {
       message: "Chọn phương thức thanh toán khi nhận hàng thành công",
     }).send(res);
   }
+
+  getAllDeliveredOrders = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllDeliveredOrders(req);
+    new SuccessResponse({
+      message: "Lấy danh sách đơn hàng đã giao thành công",
+      data: paymentInfos,
+    }).send(res);
+  }
+
+  
 }
 module.exports = new PaymentInfoController();

@@ -27,7 +27,6 @@ class ProductService {
         description,
         price,
         sellingPrice,
-        active,
       } = productData;
       const product = await productSchema.findById(id);
       if (!product) {
@@ -40,7 +39,6 @@ class ProductService {
       product.description = description;
       product.price = price;
       product.sellingPrice = sellingPrice;
-      product.active = active;
       await product.save();
       return product;
     } catch (error) {

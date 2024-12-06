@@ -20,11 +20,13 @@ router.get("/check/:transactionId",asyncHandle(PaymentInfoController.checkTransa
 router.get("/by/:id", asyncHandle(PaymentInfoController.getById));
 router.delete("/deleteCanceledOrder/:id", asyncHandle(PaymentInfoController.deleteCanceledOrder));
 router.get("/all-ShippingOrder", asyncHandle(PaymentInfoController.getAllShippingOrder));
-router.get("/all-DeliveredOrder", asyncHandle(PaymentInfoController.getAllDeliveredOrder));
+router.get("/all-Delivered-Orders", asyncHandle(PaymentInfoController.getAllDeliveredOrders));
+router.get("/all-Delivered-Orders-ForReview", asyncHandle(PaymentInfoController.getAllDeliveredOrdersForReview));
 router.put("/choosePaymentMethod/:id", asyncHandle(PaymentInfoController.choosePaymentMethod));
 // đối với sale
 router.get("/all-confirm-order-sale", asyncHandle(PaymentInfoController.getAllConfirmedOrderSale));
 router.get("/all-cancel-order-sale", asyncHandle(PaymentInfoController.getAllCanceledOrderSale));
 router.get("/all-not-confirm-order-sale", asyncHandle(PaymentInfoController.getAllNotConfirmOrderSale));
+// router.put("/update-Shipping-Status/:id", asyncHandle(PaymentInfoController.updateShippingStatus));
 
 module.exports = router;

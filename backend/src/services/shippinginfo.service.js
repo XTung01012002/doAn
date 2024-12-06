@@ -156,5 +156,6 @@ class ShippingInfoService {
     });
     return shippingInfo;
   };
+
 }
 module.exports = ShippingInfoService;
