@@ -22,6 +22,8 @@ import GetCommentProductReducer from './delivered/getCommnetproduct'
 import GetAllCancelOrderSaleReducer from './getAllCancelOrderSale/GetAllCancelOrderSale'
 import FetchDataAcceptReducer from './staff/FetchDataAccept'
 import PutInfoOrderReducer from './bought/putInfoOrder'
+import GetCategoryHomeReducer from './home/getCategiry'
+
 
 export const store = configureStore({
   reducer: {
@@ -47,6 +49,7 @@ export const store = configureStore({
     getComment: GetCommentProductReducer,
     getAllCancelSale: GetAllCancelOrderSaleReducer,
     fetchAccept: FetchDataAcceptReducer,
-    putInfoOrder: PutInfoOrderReducer
+    putInfoOrder: PutInfoOrderReducer,
+    getCategory: GetCategoryHomeReducer                                                                                                                     
   },
 })

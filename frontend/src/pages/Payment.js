@@ -16,6 +16,7 @@ import { Avatar, Button, Modal, notification, Space } from "antd";
 import { CreateQR } from "../store/QRcode/CreateQR";
 import { fetchDataBoughtUser } from "../store/bought/BoughtUser";
 import { PaymentOrder } from "../store/thanhtoan/PaymentOrder";
+import { DeleteCartAPI } from "../store/deleteCart/DeletecartSlice";
 
 const Payment = () => {
   const nav = useNavigate();
@@ -40,6 +41,7 @@ const Payment = () => {
   const [transactionStatus, setTransactionStatus] = useState("Đang xử lý...");
   const [intervalId, setIntervalId] = useState(null);
   const [open, setOpen] = useState(false);
+
   const handleOK = () => {
     setOpen(false);
   };
@@ -189,6 +191,7 @@ const Payment = () => {
   useEffect(() => {
     if (subasd) {
       dispatch(fetchDataBoughtUser());
+      dispatch(DeleteCartAPI())
       setOpen(true);
     }
   }, [subasd]);
