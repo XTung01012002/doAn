@@ -146,8 +146,8 @@ class PaymentInfoController {
     }).send(res);
   };
 
-  getAllDeliveredOrder = async (req, res) => {
-    const paymentInfos = await PaymentInfoService.getAllDeliveredOrder(req);
+  getAllDeliveredOrdersForReview = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllDeliveredOrdersForReview(req);
     new SuccessResponse({
       message: "Lấy danh sách đơn hàng đã giao thành công",
       data: paymentInfos,
@@ -161,12 +161,14 @@ class PaymentInfoController {
     }).send(res);
   }
 
-  // updateShippingStatus = async (req, res) => {
-  //   const shippingInfo = await PaymentInfoService.updateShippingStatus(req.body, req.params.id);
-  //   new SuccessResponse({
-  //     message: "Cập nhật trạng thái vận chuyển thành công",
-  //     data: shippingInfo,
-  //   }).send(res);
-  // }
+  getAllDeliveredOrders = async (req, res) => {
+    const paymentInfos = await PaymentInfoService.getAllDeliveredOrders(req);
+    new SuccessResponse({
+      message: "Lấy danh sách đơn hàng đã giao thành công",
+      data: paymentInfos,
+    }).send(res);
+  }
+
+  
 }
 module.exports = new PaymentInfoController();

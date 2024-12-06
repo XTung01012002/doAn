@@ -94,7 +94,7 @@ const SummaryApi = {
     method: "delete",
   },
   getAllNotConfirm: {
-    url: `${backendDomin}/api/paymentinfo/all-not-confirm-order-sale`,
+    url: `${backendDomin}/api/paymentinfo/all-not-confirm-order`,
     method: "get"
   },
   getAllCanceledOrder: {

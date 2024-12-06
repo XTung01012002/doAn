@@ -186,7 +186,7 @@ class PaymentInfoService {
     return { qrUrl, transactionId };
   };
 
-  static checkTransactionStatus = async (data , transactionId) => {
+  static checkTransactionStatus = async (data, transactionId) => {
     const { paymentInfoId } = data;
     const paymentInfo = await paymentInfoSchema.findById(paymentInfoId);
     if (!paymentInfo) {
@@ -281,8 +281,8 @@ class PaymentInfoService {
     await paymentInfo.save();
   };
 
-  // lấy tất cả đơn hàng đã giao của user
-  static getAllDeliveredOrder = async (req) => {
+  // lấy tất cả đơn hàng đã giao của user để đánh giá
+  static getAllDeliveredOrdersForReview = async (req) => {
     const sessionUser = req.user;
 
     try {
@@ -329,6 +329,22 @@ class PaymentInfoService {
     }
   };
 
+  // lấy danh sách đơn hàng đã giao của user không cần đánh giá
+  static getAllDeliveredOrders = async (req) => {
+    const sessionUser = req.user;
+
+    const orders = await paymentInfoSchema
+      .find({
+        userId: sessionUser,
+        orderStatus: "Đã giao hàng",
+      })
+      .populate("productList.productId") // Populate thông tin sản phẩm
+      .populate({ path: "userId", select: "name profilePic -_id" })
+      .exec();
+
+    return orders;
+  };
+
   // SALE
   // lấy tất cả đơn hàng đã xác nhận
   static getAllConfirmedOrderSale = async () => {
@@ -354,7 +370,6 @@ class PaymentInfoService {
         confirmOrder: false,
         paymentStatus: { $ne: "Chưa chọn phương thức thanh toán" },
         orderStatus: { $ne: "Đã hủy" },
-
       })
       .populate("productList.productId")
       .populate({ path: "userId", select: "name profilePic -_id" })
@@ -392,10 +407,8 @@ class PaymentInfoService {
   //   shippingInfo.shippingStatus = shippingStatus;
   //   await shippingInfo.save();
 
-
   //   return paymentInfo;
   // }
-
 }
 
 module.exports = PaymentInfoService;

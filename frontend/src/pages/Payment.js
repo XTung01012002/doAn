@@ -40,6 +40,9 @@ const Payment = () => {
   const [transactionStatus, setTransactionStatus] = useState("Đang xử lý...");
   const [intervalId, setIntervalId] = useState(null);
   const [open, setOpen] = useState(false);
+
+console.log('dataBought', dataBought);
+
   const handleOK = () => {
     setOpen(false);
   };
