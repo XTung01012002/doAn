@@ -21,7 +21,7 @@ import CommnetOrderReducer from './delivered/modeldeli'
 import GetCommentProductReducer from './delivered/getCommnetproduct'
 import GetAllCancelOrderSaleReducer from './getAllCancelOrderSale/GetAllCancelOrderSale'
 import FetchDataAcceptReducer from './staff/FetchDataAccept'
-
+import PutInfoOrderReducer from './bought/putInfoOrder'
 
 export const store = configureStore({
   reducer: {
@@ -46,6 +46,7 @@ export const store = configureStore({
     createComment: CommnetOrderReducer,
     getComment: GetCommentProductReducer,
     getAllCancelSale: GetAllCancelOrderSaleReducer,
-    fetchAccept: FetchDataAcceptReducer
+    fetchAccept: FetchDataAcceptReducer,
+    putInfoOrder: PutInfoOrderReducer
   },
 })

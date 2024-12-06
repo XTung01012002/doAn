@@ -169,6 +169,9 @@ const SummaryApi = {
   },
   fetchDataAccept: {
     url: `${backendDomin}/api/paymentinfo/all-not-confirm-order-sale`
+  },
+  putInfoOrder: {
+    url: `${backendDomin}/api/paymentinfo/update`
   }
 };
 

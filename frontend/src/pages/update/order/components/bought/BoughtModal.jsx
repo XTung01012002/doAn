@@ -1,4 +1,4 @@
-import { Col, Image, Modal, Row, Avatar, Card, Button, Collapse, Select, Radio, Space, Input, Typography } from 'antd'
+import { Col, Image, Modal, Row, Avatar, Card, Button, Collapse, Select, Radio, Space, Input, Typography, Form } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styles from './ButtonStyles.module.css'
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import { PaymentOrder, setErrorNhanhang, setSubNhanhang } from '../../../../../s
 import { CreateQR } from '../../../../../store/QRcode/CreateQR';
 import { fetchDataCanceledUser } from '../../../../../store/canceled/CanceledUser';
 import CustomNotification from '../../../../../components/notification/CustomNotifacation';
+import { PutInfoOrder, setErrorPutInfo, setSubPutInfo } from '../../../../../store/bought/putInfoOrder';
 
 const BoughtModal = ({ open, setOpen, data }) => {
 
@@ -19,12 +20,18 @@ const BoughtModal = ({ open, setOpen, data }) => {
     const sub = useSelector(state => state.statusPutCancel.subPut)
     const error = useSelector(state => state.statusPutCancel.errorPut)
 
+    const [form] = Form.useForm()
+
     const loadingCreateNhanHang = useSelector(state => state.nhanhang.loading)
 
     const subCreateNhanHang = useSelector(state => state.nhanhang.sub)
     const errorCreateNhanHang = useSelector(state => state.nhanhang.error)
 
-    console.log(error);
+    const [dataNew, setDataNew] = useState()
+
+    const subPutInfo = useSelector(state => state.putInfoOrder.sub)
+    const loadingPutInfo = useSelector(state => state.putInfoOrder.loading)
+    const errorPutInfo = useSelector(state => state.putInfoOrder.error)
 
     const qr = useSelector(state => state.createQR.data)
 
@@ -32,20 +39,38 @@ const BoughtModal = ({ open, setOpen, data }) => {
         dispatch(putCancelOrder(data._id))
     }
 
+
+
+    useEffect(() => {
+        if (data) {
+            form.setFieldsValue({
+                phone: data.phone || '',
+                address: data.address || ''
+            })
+            setDataNew({
+                phone: data.phone,
+                address: data.address
+            })
+        }
+    }, [data])
+
     useEffect(() => {
         if (error !== null) {
             dispatch(setErrorPut())
+            setFix(false)
         }
     }, [dispatch, error])
 
     useEffect(() => {
         if (errorCreateNhanHang !== null) {
             dispatch(setErrorNhanhang())
+            setFix(false)
         }
     }, [dispatch, errorCreateNhanHang])
 
     useEffect(() => {
         if (sub) {
+            setFix(false)
             setOpen(false)
             dispatch(fetchDataBoughtUser());
             dispatch(fetchDataCanceledUser())
@@ -56,6 +81,7 @@ const BoughtModal = ({ open, setOpen, data }) => {
 
     useEffect(() => {
         if (subCreateNhanHang) {
+            setFix(false)
             setOpen(false)
             dispatch(fetchDataBoughtUser());
             dispatch(setSubNhanhang())
@@ -65,18 +91,57 @@ const BoughtModal = ({ open, setOpen, data }) => {
     const onChange1 = (e) => {
         setMethodPayment(e.target.value);
     };
-    if (!data) {
-        return null;
-    }
 
 
     const handleClickCannel = () => {
         setOpen(false)
+        setFix(false)
     }
 
     const onChange = (key) => {
         console.log(key);
     };
+
+
+
+    const total = data?.totalAmount
+
+    const handleSubmit = () => {
+        if (methodPayment === 'cash-on-delivery') {
+            dispatch(PaymentOrder(data._id))
+            // console.log(data._id)
+        } else {
+            dispatch(CreateQR({ totalAmount: data.totalAmount }))
+            setOpen1(true)
+        }
+    }
+
+
+    const handleSubmitFix = (values) => {
+        dispatch(PutInfoOrder({ id: data._id, data: values }));
+
+    };
+
+    useEffect(() => {
+        if (subPutInfo) {
+            setDataNew(form.getFieldsValue());
+
+            dispatch(setSubPutInfo())
+            setFix(false)
+        }
+    }, [subPutInfo])
+
+    useEffect(() => {
+        if (errorPutInfo) {
+            dispatch(setErrorPutInfo())
+        }
+    }, [errorPutInfo])
+
+
+
+    if (!data) {
+        return null;
+    }
 
     const items = [
         {
@@ -101,18 +166,6 @@ const BoughtModal = ({ open, setOpen, data }) => {
 
     ];
 
-    const total = data?.totalAmount
-
-    const handleSubmit = () => {
-        if (methodPayment === 'cash-on-delivery') {
-            dispatch(PaymentOrder(data._id))
-            // console.log(data._id)
-        } else {
-            dispatch(CreateQR({ totalAmount: data.totalAmount }))
-            setOpen1(true)
-        }
-    }
-
     return (
         <>
             <CustomNotification
@@ -123,6 +176,11 @@ const BoughtModal = ({ open, setOpen, data }) => {
             <CustomNotification
                 success={subCreateNhanHang && 'Thay đổi thành công'}
                 error={errorCreateNhanHang}
+            />
+
+            <CustomNotification
+                success={subPutInfo && 'Cập nhật thành công'}
+                error={errorPutInfo}
             />
 
             <Modal
@@ -143,62 +201,187 @@ const BoughtModal = ({ open, setOpen, data }) => {
                     gutter={[16, 24]}
                     className={styles.customScrollbarY}
                 >
+
                     <Col className="gutter-row" span={24}>
-                        <div className='flex justify-between items-center'>
-                            <div className='mb-5 font-bold text-[16px]'>
-                                Thông tin khách hàng
+                        {/* <Form
+                            form={form}
+                            name='basic'
+                            onFinish={handleSubmitFix}
+                            labelCol={{
+                                span: 6,
+                            }}
+                            wrapperCol={{
+                                span: 18,
+                            }}
+                        >
+                            <div className='flex justify-between items-center'>
+                                <div className='mb-5 font-bold text-[16px]'>
+                                    Thông tin khách hàng
+                                </div>
+                                <div>
+                                    <Button
+                                        onClick={fix === false ? () => setFix(true) : null}
+                                        type='primary'
+                                        htmlType={fix ? 'submit' : 'button'}
+                                        loading={loadingPutInfo}
+                                    >
+                                        {fix ? 'Lưu' : 'Chỉnh sửa'}
+                                    </Button>
+                                </div>
                             </div>
-                            <div>
-                                <Button
-                                    onClick={() => setFix(!fix)}
-                                    type='primary'
-                                >
-                                    {fix ? 'Lưu' : 'Chỉnh sửa'}
-                                </Button>
+                            <Row gutter={[8, 12]}>
+                                <Col className='gutter-row' span={24}>
+                                    <Row gutter={[8, 12]}>
+
+                                        <Col className='gutter-row' span={24}>
+                                            {fix ?
+                                                <Row gutter={[8, 12]}>
+                                                    <Col className='gutter-row' span={24}>
+
+                                                        <Form.Item
+                                                            label="Số điện thoại"
+                                                            name='phone'
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: 'Vui lòng nhập số điện thoại!'
+                                                                },
+                                                                {
+                                                                    pattern: /^[0-9]{10}$/,
+                                                                    message: 'Số điện thoại phải có 10 chữ số!'
+                                                                }
+                                                            ]}
+                                                        >
+                                                            <Input placeholder="Nhập số điện thoại . . ." />
+                                                        </Form.Item>
+                                                        <Form.Item
+                                                            label="Địa chỉ"
+                                                            name='address'
+                                                            rules={[
+                                                                { required: true, message: 'Vui lòng nhập địa chỉ!' },
+                                                            ]}
+                                                        >
+                                                            <Input placeholder="Nhập địa chỉ . . ." />
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                                :
+                                                <Row gutter={[8, 12]}>
+                                                    <Col className='gutter-row' span={4}>
+                                                        Số điện thoại:
+                                                    </Col>
+                                                    <Col className='gutter-row' span={20}>
+                                                        {data.phone}
+                                                    </Col>
+                                                    <Col className='gutter-row' span={4}>
+                                                        Địa chỉ:
+                                                    </Col>
+                                                    <Col className='gutter-row' span={20}>
+                                                        {data.address}
+                                                    </Col>
+                                                </Row>
+                                            }
+                                        </Col>
+                                    </Row>
+
+                                </Col>
+                            </Row>
+                        </Form> */}
+                        <Form
+                            form={form}
+                            name="basic"
+                            onFinish={handleSubmitFix}
+                            labelCol={{
+                                span: 6,
+                            }}
+                            wrapperCol={{
+                                span: 18,
+                            }}
+                        >
+                            <div className="flex justify-between items-center">
+                                <div className="mb-5 font-bold text-[16px]">
+                                    Thông tin khách hàng
+                                </div>
+                                <div>
+                                    {fix ?
+                                        <Button
+                                            htmlType='submit'
+                                            type="primary"
+                                            loading={loadingPutInfo}
+                                        >
+                                            Lưu
+                                        </Button>
+                                        :
+                                        <Button
+                                            onClick={(e) => { e.preventDefault(); setFix(!fix) }}
+                                            type="primary"
+                                        >
+                                            Chỉnh sửa
+                                        </Button>
+                                    }
+                                </div>
                             </div>
-                        </div>
-                        <Row gutter={[8, 12]}>
-                            <Col className='gutter-row' span={24}>
-                                <Row gutter={[8, 12]}>
 
-                                    <Col className='gutter-row' span={24}>
-                                        {fix ?
-                                            <Row gutter={[8, 12]}>
-                                                <Col className='gutter-row' span={24}>
-                                                    <Typography className='text-[14px] font-medium'>Số điện thoại</Typography>
-                                                    <Input
-                                                        defaultValue={data.phone}
-                                                    />
-                                                </Col>
-                                                <Col className='gutter-row' span={24}>
-                                                    <Typography className='text-[14px] font-medium'>Địa chỉ:</Typography>
-                                                    <Input
-                                                        defaultValue={data.address}
-                                                    />
-                                                </Col>
-                                            </Row>
-                                            :
-                                            <Row gutter={[8, 12]}>
-                                                <Col className='gutter-row' span={4}>
-                                                    Số điện thoại:
-                                                </Col>
-                                                <Col className='gutter-row' span={20}>
-                                                    {data.phone}
-                                                </Col>
-                                                <Col className='gutter-row' span={4}>
-                                                    Địa chỉ:
-                                                </Col>
-                                                <Col className='gutter-row' span={20}>
-                                                    {data.address}
-                                                </Col>
-                                            </Row>
-                                        }
-                                    </Col>
-                                </Row>
+                            <Row gutter={[8, 12]}>
+                                <Col className="gutter-row" span={24}>
+                                    <Row gutter={[8, 12]}>
+                                        <Col className="gutter-row" span={24}>
+                                            {fix ? (
+                                                <Row gutter={[8, 12]}>
+                                                    <Col className="gutter-row" span={24}>
+                                                        <Form.Item
+                                                            label="Số điện thoại"
+                                                            name="phone"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: 'Vui lòng nhập số điện thoại!',
+                                                                },
+                                                                {
+                                                                    pattern: /^[0-9]{10}$/,
+                                                                    message: 'Số điện thoại phải có 10 chữ số!',
+                                                                },
+                                                            ]}
+                                                        >
+                                                            <Input placeholder="Nhập số điện thoại . . ." />
+                                                        </Form.Item>
+                                                        <Form.Item
+                                                            label="Địa chỉ"
+                                                            name="address"
+                                                            rules={[
+                                                                { required: true, message: 'Vui lòng nhập địa chỉ!' },
+                                                            ]}
+                                                        >
+                                                            <Input placeholder="Nhập địa chỉ . . ." />
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                            ) : (
+                                                <Row gutter={[8, 12]}>
+                                                    <Col className="gutter-row" span={4}>
+                                                        Số điện thoại:
+                                                    </Col>
+                                                    <Col className="gutter-row" span={20}>
+                                                        {dataNew.phone}
+                                                    </Col>
+                                                    <Col className="gutter-row" span={4}>
+                                                        Địa chỉ:
+                                                    </Col>
+                                                    <Col className="gutter-row" span={20}>
+                                                        {dataNew.address}
+                                                    </Col>
+                                                </Row>
+                                            )}
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </Row>
 
-                            </Col>
-                        </Row>
+
+                        </Form>
+
                     </Col>
+
                     <Col span={24}>
                         <hr />
                     </Col>
@@ -302,14 +485,6 @@ const BoughtModal = ({ open, setOpen, data }) => {
                             <div className='mb-5 font-bold text-[16px]'>
                                 Thanh toán
                             </div>
-                            {/* <div
-                                className="mb-5 font-bold"
-                                style={{
-                                    color: data.paymentStatus === 'Chưa chọn phương thức thanh toán' ? '#FF4D4F' : '#3538fa',
-                                }}
-                            >
-                                {data.paymentStatus}
-                            </div> */}
                         </div>
                         <Row gutter={[16, 24]}>
 

@@ -30,10 +30,7 @@ export const PutUpdateActive = createAsyncThunk(
             });
             return res
         } catch (error) {
-            const errorMessage =
-                error.response?.data?.message || 'Có lỗi xảy ra từ phía server (500).';
-            console.error('Lỗi cập nhật trạng thái:', errorMessage);
-            return rejectWithValue(errorMessage);
+            return rejectWithValue(error.response?.data?.message);
         }
     }
 )

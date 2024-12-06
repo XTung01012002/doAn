@@ -3,7 +3,7 @@ import axios from 'axios';
 import SummaryApi from '../../common/index';
 
 
-export const fetchDataBoughtUser = createAsyncThunk('data/fetchDataBoughtUser', async () => {
+export const fetchDataBoughtUser = createAsyncThunk('data/fetchDataBoughtUser', async (_,{rejectWithValue}) => {
 
     try {
 
@@ -14,7 +14,7 @@ export const fetchDataBoughtUser = createAsyncThunk('data/fetchDataBoughtUser', 
 
         return response.data.data;
     } catch (error) {
-        throw new Error(error.response?.data?.message || "Error fetching data");
+        return rejectWithValue(error.response?.data?.message);
     }
 });
 
