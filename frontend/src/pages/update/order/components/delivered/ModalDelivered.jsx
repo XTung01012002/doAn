@@ -12,45 +12,10 @@ const ModalDelivered = ({ open, setOpen, data }) => {
     const handleClickCannel = () => {
         setOpen(false)
     }
-    const onChange = (key) => {
-        console.log(key);
-    };
 
 
-    // sửa sang redux
-    const [value, setValue] = useState(1);
-    const onChange1 = (e) => {
-        setValue(e.target.value);
-    };
     if (!data) return
 
-    const items = [
-        {
-            key: '1',
-            label: <div className='font-bold text-[16px]'>Hình thức thanh toán</div>,
-            children:
-                <>
-                    <Radio.Group onChange={onChange1} value={value}>
-                        <Space direction="vertical">
-                            <Radio value={1}>Thanh toán khi nhận hàng</Radio>
-                            <Radio value={2}>Chuyển khoản ngân hàng</Radio>
-                        </Space>
-                    </Radio.Group>
-                    {value === 2 &&
-                        <img
-                            src="https://img.vietqr.io/image/TCB-19037144050012-compact.png"
-                            alt="QR Code"
-                            width="256"
-                            height="256"
-                            className="mx-auto"
-                        />
-                    }
-                </>
-
-            ,
-        },
-
-    ];
     return (
         <Modal
             title={
