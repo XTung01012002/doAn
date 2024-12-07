@@ -148,7 +148,7 @@ const SummaryApi = {
     url: `${backendDomin}/api/paymentinfo/all-ShippingOrder`
   },
   getRate: {
-    url: `${backendDomin}/api/paymentinfo/all-DeliveredOrder`
+    url: `${backendDomin}/api/paymentinfo/all-Delivered-Orders-ForReview`
   },
   createQr: {
     url: `${backendDomin}/api/paymentinfo/createQr`
