@@ -59,7 +59,6 @@ const Header = () => {
       navigate(`/search`);
     }
   };
-  console.log("user", user);
 
   return (
     <header className="h-16 shadow-md bg-white">

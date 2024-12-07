@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext,useEffect, useState } from "react";
 import SummaryApi from "../common";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import displayVNDCurrency from "../helpers/displayVNDCurrency";
 import { toast } from "react-toastify";
 import Context from "../context";
-import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CreateCart,
@@ -68,15 +67,18 @@ const Payment = () => {
 
     if (value === "bank-transfer") {
       const payload = {
+        ...formSubmit,
         totalAmount: Number(totalPrice),
       };
       console.log("payload", payload);
       try {
         const result = await dispatch(CreateQR(payload)).unwrap();
+        const paymentInfo = await dispatch((CreateOrder(formSubmit))).unwrap();
+        const paymentInfoId = paymentInfo._id;
         const transactionId = result?.transactionId;
         if (transactionId) {
           setShowQRCode(true);
-          startTransactionCheck(transactionId); // Bắt đầu kiểm tra giao dịch
+          startTransactionCheck({transactionId, paymentInfoId}); // Bắt đầu kiểm tra giao dịch
         } else {
           toast.error("Không tạo được mã QR. Vui lòng thử lại.");
         }
@@ -90,10 +92,10 @@ const Payment = () => {
     }
   };
 
-  const startTransactionCheck = (transactionId) => {
+  const startTransactionCheck = ({transactionId, paymentInfoId}) => {
     clearTransactionCheck(); // Xóa interval cũ nếu tồn tại
     const id = setInterval(() => {
-      checkTransactionStatus(transactionId);
+      checkTransactionStatus({transactionId, paymentInfoId});
     }, 10000); // Kiểm tra mỗi 5 giây
     setIntervalId(id);
   };
@@ -103,17 +105,17 @@ const Payment = () => {
     setIntervalId(null);
   };
 
-  const checkTransactionStatus = async (transactionId) => {
+  const checkTransactionStatus = async ({transactionId, paymentInfoId}, ) => {
     try {
-      console.log("Kiểm tra trạng thái giao dịch với ID:", transactionId);
+      console.log("Kiểm tra trạng thái giao dịch với ID:", transactionId, paymentInfoId);
       setLoading(true);
-      const response = await axios.get(
-        `${SummaryApi.checkTransactionStatus.url}/${transactionId}`,
+      const response = await axios.post(
+        `${SummaryApi.checkTransactionStatus.url}/${transactionId}`, { paymentInfoId },
         {
           withCredentials: true,
         }
       );
-
+      console.log("Kết quả trả về từ API:", response.data.message);
       const  status  = response.data.data.status;
       console.log("Kết quả trả về từ API:", response.data.message);
       console.log(status);
@@ -191,7 +193,7 @@ const Payment = () => {
   useEffect(() => {
     if (subasd) {
       dispatch(fetchDataBoughtUser());
-      dispatch(DeleteCartAPI())
+      dispatch(DeleteCartAPI()) // xóa giỏ hàng sau khi đặt hàng
       setOpen(true);
     }
   }, [subasd]);
@@ -205,6 +207,7 @@ const Payment = () => {
     if (paymentMethod === 'cash-on-delivery') {
       dispatch(PaymentOrder(dataBought[dataBought.length - 1]._id))
       dispatch(setSubCreate(false))
+      context.fetchUserAddToCart();
       nav('/order')
       setOpen(false)
     } else {

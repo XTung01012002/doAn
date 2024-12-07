@@ -158,5 +158,31 @@ class ShippingInfoService {
     return shippingInfo;
   };
 
+  // lấy ra những đơn hàng đang giao hàng của user và đang chờ đơn vị vận chuyển trừ đơn Đã hủy và Đã giao
+  static getAllDeliveredOrders = async (req) => {
+    const sessionUser = req.user;
+
+    const shippingInfo = await shippingInfoSchema
+      .find({
+        shippingStatus: {
+          $in: ["Đang giao", "Đang chờ đơn vị vận chuyển", "Đã lấy hàng"],
+        },
+      })
+      .populate({
+        path: "paymentInfo",
+        match: { userId: sessionUser },
+        select: "productList totalAmount orderStatus",
+        populate: {
+          path: "productList.productId",
+        },
+      })
+      .exec();
+
+    // Loại bỏ các đơn hàng không có `paymentInfo`
+    const filteredShippingInfo = shippingInfo.filter(
+      (item) => item.paymentInfo
+    );
+    return filteredShippingInfo; // Trả về danh sách đơn hàng đã xử lý
+  };
 }
 module.exports = ShippingInfoService;
