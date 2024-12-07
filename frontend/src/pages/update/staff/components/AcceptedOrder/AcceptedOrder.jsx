@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetAllInfoShipOrder } from '../../../../../store/shipinfo/GetAllOrderShipInfo';
-import { Select, Table, Tag } from 'antd';
+import { Select, Table, Tag, Modal, Button } from 'antd';
 import formatAmount from '../../../../../components/formatNumber/FormatNumber';
 import { setError, setSub, UpdateShippingStatus } from '../../../../../store/staff/UpdateShipping';
 import CustomNotification from '../../../../../components/notification/CustomNotifacation';
 
 const { Option } = Select;
-
 
 const AcceptedOrder = () => {
 
@@ -18,20 +17,51 @@ const AcceptedOrder = () => {
     }, [dispatch])
 
     const [currentPage, setCurrentPage] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedRecord, setSelectedRecord] = useState(null);
+    const [initialStatus, setInitialStatus] = useState(null);
     const pageSize = 10;
-    console.log('dataSource', dataSource);
 
     const loading = useSelector(state => state.updateShipping.loading)
     const sub = useSelector(state => state.updateShipping.sub)
     const error = useSelector(state => state.updateShipping.error)
 
     const handleChange = (record, value) => {
-        const data = {
-            shippingStatus: value
+        if (value === 'Đã giao') {
+            setSelectedRecord(record);
+            setInitialStatus(record.shippingStatus);
+            setIsModalOpen(true); 
+        } else {
+            updateShippingStatus(record, value);
         }
-        console.log('id:', record._id);
-        console.log('data:', data);
-        dispatch(UpdateShippingStatus({ id: record._id, data: data }))
+    }
+
+    const updateShippingStatus = (record, value) => {
+        const data = { shippingStatus: value }
+        dispatch(UpdateShippingStatus({ id: record._id, data }));
+    }
+
+    const handleConfirm = () => {
+        if (selectedRecord) {
+            updateShippingStatus(selectedRecord, 'Đã giao');
+        }
+        setIsModalOpen(false);
+        setSelectedRecord(null);
+        setInitialStatus(null);
+    }
+
+    const handleCancel = () => {
+        if (selectedRecord) {
+            const updatedDataSource = dataSource.map(item =>
+                item._id === selectedRecord._id
+                    ? { ...item, shippingStatus: initialStatus }
+                    : item
+            );
+            dispatch(GetAllInfoShipOrder(updatedDataSource));
+        }
+        setIsModalOpen(false);
+        setSelectedRecord(null);
+        setInitialStatus(null);
     }
 
     useEffect(() => {
@@ -47,7 +77,7 @@ const AcceptedOrder = () => {
         }
     }, [error, dispatch])
 
-    const column = [
+    const columns = [
         {
             key: '_id',
             dataIndex: '_id',
@@ -94,57 +124,40 @@ const AcceptedOrder = () => {
             key: 'paymentInfoStatus',
             dataIndex: 'paymentInfo',
             title: 'Thanh toán',
-            render: (paymentInfo) => {
-                return <Tag bordered={false}
-                    color={
-                        paymentInfo?.paymentStatus === 'Chưa thanh toán'
-                            ? 'error'
-                            : paymentInfo?.paymentStatus === 'Đã thanh toán'
-                                ? 'blue'
-                                : paymentInfo?.paymentStatus === 'thanh toán khi nhận hàng'
-                                    ? 'cyan'
-                                    : 'error'}
-                >
-                    {
-                        paymentInfo?.paymentStatus
-                            ? paymentInfo?.paymentStatus
-                            : 'Chưa chọn phương thức thanh toán'
-                    }
+            render: (paymentInfo) => (
+                <Tag color={
+                    paymentInfo?.paymentStatus === 'Chưa thanh toán'
+                        ? 'error'
+                        : paymentInfo?.paymentStatus === 'Đã thanh toán'
+                            ? 'blue'
+                            : paymentInfo?.paymentStatus === 'thanh toán khi nhận hàng'
+                                ? 'cyan'
+                                : 'error'
+                }>
+                    {paymentInfo?.paymentStatus || 'Chưa chọn phương thức thanh toán'}
                 </Tag>
-
-            }
+            )
         },
         {
             key: 'totalAmount',
             dataIndex: 'totalAmount',
             title: 'Giá tiền',
-            render: (totalAmount) => {
-                return `${formatAmount(totalAmount)} đ`
-            }
+            render: (totalAmount) => `${formatAmount(totalAmount)} đ`
         },
         {
             key: 'shippingStatus',
             dataIndex: 'shippingStatus',
             title: 'Trạng thái đơn',
-            render: (shippingStatus) => {
-                return (
-                    <Tag bordered={false}
-                        color={
-                            shippingStatus === 'Đã hủy'
-                                ? 'error'
-                                : shippingStatus === 'Đã lấy hàng'
-                                    ? 'cyan'
-                                    : shippingStatus === 'Đang giao'
-                                        ? 'geekblue'
-                                        : shippingStatus === 'Đã giao'
-                                        && 'blue'
-                        }
-                    >
-                        {shippingStatus}
-                    </Tag>
-                )
-
-            }
+            render: (shippingStatus) => (
+                <Tag color={
+                    shippingStatus === 'Đã hủy' ? 'error'
+                        : shippingStatus === 'Đã lấy hàng' ? 'cyan'
+                            : shippingStatus === 'Đang giao' ? 'geekblue'
+                                : 'blue'
+                }>
+                    {shippingStatus}
+                </Tag>
+            )
         },
         {
             key: 'shippingStatus',
@@ -152,28 +165,26 @@ const AcceptedOrder = () => {
             dataIndex: 'shippingStatus',
             render: (text, record) => (
                 <Select
-                    defaultValue={text}
+                    value={record.shippingStatus}
                     style={{ width: 150 }}
                     loading={loading}
                     onChange={(value) => handleChange(record, value)}
+                    disabled={text === 'Đã giao'}
                 >
                     <Option value='Đã lấy hàng'>Đã lấy hàng</Option>
-                    <Option value="Đang giao">Đang giao</Option>
-                    <Option value="Đã giao">Đã giao</Option>
-                    <Option value="Đã hủy">Đã hủy</Option>
+                    <Option value='Đang giao'>Đang giao</Option>
+                    <Option value='Đã giao'>Đã giao</Option>
+                    <Option value='Đã hủy'>Đã hủy</Option>
                 </Select>
             ),
         },
-    ]
+    ];
 
     return (
         <div>
-            <CustomNotification
-                success={sub && 'Cập nhập thành công'}
-                error={error}
-            />
+            <CustomNotification success={sub && 'Cập nhập thành công'} error={error} />
             <Table
-                columns={column}
+                columns={columns}
                 dataSource={dataSource}
                 pagination={{
                     pageSize: pageSize,
@@ -181,8 +192,22 @@ const AcceptedOrder = () => {
                     onChange: (page) => setCurrentPage(page),
                 }}
             />
+
+            <Modal
+                title="Xác nhận giao hàng"
+                open={isModalOpen}
+                onOk={handleConfirm}
+                centered
+                onCancel={handleCancel}
+                footer={[
+                    <Button key="cancel" onClick={handleCancel}>Hủy</Button>,
+                    <Button key="confirm" type="primary" onClick={handleConfirm}>Xác nhận</Button>,
+                ]}
+            >
+                <p>Bạn có chắc chắn muốn xác nhận đơn hàng này "Đã giao"?</p>
+            </Modal>
         </div>
     )
 }
 
-export default AcceptedOrder
+export default AcceptedOrder;
