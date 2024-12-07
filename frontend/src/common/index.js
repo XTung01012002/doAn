@@ -145,7 +145,7 @@ const SummaryApi = {
     url: `${backendDomin}/api/statistics/range-statistics`
   },
   getDelivered: {
-    url: `${backendDomin}/api/paymentinfo/all-ShippingOrder`
+    url: `${backendDomin}/api/shippinginfo/all-Delivered-Orders`
   },
   getRate: {
     url: `${backendDomin}/api/paymentinfo/all-Delivered-Orders-ForReview`

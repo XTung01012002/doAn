@@ -171,7 +171,7 @@ class ShippingInfoService {
       .populate({
         path: "paymentInfo",
         match: { userId: sessionUser },
-        select: "productList totalAmount orderStatus",
+        select: "productList totalAmount orderStatus address phone paymentStatus",
         populate: {
           path: "productList.productId",
         },
