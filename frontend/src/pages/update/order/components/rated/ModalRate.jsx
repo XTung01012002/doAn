@@ -3,6 +3,7 @@ import { Avatar, Divider, Modal, Rate, Input, Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CommnetOrder } from '../../../../../store/delivered/modeldeli';
+import { GetRate } from '../../../../../store/rate/getRate';
 
 const { TextArea } = Input;
 
@@ -32,6 +33,7 @@ const ModalRate = ({ open, setOpen, data }) => {
         if (sub) {
             setReviewContent('');
             setRating(0);
+            dispatch(GetRate())
             setOpen1(false);
         }
     }, [sub])

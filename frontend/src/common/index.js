@@ -148,7 +148,7 @@ const SummaryApi = {
     url: `${backendDomin}/api/paymentinfo/all-ShippingOrder`
   },
   getRate: {
-    url: `${backendDomin}/api/paymentinfo/all-DeliveredOrder`
+    url: `${backendDomin}/api/paymentinfo/all-Delivered-Orders-ForReview`
   },
   createQr: {
     url: `${backendDomin}/api/paymentinfo/createQr`
@@ -179,6 +179,12 @@ const SummaryApi = {
   deleteInCart: {
 
     url: `${backendDomin}/api/cartproduct/delete-all-product-in-cart`
+  },
+  getAllOrdered: {
+    url: `${backendDomin}/api/paymentinfo/all-Delivered-Orders`
+  },
+  putUpdateShippingStatus: {
+    url: `${backendDomin}/api/shippinginfo/updateShippingStatus`
   }
 };
 

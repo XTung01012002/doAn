@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetAllInfoShipOrder } from '../../../../../store/shipinfo/GetAllOrderShipInfo';
-import { Button, Table, Tag } from 'antd';
+import { Select, Table, Tag } from 'antd';
 import formatAmount from '../../../../../components/formatNumber/FormatNumber';
-import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { setError, setSub, UpdateShippingStatus } from '../../../../../store/staff/UpdateShipping';
+import CustomNotification from '../../../../../components/notification/CustomNotifacation';
 
-
+const { Option } = Select;
 
 
 const AcceptedOrder = () => {
@@ -18,9 +19,33 @@ const AcceptedOrder = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
+    console.log('dataSource', dataSource);
 
+    const loading = useSelector(state => state.updateShipping.loading)
+    const sub = useSelector(state => state.updateShipping.sub)
+    const error = useSelector(state => state.updateShipping.error)
 
-console.log('ádasd', dataSource);
+    const handleChange = (record, value) => {
+        const data = {
+            shippingStatus: value
+        }
+        console.log('id:', record._id);
+        console.log('data:', data);
+        dispatch(UpdateShippingStatus({ id: record._id, data: data }))
+    }
+
+    useEffect(() => {
+        if (sub) {
+            dispatch(setSub())
+            dispatch(GetAllInfoShipOrder())
+        }
+    }, [sub, dispatch])
+
+    useEffect(() => {
+        if (error) {
+            dispatch(setError())
+        }
+    }, [error, dispatch])
 
     const column = [
         {
@@ -46,7 +71,7 @@ console.log('ádasd', dataSource);
         {
             key: 'deliveryDate',
             dataIndex: 'deliveryDate',
-            title: 'Ngày giao hàng',
+            title: 'Dự kiến giao hàng',
             render: (deliveryDate) => {
                 return deliveryDate ? new Date(deliveryDate).toLocaleDateString('vi-VN', {
                     day: '2-digit',
@@ -68,7 +93,7 @@ console.log('ádasd', dataSource);
         {
             key: 'paymentInfoStatus',
             dataIndex: 'paymentInfo',
-            title: 'Trạng thái thanh toán',
+            title: 'Thanh toán',
             render: (paymentInfo) => {
                 return <Tag bordered={false}
                     color={
@@ -82,8 +107,8 @@ console.log('ádasd', dataSource);
                 >
                     {
                         paymentInfo?.paymentStatus
-                        ? paymentInfo?.paymentStatus
-                        : 'Chưa chọn phương thức thanh toán'
+                            ? paymentInfo?.paymentStatus
+                            : 'Chưa chọn phương thức thanh toán'
                     }
                 </Tag>
 
@@ -101,14 +126,52 @@ console.log('ádasd', dataSource);
             key: 'shippingStatus',
             dataIndex: 'shippingStatus',
             title: 'Trạng thái đơn',
-            // render: (totalAmount) => {
-            //     return `${formatAmount(totalAmount)} đ`
-            // }
+            render: (shippingStatus) => {
+                return (
+                    <Tag bordered={false}
+                        color={
+                            shippingStatus === 'Đã hủy'
+                                ? 'error'
+                                : shippingStatus === 'Đã lấy hàng'
+                                    ? 'cyan'
+                                    : shippingStatus === 'Đang giao'
+                                        ? 'geekblue'
+                                        : shippingStatus === 'Đã giao'
+                                        && 'blue'
+                        }
+                    >
+                        {shippingStatus}
+                    </Tag>
+                )
+
+            }
+        },
+        {
+            key: 'shippingStatus',
+            title: 'Xác nhận',
+            dataIndex: 'shippingStatus',
+            render: (text, record) => (
+                <Select
+                    defaultValue={text}
+                    style={{ width: 150 }}
+                    loading={loading}
+                    onChange={(value) => handleChange(record, value)}
+                >
+                    <Option value='Đã lấy hàng'>Đã lấy hàng</Option>
+                    <Option value="Đang giao">Đang giao</Option>
+                    <Option value="Đã giao">Đã giao</Option>
+                    <Option value="Đã hủy">Đã hủy</Option>
+                </Select>
+            ),
         },
     ]
 
     return (
         <div>
+            <CustomNotification
+                success={sub && 'Cập nhập thành công'}
+                error={error}
+            />
             <Table
                 columns={column}
                 dataSource={dataSource}

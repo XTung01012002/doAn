@@ -95,6 +95,7 @@ class ShippingInfoService {
       "Đã hủy": "Đã hủy",
       "Đang chờ đơn vị vận chuyển": "Đang chờ đơn vị vận chuyển",
       "Đã lấy hàng": "Đang giao hàng",
+      "Đang giao": "Đang giao hàng",
     };
 
     const newOrderStatus = statusMap[shippingStatus];
