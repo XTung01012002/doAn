@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateShipInfo, setError, setSub } from '../../../../../store/shipinfo/ShipInfoCreate';
 import CustomNotification from '../../../../../components/notification/CustomNotifacation';
+import { FetchDataAccept } from '../../../../../store/staff/FetchDataAccept';
 
 const AcceptOderModal = ({ open, setOpen, id }) => {
     const [form] = Form.useForm();
@@ -33,6 +34,7 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
         if (sub) {
             setOpen(false)
             dispatch(setSub())
+            dispatch(FetchDataAccept());
         }
     }, [sub])
 

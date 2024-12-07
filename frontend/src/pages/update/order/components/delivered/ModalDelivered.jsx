@@ -6,6 +6,7 @@ import styles from '../bought/ButtonStyles.module.css'
 const ModalDelivered = ({ open, setOpen, data }) => {
 
 
+    console.log(data);
 
 
     const handleClickCannel = () => {
@@ -21,6 +22,7 @@ const ModalDelivered = ({ open, setOpen, data }) => {
     const onChange1 = (e) => {
         setValue(e.target.value);
     };
+    if (!data) return
 
     const items = [
         {
@@ -87,7 +89,7 @@ const ModalDelivered = ({ open, setOpen, data }) => {
                 <Col className="gutter-row" span={24}>
                     <div className='flex justify-between items-center'>
                         <div className='mb-5 font-bold text-[16px]'>
-                            Thông tin khách và vận chuyển
+                            Thông tin vận chuyển
                         </div>
                     </div>
                     <Row gutter={[8, 12]}>
@@ -99,13 +101,13 @@ const ModalDelivered = ({ open, setOpen, data }) => {
                                             Số điện thoại:
                                         </Col>
                                         <Col className='gutter-row' span={20}>
-                                            {/* {phone} */}
+                                            {data.paymentInfo.phone}
                                         </Col>
                                         <Col className='gutter-row' span={4}>
                                             Địa chỉ:
                                         </Col>
                                         <Col className='gutter-row' span={20}>
-                                            {/* {address} */}
+                                            {data.paymentInfo.address}
                                         </Col>
                                     </Row>
                                 </Col>
@@ -122,7 +124,7 @@ const ModalDelivered = ({ open, setOpen, data }) => {
                         Thông tin sản phẩm
                     </div>
                     <Row gutter={[16, 24]}>
-                        {data?.productList?.map((item, index) => {
+                        {data?.paymentInfo?.productList?.map((item, index) => {
                             const totalPriceItem = item.productId.sellingPrice * item.quantity;
 
                             return (
@@ -164,7 +166,7 @@ const ModalDelivered = ({ open, setOpen, data }) => {
                                                             <Row gutter={[16, 24]} className='flex items-center justify-end'>
                                                                 <Col className='gutter-row flex items-center justify-end' span={24}>
                                                                     <span className=''>{item.quantity} sản phẩm: </span>
-                                                                    {/* <span className=' ml-1 font-medium'>{item.toLocaleString('vi-VN')} đ</span> */}
+                                                                    <span className=' ml-1 font-medium'>{totalPriceItem.toLocaleString('vi-VN')} đ</span>
                                                                 </Col>
                                                             </Row>
                                                         </Col>
@@ -182,12 +184,12 @@ const ModalDelivered = ({ open, setOpen, data }) => {
                     <hr />
                 </Col>
                 <Col className="gutter-row" span={24}>
-                    <div>
-                        <div>
+                    <div className='flex items-center justify-between'>
+                        <div className='font-bold text-[16px]'>
                             Hình thức thanh toán
                         </div>
-                        <div>
-                            {data?.paymentStatus}
+                        <div className='font-medium text-[16px]'>
+                            {data?.paymentInfo.paymentStatus}
                         </div>
                     </div>
                 </Col>
@@ -207,7 +209,7 @@ const ModalDelivered = ({ open, setOpen, data }) => {
                             Thành tiền:
                         </Col>
                         <Col className='gutter-row flex justify-end font-medium' span={12}>
-                            {/* {totleAllAmount && totleAllAmount.toLocaleString('vi-VN')} đ */}
+                            {data?.totalAmount.toLocaleString('vi-VN')} đ
                         </Col>
                     </Row>
                 </Col>

@@ -49,7 +49,7 @@ const VerticalCardProduct = ({ category, heading }) => {
             <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
 
 
-            <div className={`flex items-center ${data.length > 5 && 'justify-center'} gap-4 md:gap-6 overflow-x-scroll scrollbar-none transition-all `} ref={scrollElement}>
+            <div className={`flex items-center gap-4 md:gap-6 overflow-x-scroll scrollbar-none transition-all `} ref={scrollElement}>
                 {data.length > 5 &&
                     <>
                         <button className='bg-white shadow-md rounded-full p-1 absolute left-0 text-lg hidden md:block' onClick={scrollLeft}><FaAngleLeft /></button>

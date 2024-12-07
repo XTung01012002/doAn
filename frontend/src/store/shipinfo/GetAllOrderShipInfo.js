@@ -4,10 +4,12 @@ import SummaryApi from "../../common";
 
 
 export const GetAllInfoShipOrder = createAsyncThunk(
-    'get/GetAllInfoShipOrder', async (_,{rejectWithValue}) => {
+    'get/GetAllInfoShipOrder', async (_, { rejectWithValue }) => {
         console.log('GetAllInfoShipOrder');
         try {
-            const res = await axios.get(`${SummaryApi.getAllOrderShipInfor.url}`)
+            const res = await axios.get(`${SummaryApi.getAllOrderShipInfor.url}`, {
+                withCredentials: true
+            })
             console.log('resresres', res);
 
             return res.data.data
