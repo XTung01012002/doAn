@@ -16,7 +16,7 @@ router.put("/cancel-order/:id", asyncHandle(PaymentInfoController.cancelOrderByU
 router.put("/confirm-order/:id", asyncHandle(PaymentInfoController.confirmOrderByUser));
 router.post("/create", asyncHandle(PaymentInfoController.create));
 router.post("/createQr", asyncHandle(PaymentInfoController.createVietQR));
-router.get("/check/:transactionId",asyncHandle(PaymentInfoController.checkTransactionStatus));
+router.post("/check/:transactionId",asyncHandle(PaymentInfoController.checkTransactionStatus));
 router.get("/by/:id", asyncHandle(PaymentInfoController.getById));
 router.delete("/deleteCanceledOrder/:id", asyncHandle(PaymentInfoController.deleteCanceledOrder));
 router.get("/all-ShippingOrder", asyncHandle(PaymentInfoController.getAllShippingOrder));

@@ -50,6 +50,14 @@ class ShippingInfoController {
       data: shippingInfo,
     }).send(res);
   };
+
+  getAllDeliveredOrders = async (req, res, next) => {
+    const shippingInfo = await ShippingInfoService.getAllDeliveredOrders(req);
+    new SuccessResponse({
+      message: "Lấy tất cả đơn hàng đang giao thành công",
+      data: shippingInfo,
+    }).send(res);
+  }
 }
 
 module.exports = new ShippingInfoController();
