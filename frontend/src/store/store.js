@@ -23,6 +23,9 @@ import GetAllCancelOrderSaleReducer from './getAllCancelOrderSale/GetAllCancelOr
 import FetchDataAcceptReducer from './staff/FetchDataAccept'
 import PutInfoOrderReducer from './bought/putInfoOrder'
 import GetCategoryHomeReducer from './home/getCategiry'
+import GetAllOrderedReducer from './ordered/OrderedSlice'
+import UpdateShippingStatusReducer from './staff/UpdateShipping'
+
 
 
 export const store = configureStore({
@@ -50,6 +53,8 @@ export const store = configureStore({
     getAllCancelSale: GetAllCancelOrderSaleReducer,
     fetchAccept: FetchDataAcceptReducer,
     putInfoOrder: PutInfoOrderReducer,
-    getCategory: GetCategoryHomeReducer                                                                                                                     
+    getCategory: GetCategoryHomeReducer,
+    getOrdered: GetAllOrderedReducer,
+    updateShipping: UpdateShippingStatusReducer
   },
 })

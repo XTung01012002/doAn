@@ -1,36 +1,21 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
-import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Card, Col, Dropdown, Image, Modal, Row, Space } from 'antd';
-import styles from '../CustomScrollY.module.css';
+import React, { useEffect, useState } from 'react'
+import { Avatar, Button, Card, Col, Image, Row } from 'antd'
+import styles from '../CustomScrollY.module.css'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDataBoughtUser } from '../../../../../store/bought/BoughtUser';
-import BoughtModal from './BoughtModal';
-import { PaymentOrder } from '../../../../../store/thanhtoan/PaymentOrder';
-import { CreateQR } from '../../../../../store/QRcode/CreateQR';
+import { GetRate } from '../../../../../store/rate/getRate';
+import OrderedModal from './OrderedModal';
+import { GetAllOrdered } from '../../../../../store/ordered/OrderedSlice';
 
 
 
 
-const Bought = () => {
-    const [expandedIndices, setExpandedIndices] = useState([]);
+const Ordered = () => {
+
+    const dispatch = useDispatch()
+    const data = useSelector(state => state.getOrdered.data)
     const [open, setOpen] = useState(false)
-    const [open1, setOpen1] = useState(false)
-    const [paymentMethod, setPaymentMethod] = useState();
-    const [showQRCode, setShowQRCode] = useState(false);
-
-    const qr = useSelector(state => state.createQR.data)
-    const dispatch = useDispatch();
-    const data = useSelector((state) => state.bought.data);
-
-    
-
-    const [dataModal, setDataModal] = useState(null);
-
-    useEffect(() => {
-        dispatch(fetchDataBoughtUser());
-    }, [dispatch]);
-
+    const [dataDetal, setDataDetal] = useState([])
+    const [expandedIndices, setExpandedIndices] = useState([]);
     const toggleExpanded = (index) => {
         setExpandedIndices((prev) => {
             const newIndices = [...prev];
@@ -42,62 +27,24 @@ const Bought = () => {
             return newIndices;
         });
     };
-
-    const handleSubmit = (items) => {
-        setOpen1(true)
-        setDataModal(items)
-    }
-
-
-    const handleClose = () => {
-        setOpen1(false)
-    }
-
-    const handleClickPay = () => {
-        if (paymentMethod === 'cash-on-delivery') {
-            dispatch(PaymentOrder(dataModal._id))
-            setOpen1(false)
-        } else {
-        }
-    }
-
-    const handlePaymentMethodChange = (e) => {
-        const value = e.target.value;
-        console.log('values', value);
-
-        setPaymentMethod(value);
-
-        if (value === "bank-transfer") {
-            const tmp = {
-                totalAmount: dataModal.totalAmount
-            }
-            dispatch(CreateQR(tmp))
-            setShowQRCode(true);
-        } else {
-            setShowQRCode(false);
-        }
-    };
-
-
-
-
+    useEffect(() => {
+        dispatch(GetAllOrdered())
+    }, [dispatch])
     return (
-        <div className={`${styles.customScrollbar}`}>
+        <div className={styles.customScrollbar}>
             <Row gutter={[16, 24]}>
                 {data?.map((items, index) => {
                     const isExpanded = expandedIndices[index];
                     const displayItems = isExpanded ? items.productList : [items.productList[0]];
-                    console.log('displayIems', items.productList.length);
-
                     return (
                         <Col className="gutter-row" span={24} key={index}>
                             <Card
                                 className='relative'
                             >
                                 <span
-                                    className={`absolute right-6 top-4 text-[16px] font-semibold  ${(items.paymentStatus === 'Chưa chọn phương thức thanh toán' || items.paymentStatus === 'Thanh toán khi nhận hàng') ? 'text-[#ff4242]' : 'text-[#3538fa]'}`}
+                                    className='absolute right-6 top-4 text-[16px] font-semibold text-[#3145f7]'
                                 >
-                                    {items.paymentStatus}
+                                    {items.orderStatus}
                                 </span>
                                 {displayItems?.map((item, itemIndex) => {
                                     const totalPriceItem = item.productId?.sellingPrice * item.quantity;
@@ -128,7 +75,6 @@ const Bought = () => {
                                                                         <div>
                                                                             <span className='mr-2 text-[#B0B3B8] line-through'>{item.productId?.price.toLocaleString('vi-VN')} đ</span>
                                                                             <span className='font-medium'>{item.productId?.sellingPrice.toLocaleString('vi-VN')} đ</span>
-                                                                            {/* <span className='font-medium'>{item.productId?.sellingPrice} đ</span> */}
                                                                         </div >
                                                                     </Col>
                                                                     <Col className='gutter-row flex justify-end' span={12}>
@@ -162,27 +108,23 @@ const Bought = () => {
                                     </Col>
                                 </Row>
                                 <Row gutter={[16, 24]} className='flex mt-4 items-center justify-end'>
-                                    <Col className='gutter-row flex items-center justify-end' span={24}>
-                                        <Button
-                                            variant='solid'
-                                            color='primary'
-                                            className='mr-2'
-                                            onClick={() => { setOpen(true); setDataModal(items) }}
-                                        >
-                                            Xem chi tiết
-                                        </Button>
-                                        {(items.paymentStatus === 'Chưa chọn phương thức thanh toán') &&
-                                            <Button
-                                                variant='solid'
-                                                color='danger'
-                                                onClick={() => handleSubmit(items)}
-                                            >
-                                                Thanh toán ngay
-                                            </Button>
-                                        }
+                                    <Col className='gutter-row' span={24}>
+                                        <Row gutter={[16, 24]} className='flex items-center justify-end'>
+                                            <Col className='gutter-row flex items-center justify-end' span={24} >
+                                                <Button
+                                                    color='primary'
+                                                    variant="solid"
+                                                    onClick={() => {
+                                                        setDataDetal(items);
+                                                        setOpen(true)
+                                                    }}
+                                                >
+                                                    Xem chi tiết
+                                                </Button>
+                                            </Col>
+                                        </Row>
                                     </Col>
                                 </Row>
-
                                 {items.productList.length > 1 &&
                                     <div className="flex items-center justify-center mt-4">
                                         <div className="w-1/4 border-t border-gray-300"></div>
@@ -217,89 +159,12 @@ const Bought = () => {
                                 }
                             </Card>
                         </Col>
-                    );
+                    )
                 })}
             </Row>
-            <BoughtModal
-                open={open}
-                setOpen={setOpen}
-                data={dataModal}
-            />
-            <Modal
-                title={<div className='text-center'>Chọn phương thức thanh toán</div>}
-                open={open1}
-                onCancel={() => setOpen1(false)}
-                footer={false}
-                closable={false}
-                centered
-            >
-                <div>
-                    <div className="flex items-center mb-2">
-                        <input
-                            type="radio"
-                            id="bank-transfer"
-                            name="payment-method"
-                            value="bank-transfer"
-                            checked={paymentMethod === "bank-transfer"}
-                            onChange={handlePaymentMethodChange}
-                            className="mr-2"
-                            required
-                        />
-                        <label htmlFor="bank-transfer" className="text-gray-700">
-                            Chuyển khoản ngân hàng
-                        </label>
-                    </div>
-                    <div className="flex items-center mb-2">
-                        <input
-                            type="radio"
-                            id="cash-on-delivery"
-                            name="payment-method"
-                            value="cash-on-delivery"
-                            checked={paymentMethod === "cash-on-delivery"}
-                            onChange={handlePaymentMethodChange}
-                            className="mr-2"
-                            required
-                        />
-                        <label htmlFor="cash-on-delivery" className="text-gray-700">
-                            Thanh toán khi nhận hàng
-                        </label>
-                    </div>
-                    {showQRCode ? (
-                        <div className="text-center">
-                            <img
-                                src={qr.qrUrl}
-                                alt=""
-                            />
-                            <p className="mt-2 text-gray-700">
-                                Quét mã QR để thực hiện thanh toán chuyển khoản
-                            </p>
-                        </div>
-                    )
-                        :
-                        <></>
-                    }
-                </div>
-                <div className="flex justify-end">
-                    <Space>
-                        <Button
-                            onClick={handleClose}
-                        >
-                            Đóng
-                        </Button>
-                        {paymentMethod === "cash-on-delivery" &&
-                            <Button
-                                type="primary"
-                                onClick={handleClickPay}
-                            >
-                                Xác nhận
-                            </Button>
-                        }
-
-                    </Space>
-                </div>
-            </Modal>
+            <OrderedModal open={open} setOpen={setOpen} data={dataDetal} />
         </div>
-    );
-};
+    )
+}
 
-export default Bought;
+export default Ordered

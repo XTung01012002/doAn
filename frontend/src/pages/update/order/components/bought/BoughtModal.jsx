@@ -362,13 +362,13 @@ const BoughtModal = ({ open, setOpen, data }) => {
                                                         Số điện thoại:
                                                     </Col>
                                                     <Col className="gutter-row" span={20}>
-                                                        {dataNew.phone}
+                                                        {dataNew?.phone}
                                                     </Col>
                                                     <Col className="gutter-row" span={4}>
                                                         Địa chỉ:
                                                     </Col>
                                                     <Col className="gutter-row" span={20}>
-                                                        {dataNew.address}
+                                                        {dataNew?.address}
                                                     </Col>
                                                 </Row>
                                             )}

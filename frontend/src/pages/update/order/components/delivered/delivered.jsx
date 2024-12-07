@@ -4,6 +4,7 @@ import styles from '../CustomScrollY.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetDelivered } from '../../../../../store/delivered/Delivered'
 import ModalDelivered from './ModalDelivered'
+import { format } from 'date-fns'
 
 
 
@@ -24,6 +25,8 @@ const Delivered = () => {
             return newIndices;
         });
     };
+    console.log('asd,', data);
+
     const [dataDetal, setDatadetal] = useState()
     const [open, setOpen] = useState(false)
 
@@ -40,12 +43,23 @@ const Delivered = () => {
             <Row gutter={[16, 24]}>
                 {data?.map((items, index) => {
                     const isExpanded = expandedIndices[index];
-                    const displayItems = isExpanded ? items.productList : [items.productList[0]];
+                    const displayItems = isExpanded ? items.paymentInfo.productList : [items.paymentInfo.productList[0]];
 
                     return (
                         <Col className="gutter-row" span={24} key={index}>
+
                             <Card
                                 className='relative'
+                                title={
+                                    <div className='flex items-center justify-between'>
+                                        <div>
+                                            <span className='font-medium mr-2'>Mã vận đơn: </span>{items.maVanDon}
+                                        </div>
+                                        <div>
+                                            <span className='font-medium mr-2'>Ngày nhận dự kiến: </span>{format(new Date(items.deliveryDate), 'dd-MM-yyyy')}
+                                        </div>
+                                    </div>
+                                }
                             >
                                 <span
                                     className='absolute right-6 top-4 text-[16px] font-semibold text-[#3145f7]'
@@ -116,7 +130,6 @@ const Delivered = () => {
 
                                 <Row gutter={[16, 24]} className='flex mt-4 items-center justify-end'>
                                     <Col className='gutter-row flex items-center justify-end' span={24}>
-
                                         <Button
                                             variant='solid'
                                             color='primary'
@@ -127,7 +140,7 @@ const Delivered = () => {
                                     </Col>
                                 </Row>
 
-                                {items.productList.length > 1 &&
+                                {items.paymentInfo.productList.length > 1 &&
                                     <div className="flex items-center justify-center mt-4">
                                         <div className="w-1/4 border-t border-gray-300"></div>
                                         <div className="mx-4 text-center">

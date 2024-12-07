@@ -60,7 +60,7 @@ const ListInventory = () => {
         {
             key: 'totalAmount',
             dataIndex: 'totalAmount',
-            title: 'Đơn giá',
+            title: 'Tổng tiền',
             render: (value) => {
                 if (typeof value === 'number') {
                     return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });

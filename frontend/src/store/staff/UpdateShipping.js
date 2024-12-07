@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import SummaryApi from "../../../common";
+import SummaryApi from "../../common";
 
 
-export const PostUploadProduct = createAsyncThunk(
-    'postUpProducts', async (data, { rejectWithValue }) => {
+export const UpdateShippingStatus = createAsyncThunk(
+    'putUpdateShippingStatus', async ({ id, data }, { rejectWithValue }) => {
         try {
-            const res = await axios.post(`${SummaryApi.postUpProducts.url}`, data, {
+            const res = await axios.put(`${SummaryApi.putUpdateShippingStatus.url}/${id}`, data, {
                 withCredentials: true
             })
             return res
@@ -16,6 +16,8 @@ export const PostUploadProduct = createAsyncThunk(
     }
 )
 
+
+
 const initialState = {
     loading: false,
     sub: false,
@@ -23,8 +25,8 @@ const initialState = {
 }
 
 
-const PostUploadProductReducer = createSlice({
-    name: 'PostUploadProductReducer',
+const UpdateShippingStatusReducer = createSlice({
+    name: 'UpdateShippingStatusReducer',
     initialState,
     reducers: {
         setSub(state) {
@@ -36,22 +38,22 @@ const PostUploadProductReducer = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(PostUploadProduct.pending, (state) => {
+            .addCase(UpdateShippingStatus.pending, (state) => {
                 state.loading = true
                 state.sub = false
                 state.error = null
             })
-            .addCase(PostUploadProduct.fulfilled, (state) => {
+            .addCase(UpdateShippingStatus.fulfilled, (state) => {
                 state.loading = false
                 state.sub = true
                 state.error = null
             })
-            .addCase(PostUploadProduct.rejected, (state, action) => {
+            .addCase(UpdateShippingStatus.rejected, (state, action) => {
                 state.loading = false
                 state.sub = false
                 state.error = action.payload
             })
     }
 })
-export const { setError, setSub } = PostUploadProductReducer.actions
-export default PostUploadProductReducer.reducer
+export const { setError, setSub } = UpdateShippingStatusReducer.actions
+export default UpdateShippingStatusReducer.reducer
