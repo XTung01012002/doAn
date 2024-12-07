@@ -126,7 +126,6 @@ const Payment = () => {
         toast.success("Thanh toán thành công!");
       } else if (status === "Đang xử lí") {
         setTransactionStatus("Đang xử lý...");
-
       }
     } catch (error) {
       console.error("Lỗi khi kiểm tra giao dịch:", error);
@@ -193,7 +192,8 @@ const Payment = () => {
   useEffect(() => {
     if (subasd) {
       dispatch(fetchDataBoughtUser());
-      dispatch(DeleteCartAPI()) // xóa giỏ hàng sau khi đặt hàng
+      dispatch(DeleteCartAPI())
+      // context.fetchUserAddToCart(); // xóa giỏ hàng sau khi đặt hàng
       setOpen(true);
     }
   }, [subasd]);
@@ -209,6 +209,7 @@ const Payment = () => {
       dispatch(setSubCreate(false))
       context.fetchUserAddToCart();
       nav('/order')
+         dispatch(DeleteCartAPI())
       setOpen(false)
     } else {
       dispatch(setSubCreate(false));
