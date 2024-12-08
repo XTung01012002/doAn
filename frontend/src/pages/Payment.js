@@ -73,8 +73,8 @@ const Payment = () => {
       console.log("payload", payload);
       try {
         const result = await dispatch(CreateQR(payload)).unwrap();
-        const paymentInfo = await dispatch((CreateOrder(formSubmit))).unwrap();
-        const paymentInfoId = paymentInfo._id;
+        // const paymentInfo = await dispatch((CreateOrder(formSubmit))).unwrap();
+        const paymentInfoId = dataBought[dataBought.length - 1]._id;
         const transactionId = result?.transactionId;
         if (transactionId) {
           setShowQRCode(true);

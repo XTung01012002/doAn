@@ -4,6 +4,7 @@ import styles from '../CustomScrollY.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchDataCanceledUser } from '../../../../../store/canceled/CanceledUser'
 import CanceledModal from './CanceledModal'
+import { setSubFet } from '../../../../../store/bought/BoughtUser'
 
 const Canceled = () => {
     const dispatch = useDispatch()
@@ -21,6 +22,7 @@ const Canceled = () => {
 
     useEffect(() => {
         dispatch(fetchDataCanceledUser())
+        dispatch(setSubFet())
     }, [dispatch])
 
 

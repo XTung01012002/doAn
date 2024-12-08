@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CommnetOrder } from '../../../../../store/delivered/modeldeli';
 import { GetRate } from '../../../../../store/rate/getRate';
+import CustomNotification from '../../../../../components/notification/CustomNotifacation';
 
 const { TextArea } = Input;
 
@@ -14,6 +15,7 @@ const ModalRate = ({ open, setOpen, data }) => {
     const [reviewContent, setReviewContent] = useState('');
     const [open1, setOpen1] = useState(false)
     const sub = useSelector(state => state.createComment.sub)
+    const error = useSelector(state => state.createComment.error)
 
     const handleRateChange = (value, product) => {
         setSelectedProduct(product);
@@ -40,6 +42,10 @@ const ModalRate = ({ open, setOpen, data }) => {
 
     return (
         <>
+            <CustomNotification
+                success={sub && 'Gửi bình luận thành công'}
+                error={error}
+            />
             <Modal
                 title={
                     <>
