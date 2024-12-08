@@ -39,6 +39,22 @@ const BoughtModal = ({ open, setOpen, data }) => {
         dispatch(putCancelOrder(data._id))
     }
 
+    const handleCancel = () => {
+        Modal.confirm({
+            title: 'Xác nhận hủy đơn',
+            content: 'Bạn có chắc chắn muốn hủy đơn hàng này?',
+            okText: 'Xác nhận',
+            cancelText: 'Hủy',
+            centered: true, 
+            onOk: () => {
+                handleCancelOrder();
+            },
+            onCancel: () => {
+                
+            },
+        });
+    };
+
 
 
     useEffect(() => {
@@ -76,7 +92,7 @@ const BoughtModal = ({ open, setOpen, data }) => {
             dispatch(fetchDataCanceledUser())
             dispatch(setSubPut())
         }
-    }, [sub])
+    }, [dispatch, sub])
 
 
     useEffect(() => {
@@ -109,7 +125,6 @@ const BoughtModal = ({ open, setOpen, data }) => {
     const handleSubmit = () => {
         if (methodPayment === 'cash-on-delivery') {
             dispatch(PaymentOrder(data._id))
-            // console.log(data._id)
         } else {
             dispatch(CreateQR({ totalAmount: data.totalAmount }))
             setOpen1(true)
@@ -203,90 +218,7 @@ const BoughtModal = ({ open, setOpen, data }) => {
                 >
 
                     <Col className="gutter-row" span={24}>
-                        {/* <Form
-                            form={form}
-                            name='basic'
-                            onFinish={handleSubmitFix}
-                            labelCol={{
-                                span: 6,
-                            }}
-                            wrapperCol={{
-                                span: 18,
-                            }}
-                        >
-                            <div className='flex justify-between items-center'>
-                                <div className='mb-5 font-bold text-[16px]'>
-                                    Thông tin khách hàng
-                                </div>
-                                <div>
-                                    <Button
-                                        onClick={fix === false ? () => setFix(true) : null}
-                                        type='primary'
-                                        htmlType={fix ? 'submit' : 'button'}
-                                        loading={loadingPutInfo}
-                                    >
-                                        {fix ? 'Lưu' : 'Chỉnh sửa'}
-                                    </Button>
-                                </div>
-                            </div>
-                            <Row gutter={[8, 12]}>
-                                <Col className='gutter-row' span={24}>
-                                    <Row gutter={[8, 12]}>
 
-                                        <Col className='gutter-row' span={24}>
-                                            {fix ?
-                                                <Row gutter={[8, 12]}>
-                                                    <Col className='gutter-row' span={24}>
-
-                                                        <Form.Item
-                                                            label="Số điện thoại"
-                                                            name='phone'
-                                                            rules={[
-                                                                {
-                                                                    required: true,
-                                                                    message: 'Vui lòng nhập số điện thoại!'
-                                                                },
-                                                                {
-                                                                    pattern: /^[0-9]{10}$/,
-                                                                    message: 'Số điện thoại phải có 10 chữ số!'
-                                                                }
-                                                            ]}
-                                                        >
-                                                            <Input placeholder="Nhập số điện thoại . . ." />
-                                                        </Form.Item>
-                                                        <Form.Item
-                                                            label="Địa chỉ"
-                                                            name='address'
-                                                            rules={[
-                                                                { required: true, message: 'Vui lòng nhập địa chỉ!' },
-                                                            ]}
-                                                        >
-                                                            <Input placeholder="Nhập địa chỉ . . ." />
-                                                        </Form.Item>
-                                                    </Col>
-                                                </Row>
-                                                :
-                                                <Row gutter={[8, 12]}>
-                                                    <Col className='gutter-row' span={4}>
-                                                        Số điện thoại:
-                                                    </Col>
-                                                    <Col className='gutter-row' span={20}>
-                                                        {data.phone}
-                                                    </Col>
-                                                    <Col className='gutter-row' span={4}>
-                                                        Địa chỉ:
-                                                    </Col>
-                                                    <Col className='gutter-row' span={20}>
-                                                        {data.address}
-                                                    </Col>
-                                                </Row>
-                                            }
-                                        </Col>
-                                    </Row>
-
-                                </Col>
-                            </Row>
-                        </Form> */}
                         <Form
                             form={form}
                             name="basic"
@@ -505,7 +437,7 @@ const BoughtModal = ({ open, setOpen, data }) => {
                             color='danger'
                             variant='filled'
                             className='mr-2'
-                            onClick={handleCancelOrder}
+                            onClick={handleCancel}
                             loading={loading}
                         >
                             Hủy đơn

@@ -22,7 +22,7 @@ const Canceled = () => {
     useEffect(() => {
         dispatch(fetchDataCanceledUser())
     }, [dispatch])
-   
+
 
     const toggleExpanded = (index) => {
         setExpandedIndices((prev) => {
@@ -186,6 +186,7 @@ const Canceled = () => {
             <CanceledModal
                 open={open}
                 setOpen={setOpen}
+                setData={setDataModal}
                 data={dataModal}
                 quantityProduct={quantityProduct}
                 setQuantityProduct={setQuantityProduct}

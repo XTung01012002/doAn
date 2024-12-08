@@ -50,7 +50,7 @@ const SignUp = () => {
 
       if(data.password === data.confirmPassword){
 
-        const dataResponse = await fetch(SummaryApi.signUp.url,{
+        const APISignUp = await fetch(SummaryApi.signUp.url,{
             method : SummaryApi.signUp.method,
             headers : {
                 "content-type" : "application/json"
@@ -58,7 +58,7 @@ const SignUp = () => {
             body : JSON.stringify(data)
           })
     
-          const dataApi = await dataResponse.json()
+          const dataApi = await APISignUp.json()
 
           if(dataApi.success){
             toast.success(dataApi.message)

@@ -147,14 +147,11 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
             });
             setSelectedId(selectedOption._id);
         } else {
-            form.setFieldsValue({
-                nameProduct: value,
-                brand: undefined,
-                category: undefined,
-            });
+            form.resetFields(['nameProduct', 'brand', 'category']);
             setSelectedId(null);
         }
     };
+
     const prev = () => {
         setCurrent(current - 1);
     };
@@ -168,20 +165,21 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
                 onFinishFailed={onFinishFailed}
             >
                 <Form.Item
-                    label={`Tên sản phẩm`}
-                    name={`nameProduct`}
+                    label="Tên sản phẩm"
+                    name="nameProduct"
                     rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm' }]}
                 >
                     <Select
-                        mode="combobox"
-                        placeholder="Nhập hoặc chọn tên sản phẩm . . ."
+                        placeholder="Chọn tên sản phẩm từ kho . . ."
                         options={options}
                         showSearch
-                        allowClear
-                        // onSearch={handleSearch}
+                        filterOption={(input, option) =>
+                            option?.label?.toLowerCase().includes(input.toLowerCase())
+                        }
                         onChange={handleChange}
                     />
                 </Form.Item>
+
                 <Form.Item
                     label="Nhãn hàng"
                     name="brand"

@@ -28,23 +28,31 @@ const BoughtUser = createSlice({
         data: [],
         status: 'idle',
         error: null,
+        sub: false
     },
-    reducers: {},
+    reducers: {
+        setSubFet(state) {
+            state.sub = false
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchDataBoughtUser.pending, (state) => {
-                state.status = 'loading';
+                state.status = 'loading'
+                state.sub = false
             })
             .addCase(fetchDataBoughtUser.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.data = action.payload;
+                state.status = 'succeeded'
+                state.data = action.payload
+                state.sub = true
             })
             .addCase(fetchDataBoughtUser.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
+                state.status = 'failed'
+                state.error = action.error.message
+                state.sub = false
             })
            
     },
 });
-
+export const { setSubFet } = BoughtUser.actions
 export default BoughtUser.reducer;

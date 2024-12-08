@@ -113,7 +113,7 @@ const EditProductModal = ({ open, setOpen, id }) => {
         for (const file of newFileList) {
             if (file.originFileObj) {
                 try {
-                    const response = await uploadImage(file.originFileObj); 
+                    const response = await uploadImage(file.originFileObj);
                     updatedFileList.push(response.secure_url);
                     updatedFileList1.push(response.secure_url);
                 } catch (error) {
@@ -203,13 +203,11 @@ const EditProductModal = ({ open, setOpen, id }) => {
                                     <div style={{ position: 'relative', display: 'inline-block' }}>
                                         <Avatar
                                             src={
-                                                // typeof fileList[0] === 'string'
-                                                //     ? fileList[0]
-                                                //     : 'https://imgs.search.brave.com/jt84d5SmMRH9IYwpquW1be6mriU5QEgM7G1ML6O8rsU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oYXlj/YWZlLnZuL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzA2L0hp/bmgtYW5oLUF2YXRh/ci10cmFuZy10cm9u/LTYwMHg2MDAuanBn'
-
-                                                fileList[0].originFileObj
-                                                    ? URL.createObjectURL(fileList[0].originFileObj)
-                                                    : null
+                                                typeof fileList[0] === 'string'
+                                                    ? fileList[0]
+                                                    : fileList[0].originFileObj instanceof File
+                                                        ? URL.createObjectURL(fileList[0].originFileObj)
+                                                        : null
                                             }
                                             shape="square"
                                             size={200}

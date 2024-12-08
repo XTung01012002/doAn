@@ -23,6 +23,7 @@ const Bought = () => {
     const dispatch = useDispatch();
     const data = useSelector((state) => state.bought.data);
 
+    console.log(data);
     
 
     const [dataModal, setDataModal] = useState(null);

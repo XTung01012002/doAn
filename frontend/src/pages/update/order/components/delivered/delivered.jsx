@@ -144,7 +144,7 @@ const Delivered = () => {
                                     <div className="flex items-center justify-center mt-4">
                                         <div className="w-1/4 border-t border-gray-300"></div>
                                         <div className="mx-4 text-center">
-                                            {items.productList.length > 1 && !isExpanded && (
+                                            {items?.productList?.length > 1 && !isExpanded && (
                                                 <Row className="">
                                                     <Button
                                                         className={styles.noHover}
