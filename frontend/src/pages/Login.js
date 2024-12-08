@@ -114,7 +114,7 @@ const Login = () => {
 
           <p className="mt-5">
             {" "}
-            Bạn chưa có tài khoản?{" "}
+            Bạn chưa có tài khoản ?{" "}
             <Link
               to={"/sign-up"}
               className="text-red-600 hover:text-red-700 hover:underline"
