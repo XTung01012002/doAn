@@ -3,31 +3,26 @@ const { BadRequestError } = require("../responseHandle/error.response");
 
 class CartProductService {
   static addProductToCart = async (productData, req) => {
-    try {
-      const sessionUser = req.user;
-      console.log(sessionUser);
-      if (!sessionUser) {
-        throw new BadRequestError("Please log in to add products to the cart");
-      }
-      const { productId } = productData;
-      const isProductExist = await cartProductSchema.findOne({
-        productId,
-        userId: sessionUser,
-      });
-      if (isProductExist) {
-        throw new BadRequestError("Product already exists in the cart");
-      }
-      const payload = {
-        quantity: 1,
-        productId: productId,
-        userId: sessionUser,
-      };
-      const product = new cartProductSchema(payload);
-      await product.save();
-      return product;
-    } catch (error) {
-      throw new Error(`${error.message}`);
+    const sessionUser = req.user;
+    if (!sessionUser) {
+      throw new BadRequestError("Vui lòng đăng nhâp");
     }
+    const { productId } = productData;
+    const isProductExist = await cartProductSchema.findOne({
+      productId,
+      userId: sessionUser,
+    });
+    if (isProductExist) {
+      throw new BadRequestError("Sản phẩm đã tồn tại trong giỏ hàng");
+    }
+    const payload = {
+      quantity: 1,
+      productId: productId,
+      userId: sessionUser,
+    };
+    const product = new cartProductSchema(payload);
+    await product.save();
+    return product;
   };
 
   static countProductInCart = async (req) => {
@@ -63,7 +58,7 @@ class CartProductService {
         userId: sessionUser,
       });
       if (!product) {
-        throw new BadRequestError("Product does not exist in the cart");
+        throw new BadRequestError("Sản phẩm không tồn tại trong giỏ hàng");
       }
       product.quantity = quantity;
       await product.save();
@@ -82,7 +77,7 @@ class CartProductService {
         userId: sessionUser,
       });
       if (!product) {
-        throw new BadRequestError("Product does not exist in the cart");
+        throw new BadRequestError("Sản phẩm không tồn tại trong giỏ hàng");
       }
       return product;
     } catch (error) {

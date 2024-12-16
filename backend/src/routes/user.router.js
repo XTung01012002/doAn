@@ -17,4 +17,8 @@ router.put("/update-user", authToken, asyncHandle(UserController.updateUser));
 router.post("/request-password-reset", validator(requestPasswordReset), asyncHandle(UserController.requestPasswordReset));
 router.put("/reset-password", asyncHandle(UserController.resetPassword));
 
+router.put("/changePassword", authToken, asyncHandle(UserController.changePassword));
+router.get("/userDetail", authToken, asyncHandle(UserController.userDetail));
+
+
 module.exports = router;
