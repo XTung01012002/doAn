@@ -44,16 +44,16 @@ const Staff = () => {
                     onClick={handleMenuClick}
                     className={`${styles.customTabsHeight1} w-full border-none`}
                 >
-                    <Menu.Item key="acceptOder" icon={<UserOutlined />}>
+                    <Menu.Item key="acceptOder">
                         Danh sách đơn chưa duyệt
                     </Menu.Item>
-                    <Menu.Item key="acceptedOrder" icon={<AppstoreAddOutlined />}>
+                    <Menu.Item key="acceptedOrder">
                         Danh sách đơn đã duyệt
                     </Menu.Item>
-                    <Menu.Item key="3" icon={<AppstoreAddOutlined />}>
+                    <Menu.Item key="3" >
                         Danh sách đơn hủy
                     </Menu.Item>
-                    <Menu.Item key="productManager" icon={<FileTextOutlined />}>
+                    <Menu.Item key="productManager">
                         Quản lý sản phẩm
                     </Menu.Item>
                 </Menu>

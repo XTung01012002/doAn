@@ -1,0 +1,42 @@
+
+.customCollapseHeader :global(.ant-collapse-header) {
+    padding: 12px 0px !important;
+}
+.customCollapseHeader :global(.ant-collapse-content-box) {
+    padding: 12px 0px !important;
+}
+
+.noHover:hover {
+    background-color: transparent !important;
+    color: inherit !important;
+    border-color: transparent !important;
+}
+
+
+.customScrollbarY {
+    position: relative;
+    max-height: 700px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+}
+
+.customScrollbarY::-webkit-scrollbar {
+    width: 8px;
+}
+
+.customScrollbarY::-webkit-scrollbar-track {
+    /* background-color: #f1f1f1;  */
+    background-color: white;
+}
+
+.customScrollbarY::-webkit-scrollbar-thumb {
+    /* background-color: #E3E3E3;  */
+    background-color: white;
+    border-radius: 9999px;
+}
+
+.customScrollbarY::-webkit-scrollbar-thumb:hover {
+    /* background-color: #CDCDCD;  */
+    background-color: white;
+}

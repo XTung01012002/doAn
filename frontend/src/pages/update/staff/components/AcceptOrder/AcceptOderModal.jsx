@@ -5,7 +5,7 @@ import { CreateShipInfo, setError, setSub } from '../../../../../store/shipinfo/
 import CustomNotification from '../../../../../components/notification/CustomNotifacation';
 import { FetchDataAccept } from '../../../../../store/staff/FetchDataAccept';
 
-const AcceptOderModal = ({ open, setOpen, id }) => {
+const AcceptOderModal = ({ open, setOpen, id, setOpened }) => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.createShipInfo.loading)
@@ -33,6 +33,7 @@ const AcceptOderModal = ({ open, setOpen, id }) => {
     useEffect(() => {
         if (sub) {
             setOpen(false)
+            setOpened(false)
             dispatch(setSub())
             dispatch(FetchDataAccept());
         }

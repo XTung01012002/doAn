@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { IoCheckmarkDone } from "react-icons/io5";
 import formatAmount from '../../../../../components/formatNumber/FormatNumber'
 import { FetchDataAccept } from '../../../../../store/staff/FetchDataAccept'
+import AcceptOrderViewModal from './AcceptOrderViewModal';
+import { FaRegEye } from 'react-icons/fa';
 
 const AcceptOrder = () => {
     const dispatch = useDispatch();
@@ -15,8 +17,8 @@ const AcceptOrder = () => {
         dispatch(FetchDataAccept());
     }, [dispatch]);
 
-    console.log('abac',dataSource);
-    
+    console.log('abac', dataSource);
+
 
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 6;
@@ -117,9 +119,9 @@ const AcceptOrder = () => {
                     <Button
                         color='default'
                         variant='text'
-                        onClick={() => { setId(data._id); setOpen(true) }}
+                        onClick={() => { setId(data); setOpen(true) }}
                     >
-                        <IoCheckmarkDone
+                        <FaRegEye
                             color='blue'
                             size={20}
                         />
@@ -142,8 +144,7 @@ const AcceptOrder = () => {
                     onChange: (page) => setCurrentPage(page),
                 }}
             />
-
-            <AcceptOderModal open={open} setOpen={setOpen} id={id} />
+            <AcceptOrderViewModal open={open} setOpen={setOpen} data={id} />
         </div>
     )
 }
