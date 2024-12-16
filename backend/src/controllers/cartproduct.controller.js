@@ -5,7 +5,7 @@ class CartProductController {
   addProductToCart = async (req, res, next) => {
     const product = await CartProductService.addProductToCart(req.body, req);
     new SuccessResponse({
-      message: "Add product to cart success",
+      message: "Thêm sản phẩm vào giỏ hàng thành công",
       data: product,
     }).send(res);
   };
@@ -13,7 +13,7 @@ class CartProductController {
   countProductInCart = async (req, res, next) => {
     const count = await CartProductService.countProductInCart(req);
     new SuccessResponse({
-      message: "Count product in cart success",
+      message: "Đếm số lượng sản phẩm trong giỏ hàng thành công",
       data: count,
     }).send(res);
   };
@@ -21,7 +21,7 @@ class CartProductController {
   addProductToCartView = async (req, res, next) => {
     const products = await CartProductService.addProductToCartView(req);
     new SuccessResponse({
-      message: "Add product to cart view success",
+      message: "Tăng số lượng sản phẩm trong giỏ hàng thành công",
       data: products,
     }).send(res);
   };
@@ -29,7 +29,7 @@ class CartProductController {
   updateProductInCart = async (req, res, next) => {
     const product = await CartProductService.updateProductInCart(req);
     new SuccessResponse({
-      message: "Update product in cart success",
+      message: "Cập nhật sản phẩm trong giỏ hàng thành công",
       data: product,
     }).send(res);
   };
@@ -37,7 +37,7 @@ class CartProductController {
   deleteProductInCart = async (req, res, next) => {
     const product = await CartProductService.deleteProductInCart(req);
     new SuccessResponse({
-      message: "Delete product in cart success",
+      message: "Xóa sản phẩm trong giỏ hàng thành công",
       data: product,
     }).send(res);
   };
@@ -45,7 +45,7 @@ class CartProductController {
   deleteAllProductInCart = async (req, res, next) => {
     const product = await CartProductService.deleteAllProductInCart(req);
     new SuccessResponse({
-      message: "Delete all product in cart success",
+      message: "Xóa tất cả sản phẩm trong giỏ hàng thành công",
       data: product,
     }).send(res);
   };
