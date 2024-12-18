@@ -6,7 +6,7 @@ class ProductController {
   uploadProducts = async (req, res, next) => {
     const product = await ProductService.uploadProducts(req.body);
     new SuccessResponse({
-      message: "Upload product success",
+      message: "Thêm sản phẩm thành công",
       data: product,
     }).send(res);
   };
@@ -14,7 +14,7 @@ class ProductController {
   getAllProducts = async (req, res, next) => {
     const products = await ProductService.getAllProducts();
     new SuccessResponse({
-      message: "Get all products success",
+      message: "Lấy tất cả sản phẩm thành công",
       data: products,
     }).send(res);
   };
@@ -22,7 +22,7 @@ class ProductController {
   updateProduct = async (req, res, next) => {
     const updatedProduct = await ProductService.updateProduct(req.body, req.params.id);
     new SuccessResponse({
-      message: "Update product success",
+      message: "Cập nhật sản phẩm thành công",
       data: updatedProduct,
     }).send(res);
   };
@@ -30,7 +30,7 @@ class ProductController {
   getCategoryProductOne = async (req, res, next) => {
     const products = await ProductService.getCategoryProductOne();
     new SuccessResponse({
-      message: "Get category products success",
+      message: "Lấy sản phẩm theo danh mục thành công",
       data: products,
     }).send(res);
   };
@@ -38,7 +38,7 @@ class ProductController {
   getCategoryWiseProduct = async (req, res) => {
     const products = await ProductService.getCategoryWiseProduct(req?.body);
     new SuccessResponse({
-      message: "Get category wise products success",
+      message: "Lấy sản phẩm theo danh mục thành công",
       data: products,
     }).send(res);
   };
@@ -46,7 +46,7 @@ class ProductController {
   getProductDetails = async (req, res) => {
     const product = await ProductService.getProductDetails(req.body);
     new SuccessResponse({
-      message: "Get product details success",
+      message: "Lấy chi tiết sản phẩm thành công",
       data: product,
     }).send(res);
   };
@@ -54,7 +54,7 @@ class ProductController {
   searchProduct = async (req, res) => {
     const products = await ProductService.searchProduct(req.query.q);
     new SuccessResponse({
-      message: "Search product success",
+      message: "Tìm kiếm sản phẩm thành công",
       data: products,
     }).send(res);
   };
@@ -62,14 +62,14 @@ class ProductController {
   filterProduct = async (req, res) => {
     const products = await ProductService.filterProduct(req.body.category);
     new SuccessResponse({
-      message: "Fillter product success",
+      message: "Lọc sản phẩm thành công",
       data: products,
     }).send(res);
   };
   deleteProduct = async (req, res) => {
     const product = await ProductService.deleteProduct(req.body);
     new SuccessResponse({
-      message: "Delete product success",
+      message: "Xóa sản phẩm thành công",
       data: product,
     }).send(res);
   };
@@ -77,7 +77,7 @@ class ProductController {
   productNotActive = async (req, res) => {
     const products = await ProductService.productNotActive();
     new SuccessResponse({
-      message: "Get product not active success",
+      message: "Lấy sản phẩm không active thành công",
       data: products,
     }).send(res);
   };
@@ -93,7 +93,7 @@ class ProductController {
   getCategory = async (req, res, next) => {
     const products = await ProductService.getCategory(req);
     new SuccessResponse({
-      message: "Get category success",
+      message: "Lấy danh mục sản phẩm thành công",
       data: products,
     }).send(res);
   }
@@ -101,7 +101,7 @@ class ProductController {
   createComment = async (req, res) => {
     const product = await ProductService.createComment(req, req.body, req.params.id);
     new SuccessResponse({
-      message: "Create comment success",
+      message: "Tạo đánh giá thành công",
       data: product,
     }).send(res);
   }
@@ -109,7 +109,7 @@ class ProductController {
   getCommentById = async (req, res) => {
     const product = await ProductService.getCommentById(req.params.id);
     new SuccessResponse({
-      message: "Get all comment success",
+      message: "Lấy đánh giá thành công",
       data: product,
     }).send(res);
   }

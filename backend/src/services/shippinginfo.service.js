@@ -33,12 +33,11 @@ class ShippingInfoService {
       const { productId, quantity } = productList[i];
       const product = productMap.get(productId.toString());
 
-      // Nếu sản phẩm không tồn tại, báo lỗi
       if (!product) {
         throw new BadRequestError("Sản phẩm không tồn tại");
       }
 
-      // Kiểm tra số lượng tồn kho, nếu không đủ thì báo lỗi
+      // Kiểm tra số lượng tồn kho
       if (product.quantityInStock < quantity) {
         throw new BadRequestError("Số lượng sản phẩm trong kho không đủ");
       }
@@ -47,7 +46,7 @@ class ShippingInfoService {
       product.quantityInStock -= quantity;
     }
 
-    // Lưu tất cả sản phẩm đã được cập nhật tồn kho trong một lần gọi
+    // Lưu tất cả sản phẩm đã được cập nhật tồn kho
     await Promise.all(
       Array.from(productMap.values()).map((product) => product.save())
     );
@@ -171,7 +170,8 @@ class ShippingInfoService {
       .populate({
         path: "paymentInfo",
         match: { userId: sessionUser },
-        select: "productList totalAmount orderStatus address phone paymentStatus",
+        select:
+          "productList totalAmount orderStatus address phone paymentStatus",
         populate: {
           path: "productList.productId",
         },

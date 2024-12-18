@@ -94,8 +94,6 @@ class PaymentInfoService {
 
   static cancelOrderByUser = async (req, id) => {
     const sessionUser = req.user;
-    console.log(sessionUser + "sessionUser");
-    console.log(id + "id");
     const paymentInfo = await paymentInfoSchema
       .findOne({
         userId: sessionUser,
@@ -104,7 +102,6 @@ class PaymentInfoService {
       })
       .populate("productList.productId")
       .exec();
-    console.log(paymentInfo + "paymentInfo");
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
     }

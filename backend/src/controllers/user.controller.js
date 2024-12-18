@@ -22,7 +22,6 @@ class UserController {
 
   userDetail = async (req, res, next) => {
     const user = await UserService.userDetail(req.user);
-   
     new SuccessResponse({
       message: "Lấy thông tin user thành công",
       data: user,
@@ -65,6 +64,22 @@ class UserController {
     new SuccessResponse({
       message: "Đặt lại mật khẩu thành công",
       data: resetPassword,
+    }).send(res);
+  }
+
+  changePassword = async (req, res, next) => {
+    const changePassword = await UserService.changePassword(req.body, req.user);
+    new SuccessResponse({
+      message: "Đổi mật khẩu thành công",
+      data: changePassword,
+    }).send(res);
+  }
+
+  userDetail = async (req, res, next) => {
+    const user = await UserService.userDetail(req.user);
+    new SuccessResponse({
+      message: "Lấy thông tin user thành công",
+      data: user,
     }).send(res);
   }
 }
