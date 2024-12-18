@@ -128,13 +128,13 @@ const Cart = () => {
             {loading
               ? loadingCart?.map((el, index) => (
                 <div
-                  key={el + "Add To Cart Loading" + index}
+                  key={el + "Thêm vào giỏ hàng" + index}
                   className="w-full bg-slate-200 h-32 my-2 border border-slate-300 animate-pulse rounded"
                 ></div>
               ))
               : data.map((product, _index) => (
                 <div
-                  key={product?._id + "Add To Cart Loading"}
+                  key={product?._id + "Thêm vào giỏ hàng"}
                   className="w-[90vh] bg-white h-32 my-2 border border-slate-300 rounded grid grid-cols-[128px,1fr]"
                 >
                   <div className="w-32 h-32 bg-slate-200">

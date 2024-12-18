@@ -1,13 +1,12 @@
 
-import React, { useEffect } from 'react';
 import { Layout, Menu } from 'antd';
-import { UserOutlined, AppstoreAddOutlined, FileTextOutlined } from '@ant-design/icons';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './Staff.module.css';
 import AcceptOrder from './components/AcceptOrder/AcceptOrder';
 import AcceptedOrder from './components/AcceptedOrder/AcceptedOrder';
-import ProductManager from './components/ProductManager/ProductManager';
 import AppCanceledSale from './components/AllCanceledSale/AppCanceledSale';
+import ProductManager from './components/ProductManager/ProductManager';
 
 const { Sider, Content } = Layout;
 
@@ -20,6 +19,9 @@ const Staff = () => {
     const handleMenuClick = (e) => {
         navigate(`/staff/${e.key}`);
     };
+    useEffect(() => {
+        navigate(`/staff/acceptOder`);
+    }, [navigate])
 
     const renderContent = () => {
         switch (selectedKey) {
@@ -27,7 +29,7 @@ const Staff = () => {
                 return <AcceptOrder />;
             case 'acceptedOrder':
                 return <AcceptedOrder />;
-            case '3':
+            case 'appCanceledSale':
                 return <AppCanceledSale />;
             default:
                 return <ProductManager />;
@@ -50,7 +52,7 @@ const Staff = () => {
                     <Menu.Item key="acceptedOrder">
                         Danh sách đơn đã duyệt
                     </Menu.Item>
-                    <Menu.Item key="3" >
+                    <Menu.Item key="appCanceledSale" >
                         Danh sách đơn hủy
                     </Menu.Item>
                     <Menu.Item key="productManager">

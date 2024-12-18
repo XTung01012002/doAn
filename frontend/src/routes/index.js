@@ -1,24 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
+import Cart from "../pages/Cart";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
-import RequestForgotPassword from "../pages/RequestForgotPassword";
-import SignUp from "../pages/SignUp";
-import AdminPanel from "../pages/AdminPanel";
-import AllUser from "../pages/AllUser";
-import AllProduct from "../pages/AllProduct";
-import ProductDetail from "../pages/ProductDetail";
-import Cart from "../pages/Cart";
-import SearchProduct from "../pages/SearchProduct";
-import ProductCategory from "../pages/ProductCategory";
-import Payment from "../pages/Payment";
-import ResetPassword from "../pages/ResetPassword";
 import Notification from "../pages/Notification";
-import OrderPage from '../pages/update/order'
+import Payment from "../pages/Payment";
+import ProductCategory from "../pages/ProductCategory";
+import ProductDetail from "../pages/ProductDetail";
+import RequestForgotPassword from "../pages/RequestForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
+import SearchProduct from "../pages/SearchProduct";
+import SignUp from "../pages/SignUp";
+import OrderPage from '../pages/update/order';
 // import Warehouse from "../pages/update/admin/warehouse/components/Warehouse";
-import Staff from "../pages/update/staff/Staff";
-import WarehouseAdmin from "../pages/update/admin/warehouse";
 import PageAdmin from "../pages/update/admin/PageAdmin";
+import WarehouseAdmin from "../pages/update/admin/warehouse";
+import ProfileAccount from "../pages/update/profile";
+import Staff from "../pages/update/staff/Staff";
 
 
 const router = createBrowserRouter([
@@ -124,6 +122,16 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: 'profileAccount',
+        element: <ProfileAccount />,
+        children: [
+          {
+            path: ":key",
+            element: <ProfileAccount />,
+          },
+        ],
+      }
     ],
   },
 ]);

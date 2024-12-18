@@ -64,7 +64,7 @@ const VerticalCard = ({ loading, data = [] }) => {
                     className="text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full"
                     onClick={(e) => handleAddToCart(e, product?._id)}
                   >
-                    Add to Cart
+                    Thêm vào giỏ hàng
                   </button>
                 </div>
               </Link>

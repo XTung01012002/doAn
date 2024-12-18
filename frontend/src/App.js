@@ -67,22 +67,6 @@ function App() {
         <Footer />
       </Context.Provider>
     </>
-    // <div className="App">
-    //   <Context.Provider
-    //     value={{
-    //       fetchUserDetails,
-    //       cartProductCount,
-    //       fetchUserAddToCart,
-    //     }}
-    //   >
-    //     <ToastContainer position="top-center" />
-    //     <Header />
-    //     <main className="flex-grow h-full">
-    //       <Outlet />
-    //     </main>
-    //     <Footer />
-    //   </Context.Provider>
-    // </div>
   );
 }
 

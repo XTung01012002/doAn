@@ -135,6 +135,9 @@ const AcceptOrder = () => {
 
     return (
         <div>
+            <div className='mb-2 text-[18px] font-bold'>
+                Danh sách đơn hàng chưa duyệt
+            </div>
             <Table
                 columns={column}
                 dataSource={dataSource}

@@ -190,6 +190,9 @@ const ProductManager = () => {
                 error={error}
                 success={sub ? 'Cập nhật thành công!' : ''}
             />
+            <div className='mb-2 text-[18px] font-bold'>
+                Danh sách sản phẩm
+            </div>
             <Table
                 columns={column}
                 dataSource={dataSource}

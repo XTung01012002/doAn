@@ -37,17 +37,19 @@ const Statistical = () => {
 
     return (
         <>
-            <div className="mb-6 flex gap-4 justify-end">
+            <div className="mb-6 flex items-center gap-4">
+                <p className='text-[18px] font-bold'>Thống kê doanh thu:</p>
                 <DatePicker
                     onChange={handleStartDateChange}
                     defaultValue={twoMonthsBeforeToday}
-                    format="YYYY-MM-DD"
+                    format="DD-MM-YYYY"
                     placeholder="Chọn ngày bắt đầu"
                 />
+                <p className='text-[16px]'>tới</p>
                 <DatePicker
                     onChange={handleEndDateChange}
                     defaultValue={date}
-                    format="YYYY-MM-DD"
+                    format="DD-MM-YYYY"
                     placeholder="Chọn ngày kết thúc"
                 />
             </div>

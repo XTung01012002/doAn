@@ -1,59 +1,53 @@
-import { FileTextOutlined, UserOutlined } from '@ant-design/icons';
+
 import { Layout, Menu } from 'antd';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import AllUserAdmin from './components/AllUsersAdmin';
-import Statistical from './components/Statistical';
-import styles from './pageAdmin.module.css';
+import styles from './ProfileAccount.module.css';
+import ProfileDetail from './component/profileDetail/ProfileDetail';
+import ForgotPassword from './component/forgotPassword/ForgotPasswords';
 
 
 const { Sider, Content } = Layout;
 
-const PageAdmin = () => {
+const ProfileAccount = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
 
-
-    const nav = useNavigate();
-    const location = useLocation()
-
-    const selectedKey = location.pathname.split('/')[2] || 'statistical'
+    const selectedKey = location.pathname.split('/')[2] || 'profileDetail';
 
     const handleMenuClick = (e) => {
-        nav(`/admin-panel/${e.key}`)
+        navigate(`/profileAccount/${e.key}`);
     };
     useEffect(() => {
-        nav(`/admin-panel/statistical`);
-    }, [nav])
-
+        navigate(`/profileAccount/profileDetail`);
+    }, [navigate])
 
     const renderContent = () => {
         switch (selectedKey) {
-            case 'statistical':
-                return <Statistical />
-            // case 'all-users':
+            case 'profileDetail':
+                return <ProfileDetail />;
             default:
-                return <AllUserAdmin />
-
+                return <ForgotPassword />;
         }
     };
 
     return (
         <Layout className={styles.customTabsHeight}>
-            <Sider width={250} className={`${styles.customTabsHeight} bg-white `}  >
-                <div className='text-center text-[24px] font-bold py-4'>
-                    Admin
-                </div>
+            <Sider width={250} className={`${styles.customTabsHeight} bg-white`}>
+                <div className="text-center text-[24px] font-bold py-4">Nhân viên</div>
                 <Menu
                     mode="inline"
                     selectedKeys={[selectedKey]}
                     onClick={handleMenuClick}
                     className={`${styles.customTabsHeight1} w-full border-none`}
                 >
-                    <Menu.Item key="statistical" icon={<FileTextOutlined />}>
-                        Thống kê
+                    <Menu.Item key="profileDetail">
+                        Thông tin tài khoản
                     </Menu.Item>
-                    <Menu.Item key="all-users" icon={<UserOutlined />}>
-                        Quản lý tài khoản
+                    <Menu.Item key="acceptedOrder">
+                        Đổi mật khẩu
                     </Menu.Item>
+
                 </Menu>
             </Sider>
 
@@ -74,4 +68,4 @@ const PageAdmin = () => {
     );
 };
 
-export default PageAdmin
+export default ProfileAccount;

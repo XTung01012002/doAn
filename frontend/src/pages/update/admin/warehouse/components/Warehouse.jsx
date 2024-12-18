@@ -137,26 +137,30 @@ const Warehouse = () => {
 
     return (
         <>
-            <div
-                className='flex justify-end pb-6'
-            >
-                <Space>
-                    <Button
-                        variant='outlined'
-                        color='primary'
-                        onClick={() => setOpen1(true)}
-                    >
-                        Thêm sản phẩm
-                    </Button>
-                    <Button
-                        variant='solid'
-                        color='primary'
-                        onClick={() => setOpen(true)}
-                    >
-                        Nhập hàng
-                    </Button>
-                </Space>
-            </div>
+            <div className='flex justify-between items-center pb-6'>
+                <div className='mb-2 text-[18px] font-bold'>
+                    Danh sách sản phẩm trong kho
+                </div>
+                <div
+                >
+                    <Space>
+                        <Button
+                            variant='outlined'
+                            color='primary'
+                            onClick={() => setOpen1(true)}
+                        >
+                            Thêm sản phẩm
+                        </Button>
+                        <Button
+                            variant='solid'
+                            color='primary'
+                            onClick={() => setOpen(true)}
+                        >
+                            Nhập hàng
+                        </Button>
+                    </Space>
+                </div>
+           </div>
             <Table
                 columns={columns}
                 dataSource={dataWH}

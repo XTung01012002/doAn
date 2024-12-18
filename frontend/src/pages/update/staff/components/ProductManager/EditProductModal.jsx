@@ -112,6 +112,8 @@ const EditProductModal = ({ open, setOpen, id }) => {
 
         for (const file of newFileList) {
             if (file.originFileObj) {
+                console.log('testfile', file);
+
                 try {
                     const response = await uploadImage(file.originFileObj);
                     updatedFileList.push(response.secure_url);

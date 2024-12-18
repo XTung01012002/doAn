@@ -224,19 +224,19 @@ const ProductDetails = () => {
             <div className="flex items-center gap-3 my-2">
               <button className="border-2 border-red-600 rounded px-3 py-1 min-w-[120px] text-red-600 font-medium hover:bg-red-600 hover:text-white"
                 onClick={(e) => handleBuyProduct(e, data?._id)}>
-                Buy
+                Mua
               </button>
               <button
-                className="border-2 border-red-600 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-red-600 hover:text-red-600 hover:bg-white
+                className="border-2 border-red-600 rounded px-3 py-1 min-w-[200px] font-medium text-white bg-red-600 hover:text-red-600 hover:bg-white
               "
                 onClick={(e) => handleAddToCart(e, data?._id)}
               >
-                Add To Cart
+                Thêm vào giỏ hàng
               </button>
             </div>
 
             <div>
-              <p className="text-slate-600 font-medium my-1">Description : </p>
+              <p className="text-slate-600 font-medium my-1">Mô tả : </p>
               <p>{data?.description}</p>
             </div>
 

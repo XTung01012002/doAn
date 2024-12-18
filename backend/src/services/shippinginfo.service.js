@@ -137,10 +137,9 @@ class ShippingInfoService {
   };
 
   // lấy tất cả các đơn hàng mà confirmOrder = true
-
   static getAllShippingInfo = async () => {
     const shippingInfo = await shippingInfoSchema
-      .find()
+      .find({ shippingStatus: { $ne: "Đã hủy" } }) // Lọc các đơn hàng không có trạng thái "Đã giao"
       .populate({
         path: "paymentInfo",
         populate: {
@@ -150,6 +149,7 @@ class ShippingInfoService {
       .exec();
     return shippingInfo;
   };
+
 
   static getShippingInfoByStatus = async (status) => {
     const shippingInfo = await shippingInfoSchema.find({

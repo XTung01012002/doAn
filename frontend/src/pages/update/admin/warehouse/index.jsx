@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Layout, Menu } from 'antd';
 
 import styles from './Warehouse.module.css';
@@ -18,6 +18,10 @@ const WarehouseAdmin = () => {
     const handleMenuClick = (e) => {
         navigate(`/admin-warehouse/${e.key}`);
     };
+
+    useEffect(() => {
+        navigate(`/admin-warehouse/warehouse`);
+    }, [navigate])
 
     const renderContent = () => {
         switch (selectedKey) {

@@ -138,7 +138,7 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setData, setQuant
             if (methodPayment === 'cash-on-delivery') {
                 dispatch(PaymentOrder(dataBought[dataBought.length - 1]._id))
                 setOpen(false)
-            } else {
+            } else if (methodPayment === 'bank-transfer') {
                 setOpen3(true)
                 dispatch(CreateQR({ totalAmount: data?.totalAmount }))
             }

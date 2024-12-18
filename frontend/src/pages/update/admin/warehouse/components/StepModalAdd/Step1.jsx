@@ -26,7 +26,7 @@ const formItem = [
 ];
 
 const Step1 = ({ current, setCurrent, data, setData }) => {
-    
+
     const [form] = Form.useForm();
 
     useEffect(() => {
@@ -109,7 +109,7 @@ const Step1 = ({ current, setCurrent, data, setData }) => {
 
             <Form.Item className="flex justify-end">
                 <Button type="primary" htmlType="submit">
-                    Next
+                    Tiếp theo
                 </Button>
             </Form.Item>
         </Form>
