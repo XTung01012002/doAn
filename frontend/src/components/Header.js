@@ -56,7 +56,7 @@ const Header = () => {
     if (search) {
       navigate(`/search?q=${search}`);
     } else {
-      navigate(`/search`);
+      navigate(`/`);
     }
   };
 
@@ -122,6 +122,13 @@ const Header = () => {
             {menuDisplay && (
               <div className="absolute bottom-0 top-11 h-fit px-10 py-4 shadow-2xl shadow-slate-400 rounded z-50 bg-white">
                 <nav>
+                  <Link
+                    to={"/profileAccount"}
+                    className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay(!menuDisplay)}
+                  >
+                    Thông tin tài khoản
+                  </Link>
                   {user?.role === "ADMIN" && (
                     <Link
                       to={"/admin-panel"}
@@ -131,20 +138,24 @@ const Header = () => {
                       Admin Panel
                     </Link>
                   )}
-                  <Link
-                    to={'/staff'}
-                    className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
-                    onClick={() => setMenuDisplay(!menuDisplay)}
-                  >
-                    Nhân viên
-                  </Link>
-                  <Link
-                    to={'admin-warehouse'}
-                    className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
-                    onClick={() => setMenuDisplay(!menuDisplay)}
-                  >
-                    Kho
-                  </Link>
+                  {(user?.role === "SALE" || user?.role === "ADMIN") && (
+                    <Link
+                      to={'/staff'}
+                      className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
+                      onClick={() => setMenuDisplay(!menuDisplay)}
+                    >
+                      Nhân viên
+                    </Link>
+                  )}
+                  {(user?.role === "INVENTORY" || user?.role === "ADMIN") && (
+                    <Link
+                      to={'admin-warehouse'}
+                      className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
+                      onClick={() => setMenuDisplay(!menuDisplay)}
+                    >
+                      Kho
+                    </Link>
+                  )}
                   <Link
                     to={'/order'}
                     className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
@@ -152,8 +163,10 @@ const Header = () => {
                   >
                     Đơn hàng
                   </Link>
+
+
                   {user?._id && (
-                    <div className="flex justify-center">
+                    <div className="flex justify-center mt-3">
                       <Button
                         onClick={handleLogOut}
                         className=" rounded-full"

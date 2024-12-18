@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { GetBill } from '../../../../../store/admin/getBill/GetBill'
+import { GetBillListInventory } from '../../../../../store/admin/getBill/GetBill'
 import { Button, Space, Table } from 'antd'
 import { FaRegEye } from "react-icons/fa";
 import ModalListInventory from './ModalListInventory'
@@ -10,13 +10,13 @@ const ListInventory = () => {
     const dispatch = useDispatch()
     const data = useSelector(state => state.getBill.data)
     useEffect(() => {
-        dispatch(GetBill())
-    }, [])
+        dispatch(GetBillListInventory())
+    }, [dispatch])
 
     const [open, setOpen] = useState(false)
     const [dataDital, setDataDital] = useState()
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 9;
+    const pageSize = 8;
     const column = [
         {
             key: 'stt',
@@ -91,6 +91,9 @@ const ListInventory = () => {
 
     return (
         <>
+            <div className='mb-4 text-[18px] font-bold'>
+                Danh sách phiếu nhập hàng
+            </div>
             <Table
                 columns={column}
                 dataSource={data}

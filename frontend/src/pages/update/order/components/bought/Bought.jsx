@@ -8,6 +8,7 @@ import { fetchDataBoughtUser } from '../../../../../store/bought/BoughtUser';
 import BoughtModal from './BoughtModal';
 import { PaymentOrder } from '../../../../../store/thanhtoan/PaymentOrder';
 import { CreateQR } from '../../../../../store/QRcode/CreateQR';
+import { format } from 'date-fns';
 
 
 
@@ -23,7 +24,8 @@ const Bought = () => {
     const dispatch = useDispatch();
     const data = useSelector((state) => state.bought.data);
 
-    
+    console.log(data);
+
 
     const [dataModal, setDataModal] = useState(null);
 
@@ -82,222 +84,239 @@ const Bought = () => {
 
 
     return (
-        <div className={`${styles.customScrollbar}`}>
-            <Row gutter={[16, 24]}>
-                {data?.map((items, index) => {
-                    const isExpanded = expandedIndices[index];
-                    const displayItems = isExpanded ? items.productList : [items.productList[0]];
-                    console.log('displayIems', items.productList.length);
+        <div>
+            <div className='mb-2 text-[18px] font-bold'>
+                Danh sách đơn hàng chưa duyệt
+            </div>
+            <div className={`${styles.customScrollbar}`}>
+                <Row gutter={[16, 24]}>
+                    {data?.map((items, index) => {
+                        const isExpanded = expandedIndices[index];
+                        const displayItems = isExpanded ? items.productList : [items.productList[0]];
+                        console.log('displayIems', items.productList.length);
 
-                    return (
-                        <Col className="gutter-row" span={24} key={index}>
-                            <Card
-                                className='relative'
-                            >
-                                <span
-                                    className={`absolute right-6 top-4 text-[16px] font-semibold  ${(items.paymentStatus === 'Chưa chọn phương thức thanh toán' || items.paymentStatus === 'Thanh toán khi nhận hàng') ? 'text-[#ff4242]' : 'text-[#3538fa]'}`}
+                        return (
+                            <Col className="gutter-row" span={24} key={index}>
+                                <Card
+                                    className='relative'
                                 >
-                                    {items.paymentStatus}
-                                </span>
-                                {displayItems?.map((item, itemIndex) => {
-                                    const totalPriceItem = item.productId?.sellingPrice * item.quantity;
+                                    <span
+                                        className={`absolute right-6 top-4 text-[14px] font-semibold`}
+                                    >
+                                        Ngày tạo đơn: {format(new Date(items.createdAt), 'dd-MM-yyyy')}
+                                    </span>
+                                    {displayItems?.map((item, itemIndex) => {
+                                        const totalPriceItem = item.productId?.sellingPrice * item.quantity;
 
-                                    return (
-                                        <Row gutter={[16, 24]} key={itemIndex} className='mb-4'>
-                                            <Col className='gutter-row flex justify-center items-center' span={6}>
-                                                <Avatar
-                                                    shape="square"
-                                                    size={150}
-                                                    icon={<Image src={item.productId?.productImage[0]} />}
-                                                />
-                                            </Col>
-                                            <Col className='gutter-row' span={18}>
-                                                <Row gutter={[16, 24]} className='flex items-center'>
-                                                    <Col className='gutter-row' span={24}>
-                                                        <Row gutter={[16, 24]}>
-                                                            <Col className='gutter-row' span={24}>
-                                                                <Row gutter={[16, 24]} className='flex items-center'>
-                                                                    <Col className='gutter-row' span={24}>
-                                                                        <span className='font-medium'>{item.productId?.productName}</span>
-                                                                    </Col>
-                                                                </Row>
-                                                            </Col>
-                                                            <Col className='gutter-row' span={24}>
-                                                                <Row gutter={[16, 24]} className='flex items-center'>
-                                                                    <Col className='gutter-row' span={12}>
-                                                                        <div>
-                                                                            <span className='mr-2 text-[#B0B3B8] line-through'>{item.productId?.price.toLocaleString('vi-VN')} đ</span>
-                                                                            <span className='font-medium'>{item.productId?.sellingPrice.toLocaleString('vi-VN')} đ</span>
-                                                                            {/* <span className='font-medium'>{item.productId?.sellingPrice} đ</span> */}
-                                                                        </div >
-                                                                    </Col>
-                                                                    <Col className='gutter-row flex justify-end' span={12}>
-                                                                        <span className='font-medium'>x {item.quantity}</span>
-                                                                    </Col>
-                                                                </Row>
-                                                            </Col>
-                                                        </Row>
-                                                    </Col>
-                                                    <Col className='gutter-row' span={24}>
-                                                        <Row gutter={[16, 24]}>
-                                                            <Col className='gutter-row' span={24}>
-                                                                <Row gutter={[16, 24]} className='flex items-center justify-end'>
-                                                                    <Col className='gutter-row flex items-center justify-end' span={24}>
-                                                                        <span className=''>{item.quantity} sản phẩm: </span>
-                                                                        <span className='ml-1 font-medium'>{totalPriceItem.toLocaleString('vi-VN')} đ</span>
-                                                                    </Col>
-                                                                </Row>
-                                                            </Col>
-                                                        </Row>
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                        </Row>
-                                    );
-                                })}
-                                <Row gutter={[16, 24]} className='flex items-center justify-end'>
-                                    <Col className='gutter-row flex items-center justify-end' span={24}>
-                                        <span className=''>Tổng tiền: </span>
-                                        <span className=' ml-1 font-medium'>{items.totalAmount.toLocaleString('vi-VN')} đ</span>
-                                    </Col>
-                                </Row>
-                                <Row gutter={[16, 24]} className='flex mt-4 items-center justify-end'>
-                                    <Col className='gutter-row flex items-center justify-end' span={24}>
-                                        <Button
-                                            variant='solid'
-                                            color='primary'
-                                            className='mr-2'
-                                            onClick={() => { setOpen(true); setDataModal(items) }}
-                                        >
-                                            Xem chi tiết
-                                        </Button>
-                                        {(items.paymentStatus === 'Chưa chọn phương thức thanh toán') &&
+                                        return (
+                                            <Row gutter={[16, 24]} key={itemIndex} className=''>
+                                                <Col className='gutter-row flex justify-center items-center' span={6}>
+                                                    <Avatar
+                                                        shape="square"
+                                                        size={150}
+                                                        icon={<Image src={item.productId?.productImage[0]} />}
+                                                    />
+                                                </Col>
+                                                <Col className='gutter-row' span={18}>
+                                                    <Row gutter={[16, 24]} className='flex items-center'>
+                                                        <Col className='gutter-row' span={24}>
+                                                            <Row gutter={[16, 24]}>
+                                                                <Col className='gutter-row' span={24}>
+                                                                    <Row gutter={[16, 24]} className='flex items-center'>
+                                                                        <Col className='gutter-row' span={24}>
+                                                                            <span className='font-medium'>{item.productId?.productName}</span>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </Col>
+                                                                <Col className='gutter-row' span={24}>
+                                                                    <Row gutter={[16, 24]} className='flex items-center'>
+                                                                        <Col className='gutter-row' span={12}>
+                                                                            <div>
+                                                                                <span className='mr-2 text-[#B0B3B8] line-through'>{item.productId?.price.toLocaleString('vi-VN')} đ</span>
+                                                                                <span className='font-medium'>{item.productId?.sellingPrice.toLocaleString('vi-VN')} đ</span>
+                                                                                {/* <span className='font-medium'>{item.productId?.sellingPrice} đ</span> */}
+                                                                            </div >
+                                                                        </Col>
+                                                                        <Col className='gutter-row flex justify-end' span={12}>
+                                                                            <span className='font-medium'>x {item.quantity}</span>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </Col>
+                                                            </Row>
+                                                        </Col>
+                                                        <Col className='gutter-row' span={24}>
+                                                            <Row gutter={[16, 24]}>
+                                                                <Col className='gutter-row' span={24}>
+                                                                    <Row gutter={[16, 24]} className='flex items-center justify-end'>
+                                                                        <Col className='gutter-row flex items-center justify-end' span={24}>
+                                                                            <span className=''>{item.quantity} sản phẩm: </span>
+                                                                            <span className='ml-1 font-medium'>{totalPriceItem.toLocaleString('vi-VN')} đ</span>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </Col>
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
+                                                </Col>
+                                            </Row>
+                                        );
+                                    })}
+                                    <Row gutter={[16, 24]} className='flex items-center justify-end'>
+                                        <Col className='gutter-row flex items-center justify-end' span={24}>
+                                            <span className=''>Tổng tiền: </span>
+                                            <span className=' ml-1 font-medium'>{items.totalAmount.toLocaleString('vi-VN')} đ</span>
+                                        </Col>
+
+                                    </Row>
+                                    <Row gutter={[16, 24]} className='flex items-center justify-end'>
+
+                                        <Col className='gutter-row flex items-center mt-3    justify-end' span={24}>
+                                            <span
+                                                className={`text-[14px] font-medium  ${(items.paymentStatus === 'Chưa chọn phương thức thanh toán' || items.paymentStatus === 'Thanh toán khi nhận hàng') ? 'text-[#ff4242]' : 'text-[#3538fa]'}`}
+                                            >
+                                                {items.paymentStatus}
+                                            </span>
+                                        </Col>
+                                    </Row>
+                                    <Row gutter={[16, 24]} className='flex mt-4 items-center justify-end'>
+                                        <Col className='gutter-row flex items-center justify-end' span={24}>
+                                            {(items.paymentStatus === 'Chưa chọn phương thức thanh toán') &&
+                                                <Button
+                                                    variant='solid'
+                                                    color='danger'
+                                                    className='mr-2'
+                                                    onClick={() => handleSubmit(items)}
+                                                >
+                                                    Thanh toán ngay
+                                                </Button>
+                                            }
                                             <Button
                                                 variant='solid'
-                                                color='danger'
-                                                onClick={() => handleSubmit(items)}
+                                                color='primary'
+                                                onClick={() => { setOpen(true); setDataModal(items) }}
                                             >
-                                                Thanh toán ngay
+                                                Xem chi tiết
                                             </Button>
-                                        }
-                                    </Col>
-                                </Row>
 
-                                {items.productList.length > 1 &&
-                                    <div className="flex items-center justify-center mt-4">
-                                        <div className="w-1/4 border-t border-gray-300"></div>
-                                        <div className="mx-4 text-center">
-                                            {items.productList.length > 1 && !isExpanded && (
-                                                <Row className="">
-                                                    <Button
-                                                        className={styles.noHover}
-                                                        color="default"
-                                                        variant="text"
-                                                        onClick={() => toggleExpanded(index)}
-                                                    >
-                                                        Xem thêm
-                                                    </Button>
-                                                </Row>
-                                            )}
-                                            {isExpanded && (
-                                                <Row className="">
-                                                    <Button
-                                                        className={styles.noHover}
-                                                        color="default"
-                                                        variant="text"
-                                                        onClick={() => toggleExpanded(index)}
-                                                    >
-                                                        Thu gọn
-                                                    </Button>
-                                                </Row>
-                                            )}
+                                        </Col>
+                                    </Row>
+
+                                    {items.productList.length > 1 &&
+                                        <div className="flex items-center justify-center mt-4">
+                                            <div className="w-1/4 border-t border-gray-300"></div>
+                                            <div className="mx-4 text-center">
+                                                {items.productList.length > 1 && !isExpanded && (
+                                                    <Row className="">
+                                                        <Button
+                                                            className={styles.noHover}
+                                                            color="default"
+                                                            variant="text"
+                                                            onClick={() => toggleExpanded(index)}
+                                                        >
+                                                            Xem thêm
+                                                        </Button>
+                                                    </Row>
+                                                )}
+                                                {isExpanded && (
+                                                    <Row className="">
+                                                        <Button
+                                                            className={styles.noHover}
+                                                            color="default"
+                                                            variant="text"
+                                                            onClick={() => toggleExpanded(index)}
+                                                        >
+                                                            Thu gọn
+                                                        </Button>
+                                                    </Row>
+                                                )}
+                                            </div>
+                                            <div className="w-1/4 border-t border-gray-300"></div>
                                         </div>
-                                        <div className="w-1/4 border-t border-gray-300"></div>
-                                    </div>
-                                }
-                            </Card>
-                        </Col>
-                    );
-                })}
-            </Row>
-            <BoughtModal
-                open={open}
-                setOpen={setOpen}
-                data={dataModal}
-            />
-            <Modal
-                title={<div className='text-center'>Chọn phương thức thanh toán</div>}
-                open={open1}
-                onCancel={() => setOpen1(false)}
-                footer={false}
-                closable={false}
-                centered
-            >
-                <div>
-                    <div className="flex items-center mb-2">
-                        <input
-                            type="radio"
-                            id="bank-transfer"
-                            name="payment-method"
-                            value="bank-transfer"
-                            checked={paymentMethod === "bank-transfer"}
-                            onChange={handlePaymentMethodChange}
-                            className="mr-2"
-                            required
-                        />
-                        <label htmlFor="bank-transfer" className="text-gray-700">
-                            Chuyển khoản ngân hàng
-                        </label>
-                    </div>
-                    <div className="flex items-center mb-2">
-                        <input
-                            type="radio"
-                            id="cash-on-delivery"
-                            name="payment-method"
-                            value="cash-on-delivery"
-                            checked={paymentMethod === "cash-on-delivery"}
-                            onChange={handlePaymentMethodChange}
-                            className="mr-2"
-                            required
-                        />
-                        <label htmlFor="cash-on-delivery" className="text-gray-700">
-                            Thanh toán khi nhận hàng
-                        </label>
-                    </div>
-                    {showQRCode ? (
-                        <div className="text-center">
-                            <img
-                                src={qr.qrUrl}
-                                alt=""
+                                    }
+                                </Card>
+                            </Col>
+                        );
+                    })}
+                </Row>
+                <BoughtModal
+                    open={open}
+                    setOpen={setOpen}
+                    data={dataModal}
+                />
+                <Modal
+                    title={<div className='text-center'>Chọn phương thức thanh toán</div>}
+                    open={open1}
+                    onCancel={() => setOpen1(false)}
+                    footer={false}
+                    closable={false}
+                    centered
+                >
+                    <div>
+                        <div className="flex items-center mb-2">
+                            <input
+                                type="radio"
+                                id="bank-transfer"
+                                name="payment-method"
+                                value="bank-transfer"
+                                checked={paymentMethod === "bank-transfer"}
+                                onChange={handlePaymentMethodChange}
+                                className="mr-2"
+                                required
                             />
-                            <p className="mt-2 text-gray-700">
-                                Quét mã QR để thực hiện thanh toán chuyển khoản
-                            </p>
+                            <label htmlFor="bank-transfer" className="text-gray-700">
+                                Chuyển khoản ngân hàng
+                            </label>
                         </div>
-                    )
-                        :
-                        <></>
-                    }
-                </div>
-                <div className="flex justify-end">
-                    <Space>
-                        <Button
-                            onClick={handleClose}
-                        >
-                            Đóng
-                        </Button>
-                        {paymentMethod === "cash-on-delivery" &&
-                            <Button
-                                type="primary"
-                                onClick={handleClickPay}
-                            >
-                                Xác nhận
-                            </Button>
+                        <div className="flex items-center mb-2">
+                            <input
+                                type="radio"
+                                id="cash-on-delivery"
+                                name="payment-method"
+                                value="cash-on-delivery"
+                                checked={paymentMethod === "cash-on-delivery"}
+                                onChange={handlePaymentMethodChange}
+                                className="mr-2"
+                                required
+                            />
+                            <label htmlFor="cash-on-delivery" className="text-gray-700">
+                                Thanh toán khi nhận hàng
+                            </label>
+                        </div>
+                        {showQRCode ? (
+                            <div className="text-center">
+                                <img
+                                    src={qr.qrUrl}
+                                    alt=""
+                                />
+                                <p className="mt-2 text-gray-700">
+                                    Quét mã QR để thực hiện thanh toán chuyển khoản
+                                </p>
+                            </div>
+                        )
+                            :
+                            <></>
                         }
+                    </div>
+                    <div className="flex justify-end">
+                        <Space>
+                            <Button
+                                onClick={handleClose}
+                            >
+                                Đóng
+                            </Button>
+                            {paymentMethod === "cash-on-delivery" &&
+                                <Button
+                                    type="primary"
+                                    onClick={handleClickPay}
+                                >
+                                    Xác nhận
+                                </Button>
+                            }
 
-                    </Space>
-                </div>
-            </Modal>
+                        </Space>
+                    </div>
+                </Modal>
+            </div>
         </div>
     );
 };

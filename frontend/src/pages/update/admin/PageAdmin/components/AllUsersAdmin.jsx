@@ -22,7 +22,7 @@ const AllUserAdmin = () => {
 
 
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 9;
+    const pageSize = 8;
 
     const column = [
         {
@@ -74,6 +74,9 @@ const AllUserAdmin = () => {
 
     return (
         <>
+            <div className='mb-4 text-[18px] font-bold'>
+                Danh sách tài khoản
+            </div>
             <Table
                 dataSource={data}
                 columns={column}

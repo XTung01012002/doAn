@@ -1,48 +1,40 @@
 import { Col, Image, Modal, Row, Avatar, Button, Input, Typography, message, Collapse, Radio, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styles from '../bought/ButtonStyles.module.css'
-import { CreateOrder, DeleteOrder } from '../../../../../store/createCart/CreateCartSlice'
+import { CreateOrder, DeleteOrder, setSubCreate } from '../../../../../store/createCart/CreateCartSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { fetchDataCanceledUser } from '../../../../../store/canceled/CanceledUser'
 import { PaymentOrder } from '../../../../../store/thanhtoan/PaymentOrder'
 import { CreateQR } from '../../../../../store/QRcode/CreateQR'
+import { fetchDataBoughtUser, setSubFet } from '../../../../../store/bought/BoughtUser'
+import CustomNotification from '../../../../../components/notification/CustomNotifacation'
 
 
-const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduct, phone, setPhone, address, setAddress, setTotalAllAmount, totleAllAmount }) => {
+const CanceledModal = ({ open, setOpen, data, quantityProduct, setData, setQuantityProduct, phone, setPhone, address, setAddress, setTotalAllAmount, totleAllAmount }) => {
 
     const dispatch = useDispatch()
-    const [open1, setOpen1] = useState(false)
-    const [open2, setOpen2] = useState(false)
     const [open3, setOpen3] = useState(false)
     const [fix, setFix] = useState(false)
     const [formData, setFormData] = useState()
     const [showQRCode, setShowQRCode] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState("");
-    const [messageApi, contextHolder] = message.useMessage();
     const loadingCreate = useSelector(state => state.statusCanceled.loadingCreateOrder)
-    const subCreate = useSelector(state => state.statusCanceled.subCreateOrder)
     const nav = useNavigate()
     const subDele = useSelector(state => state.statusCanceled.subDeleteOrder)
     const [methodPayment, setMethodPayment] = useState(1);
-    console.log(data);
     const qr = useSelector(state => state.createQR.data)
     const subCreateOrder = useSelector(state => state.statusCanceled.subCreateOrder)
-
-    // console.log('quantityProductdata', data);
-    // console.log('quantityProduct123123123', quantityProduct);
-    // console.log('quantityProduct', quantityProduct[0]?.quantity);
+    const errorCreateOrder = useSelector(state => state.statusCanceled.errorCreateOrder)
+    const dataBought = useSelector((state) => state.bought.data);
+    const subFet = useSelector((state) => state.bought.sub);
 
 
     const onChange1 = (e) => {
-        console.log(e.target.value);
-
         setMethodPayment(e.target.value);
+        console.log(e.target.value);
     };
 
-    const info = () => {
-        messageApi.info('Xóa sản phẩm thành công!');
-    };
 
     useEffect(() => {
         const tmp = []
@@ -66,13 +58,7 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
     }, [quantityProduct]);
 
 
-    useEffect(() => {
-        if (subCreate) {
-            setOpen(false)
-            setOpen1(false)
-            dispatch(DeleteOrder(data?._id))
-        }
-    }, [subCreate])
+
     useEffect(() => {
         if (subDele) {
             dispatch(fetchDataCanceledUser())
@@ -94,79 +80,71 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
     }
 
 
-    const total = data?.totalAmount
-
-
-
-    const handleClose = () => {
-        dispatch(CreateOrder(formData))
-    }
-
-    useEffect(() => {
-        if (subCreateOrder) {
-            if (methodPayment === 'cash-on-delivery') {
-                dispatch(PaymentOrder(data._id))
-            } else {
-                dispatch(CreateQR({ totalAmount: data.totalAmount }))
-                setOpen3(true)
-            }
-        }
-    }, [subCreateOrder, dispatch])
-
-    // const handleOK = () => {
-    //     setOpen1(false)
-    // }
-
-    // const handleCancel = () => {
-    //     setOpen1(false)
-    // }
-    // const handleOK1 = () => {
-    //     setOpen2(false)
-    // }
-
-    // const handleCancel1 = () => {
-    //     setOpen2(false)
-    // }
-
     const totalAmountProduct = (amount, quantity) => {
         return amount * quantity
     }
 
-
-    const handlePaymentMethodChange = (e) => {
-        const value = e.target.value;
-        console.log('values', value);
-
-        setPaymentMethod(value);
-
-        if (value === "bank-transfer") {
-            setShowQRCode(true);
-        } else {
-            setShowQRCode(false);
-        }
-    };
-
     const handleUp = (index) => {
         const datanew = [...quantityProduct];
         datanew[index].quantity = datanew[index].quantity + 1;
-        setQuantityProduct(datanew)
-    }
+        setQuantityProduct(datanew);
+    };
 
     const handleDown = (index) => {
-        const datanew = [...quantityProduct]
+        const datanew = [...quantityProduct];
         if (datanew[index].quantity > 1) {
             datanew[index].quantity = datanew[index].quantity - 1;
-            setQuantityProduct(datanew)
-        } else info()
-    }
+            setQuantityProduct(datanew);
+        } else {
+            Modal.confirm({
+                title: 'Xác nhận xóa',
+                content: 'Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách không?',
+                okText: 'Xóa',
+                cancelText: 'Hủy',
+                onOk: () => handleDelete(index),
+            });
+        }
+    };
+
+    const handleDelete = (index) => {
+        const updatedProductList = data.productList.filter((_, i) => i !== index);
+        setData(prevData => ({
+            ...prevData,
+            productList: updatedProductList,
+        }));
+        const updatedQuantityProduct = quantityProduct.filter((_, i) => i !== index);
+        setQuantityProduct(updatedQuantityProduct);
+
+    };
+
 
 
     const handleBuy = () => {
-        console.log('formData', formData);
         dispatch(CreateOrder(formData))
     }
+    console.log('methodPayment', methodPayment);
 
+    useEffect(() => {
 
+        if (subCreateOrder) {
+            dispatch(fetchDataBoughtUser());
+            dispatch(setSubCreate(false))
+        }
+    }, [subCreateOrder, dispatch])
+
+    useEffect(() => {
+        if (subFet) {
+            dispatch(DeleteOrder(data?._id))
+            if (methodPayment === 'cash-on-delivery') {
+                dispatch(PaymentOrder(dataBought[dataBought.length - 1]._id))
+                setOpen(false)
+            } else if (methodPayment === 'bank-transfer') {
+                setOpen3(true)
+                dispatch(CreateQR({ totalAmount: data?.totalAmount }))
+            }
+            dispatch(setSubFet())
+        }
+    }, [subFet])
 
     const onChange = (key) => {
         console.log(key);
@@ -196,15 +174,18 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setQuantityProduc
     ];
 
 
-
     if (!data) {
         return null;
     }
 
 
+
     return (
         <>
-            {contextHolder}
+            <CustomNotification
+                success={subCreateOrder && 'Mua lại thành công'}
+                error={errorCreateOrder}
+            />
             <Modal
                 title={
                     <div className='text-center font-bold text-[18px]'>

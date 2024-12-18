@@ -4,7 +4,7 @@ import SummaryApi from "../../../common";
 
 
 
-export const GetBill = createAsyncThunk(
+export const GetBillListInventory = createAsyncThunk(
     'getBillAdmin', async (_, { rejectWithValue }) => {
         try {
             const res = await axios.get(`${SummaryApi.getInventoryreceipt.url}`, {
@@ -32,16 +32,16 @@ const GetBillReducer = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(GetBill.pending, state => {
+            .addCase(GetBillListInventory.pending, state => {
                 state.loading = true
                 state.error = null
             })
-            .addCase(GetBill.fulfilled, (state, action) => {
+            .addCase(GetBillListInventory.fulfilled, (state, action) => {
                 state.data = action.payload
                 state.loading = false
                 state.error = null
             })
-            .addCase(GetBill.rejected, (state, action) => {
+            .addCase(GetBillListInventory.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })

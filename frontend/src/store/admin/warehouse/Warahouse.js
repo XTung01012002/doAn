@@ -3,9 +3,6 @@ import axios from 'axios';
 import SummaryApi from '../../../common/index';
 
 export const fetchDataWarehouse = createAsyncThunk('data/fetchDataWarehouse', async (_,{rejectWithValue}) => {
-    // const response = await axios.get(`${SummaryApi.allProducts.url}`);
-    // return response.data;
-
     try {
         const response = await axios.get(`${SummaryApi.allProducts.url}`, {
             withCredentials: true

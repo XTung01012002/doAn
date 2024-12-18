@@ -79,7 +79,7 @@ const AcceptOderModal = ({ open, setOpen, id, setOpened }) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Phương thức vận chuyển"
+                        label="Đơn vị vận chuyển"
                         name="shippingMethod"
                         rules={[
                             { required: true, message: 'Vui lòng chọn phương thức vận chuyển!' },

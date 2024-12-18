@@ -6,7 +6,7 @@ import SummaryApi from "../../common";
 
 export const CreateCart = createAsyncThunk(
     'post/create-cart',
-    async (data,{rejectWithValue}) => {
+    async (data, { rejectWithValue }) => {
         try {
             const res = await axios.post(`${SummaryApi.postCreateCart.url}`, data, {
                 withCredentials: true
@@ -69,6 +69,9 @@ const CanceledOrderReducer = createSlice({
     reducers: {
         setSubCreate(state, action) {
             state.subCreateOrder = action.payload
+        },
+        setErrorCreate(state, action) {
+            state.errorCreateOrder = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -112,5 +115,5 @@ const CanceledOrderReducer = createSlice({
     }
 })
 
-export const { setSubCreate } = CanceledOrderReducer.actions
+export const { setSubCreate, setErrorCreate } = CanceledOrderReducer.actions
 export default CanceledOrderReducer.reducer

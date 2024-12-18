@@ -142,10 +142,10 @@ const AcceptedOrder = () => {
             key: 'totalAmount',
             dataIndex: 'totalAmount',
             title: 'Giá tiền',
-            render: (totalAmount) => `${formatAmount(totalAmount)} đ`
+            render: (totalAmount) => `${formatAmount(totalAmount)} đ`  
         },
         {
-            key: 'shippingStatus',
+            key: 'shippingStatus', 
             dataIndex: 'shippingStatus',
             title: 'Trạng thái đơn',
             render: (shippingStatus) => (
@@ -183,6 +183,9 @@ const AcceptedOrder = () => {
     return (
         <div>
             <CustomNotification success={sub && 'Cập nhập thành công'} error={error} />
+            <div className='mb-2 text-[18px] font-bold'>
+                Danh sách đơn hàng đã duyệt
+            </div>
             <Table
                 columns={columns}
                 dataSource={dataSource}
@@ -192,7 +195,6 @@ const AcceptedOrder = () => {
                     onChange: (page) => setCurrentPage(page),
                 }}
             />
-
             <Modal
                 title="Xác nhận giao hàng"
                 open={isModalOpen}

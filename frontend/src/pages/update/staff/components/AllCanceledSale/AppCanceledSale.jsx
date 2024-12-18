@@ -17,7 +17,7 @@ const AppCanceledSale = () => {
         dispatch(GetAllCancelOrderSale())
     }, [dispatch])
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 9;
+    const pageSize = 8;
 
     const column = [
         {
@@ -74,15 +74,20 @@ const AppCanceledSale = () => {
     ]
 
     return (
-        <Table
-            dataSource={data}
-            columns={column}
-            pagination={{
-                pageSize: pageSize,
-                current: currentPage,
-                onChange: (page) => setCurrentPage(page),
-            }}
-        />
+        <>
+            <div className='mb-2 text-[18px] font-bold'>
+                Danh sách đơn hàng đã hủy
+            </div>
+            <Table
+                dataSource={data}
+                columns={column}
+                pagination={{
+                    pageSize: pageSize,
+                    current: currentPage,
+                    onChange: (page) => setCurrentPage(page),
+                }}
+            />
+        </>
     )
 }
 

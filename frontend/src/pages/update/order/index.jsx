@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Layout, Menu } from 'antd';
 import Bought from './components/bought/Bought';
 import Canceled from './components/canceled/Canceled';
@@ -21,6 +21,10 @@ const OrderPage = () => {
   const handleMenuClick = (e) => {
     nav(`/order/${e.key}`)
   };
+
+  useEffect(() => {
+    nav(`/order/bought`);
+  }, [nav])
 
   const renderContent = () => {
     switch (selectedKey) {
