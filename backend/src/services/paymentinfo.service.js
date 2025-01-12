@@ -185,6 +185,7 @@ class PaymentInfoService {
 
   static checkTransactionStatus = async (data, transactionId) => {
     const { paymentInfoId } = data;
+    console.log(paymentInfoId + ":::paymentInfoId");
     const paymentInfo = await paymentInfoSchema.findById(paymentInfoId);
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
@@ -197,7 +198,7 @@ class PaymentInfoService {
     if (transaction) {
       try {
         const response = await axios.get(
-          `${config.casso.apiUrl}/transactions`,
+          `${config.casso.apiUrl}/transactions?timestamp=${Date.now()}`,
           {
             headers: {
               Authorization: `Apikey ${config.casso.apiKey}`,
@@ -207,6 +208,10 @@ class PaymentInfoService {
         );
 
         const transactionsData = response.data.data.records;
+        const sortedTransactions = transactionsData.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+        console.log("sortedTransactions:::", sortedTransactions);
         const updatedTransaction = transactionsData.find((t) =>
           t.description.includes(transactionId)
         );

@@ -91,7 +91,7 @@ const Bought = () => {
       const tmp = { totalAmount: dataModal.totalAmount };
       //  dispatch(CreateQR(tmp));
       const result = await dispatch(CreateQR(tmp)).unwrap();
-
+    
       setShowQRCode(true);
       startTransactionCheck({
         transactionId: result.transactionId,

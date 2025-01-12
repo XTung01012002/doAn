@@ -69,7 +69,7 @@ const ForgotPassword = () => {
                         },
                         {
                             min: 6,
-                            message: 'Mật khẩu mới phải ít nhất 66 ký tự!',
+                            message: 'Mật khẩu mới phải ít nhất 6 ký tự!',
                         },
                     ]}
                 >
