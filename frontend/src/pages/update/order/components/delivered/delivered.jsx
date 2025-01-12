@@ -48,10 +48,8 @@ const Delivered = () => {
                     {data?.map((items, index) => {
                         const isExpanded = expandedIndices[index];
                         const displayItems = isExpanded ? items.paymentInfo.productList : [items.paymentInfo.productList[0]];
-
                         return (
                             <Col className="gutter-row" span={24} key={index}>
-
                                 <Card
                                     className='relative'
                                     title={
@@ -72,7 +70,6 @@ const Delivered = () => {
                                     </span>
                                     {displayItems?.map((item, itemIndex) => {
                                         const totalPriceItem = item.productId?.sellingPrice * item.quantity;
-
                                         return (
                                             <Row gutter={[16, 24]} key={itemIndex} className='mb-4'>
                                                 <Col className='gutter-row flex justify-center items-center' span={6}>

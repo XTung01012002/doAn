@@ -1,6 +1,7 @@
 import { Avatar, Button, Col, Collapse, Image, Modal, Radio, Row, Space } from 'antd';
 import React, { useState } from 'react'
 import styles from '../bought/ButtonStyles.module.css'
+import { format } from 'date-fns';
 
 
 const ModalDelivered = ({ open, setOpen, data }) => {
@@ -62,18 +63,39 @@ const ModalDelivered = ({ open, setOpen, data }) => {
                             <Row gutter={[8, 12]}>
                                 <Col className='gutter-row' span={24}>
                                     <Row gutter={[8, 12]}>
-                                        <Col className='gutter-row' span={4}>
-                                            Số điện thoại:
+                                        <Col className='gutter-row' span={12}>
+                                            <Row gutter={[8, 12]}>
+                                                <Col className='gutter-row' span={10}>
+                                                    Mã vận đơn:
+                                                </Col>
+                                                <Col className='gutter-row' span={14}>
+                                                    {data.maVanDon}
+                                                </Col>
+                                                <Col className='gutter-row' span={10}>
+                                                    Ngày nhận dự kiến:
+                                                </Col>
+                                                <Col className='gutter-row' span={14}>
+                                                    {format(new Date(data.deliveryDate), 'dd-MM-yyyy')}
+                                                </Col>
+                                            </Row>
                                         </Col>
-                                        <Col className='gutter-row' span={20}>
-                                            {data.paymentInfo.phone}
+                                        <Col className='gutter-row' span={12}>
+                                            <Row gutter={[8, 12]}>
+                                                <Col className='gutter-row' span={10}>
+                                                    Số điện thoại:
+                                                </Col>
+                                                <Col className='gutter-row' span={14}>
+                                                    {data.paymentInfo.phone}
+                                                </Col>
+                                                <Col className='gutter-row' span={10}>
+                                                    Địa chỉ:
+                                                </Col>
+                                                <Col className='gutter-row' span={14}>
+                                                    {data.paymentInfo.address}
+                                                </Col>
+                                            </Row>
                                         </Col>
-                                        <Col className='gutter-row' span={4}>
-                                            Địa chỉ:
-                                        </Col>
-                                        <Col className='gutter-row' span={20}>
-                                            {data.paymentInfo.address}
-                                        </Col>
+
                                     </Row>
                                 </Col>
                             </Row>
@@ -168,8 +190,6 @@ const ModalDelivered = ({ open, setOpen, data }) => {
                         </div>
                     </div>
                     <Row gutter={[16, 24]}>
-
-
                         <Col className='gutter-row' span={12}>
                             Thành tiền:
                         </Col>

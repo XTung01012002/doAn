@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchDataWarehouse } from '../../../../../store/admin/warehouse/Warahouse';
-import { Button, Image, message, Space, Switch, Table, Tag } from 'antd';
-import { CiTrash } from "react-icons/ci";
+import { Button, Image, Space, Switch, Table, Tag } from 'antd';
 import EditProductModal from './EditProductModal';
 import { AiOutlineEdit } from "react-icons/ai";
-import { PutUpdateActive, setErrorPut, setSubPut } from '../../../../../store/staff/EditProduct';
+import { PutUpdateActive, setErrorPut, setReload, setSubPut } from '../../../../../store/staff/EditProduct';
 import CustomNotification from '../../../../../components/notification/CustomNotifacation';
+import fetchCategoryWiseProduct from '../../../../../helpers/fetchCategoryWiseProduct';
+import { GetCategoryHome } from '../../../../../store/home/getCategiry';
 
 
 const ProductManager = () => {
@@ -21,11 +22,14 @@ const ProductManager = () => {
     const sub = useSelector(state => state.putProductStaff.sub1)
     const error = useSelector(state => state.putProductStaff.error1)
 
+
+    const reload = useSelector(state => state.putProductStaff.reload)
+    console.log('reloadProduct', reload);
+
     useEffect(() => {
         if (error !== null) dispatch(setErrorPut())
     }, [error, dispatch])
 
-   
     console.log('asdasd', dataSource);
 
     useEffect(() => {
@@ -39,6 +43,8 @@ const ProductManager = () => {
         if (sub) {
             dispatch(fetchDataWarehouse())
             dispatch(setSubPut())
+            dispatch(setReload(true))
+            dispatch(GetCategoryHome())
         }
     }, [sub, dispatch])
 

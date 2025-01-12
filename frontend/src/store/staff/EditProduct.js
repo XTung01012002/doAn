@@ -43,7 +43,8 @@ const initialState = {
     error: null,
     sub1: false,
     loading1: false,
-    error1: null
+    error1: null,
+    reload: true
 }
 
 const PutProductStaffReducer = createSlice({
@@ -55,6 +56,9 @@ const PutProductStaffReducer = createSlice({
         },
         setErrorPut(state) {
             state.error1 = null
+        },
+        setReload(state, action) {
+            state.reload = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -92,5 +96,5 @@ const PutProductStaffReducer = createSlice({
     }
 })
 
-export const { setSubPut, setErrorPut } = PutProductStaffReducer.actions
+export const { setSubPut, setErrorPut, setReload } = PutProductStaffReducer.actions
 export default PutProductStaffReducer.reducer
