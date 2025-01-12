@@ -124,6 +124,10 @@ const Payment = () => {
         setTransactionStatus("Đã thanh toán");
         clearTransactionCheck();
         toast.success("Thanh toán thành công!");
+        nav("/order");
+        setTimeout(() => {
+          window.location.reload(); // Reload trang sau khi hiển thị thông báo
+        }, 1000);
       } else if (status === "Đang xử lí") {
         setTransactionStatus("Đang xử lý...");
       }
@@ -198,7 +202,9 @@ const Payment = () => {
   }, [subasd]);
 
   const handleClose = () => {
+    clearTransactionCheck();
     setOpen(false);
+    context.fetchUserAddToCart();
     nav("/order");
   };
 

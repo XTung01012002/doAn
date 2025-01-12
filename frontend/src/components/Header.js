@@ -122,13 +122,13 @@ const Header = () => {
             {menuDisplay && (
               <div className="absolute bottom-0 top-11 h-fit px-10 py-4 shadow-2xl shadow-slate-400 rounded z-50 bg-white">
                 <nav>
-                  {/* <Link
+                  <Link
                     to={"/profileAccount"}
                     className="whitespace-nowrap hidden md:block text-center hover:bg-slate-100 p-2"
                     onClick={() => setMenuDisplay(!menuDisplay)}
                   >
                     Thông tin tài khoản
-                  </Link> */}
+                  </Link>
                   {user?.role === "ADMIN" && (
                     <Link
                       to={"/admin-panel"}

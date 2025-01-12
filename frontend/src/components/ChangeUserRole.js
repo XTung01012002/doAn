@@ -46,7 +46,7 @@ const ChangeUserRole = ({ name, email, role, onClose, userId }) => {
           <IoMdClose />
         </button>
 
-        <h1 className="pb-4 text-lg font-medium">Change User Role</h1>
+        <h1 className="pb-4 text-lg font-medium">Thay đổi Vai trò Người dùng</h1>
 
         <p>Name : {name}</p>
         <p>Email : {email}</p>

@@ -166,17 +166,17 @@ const BoughtModal = ({ open, setOpen, data }) => {
                     <div className='font-bold text-[16px]'>Hình thức thanh toán</div>
                     <div className='font-medium text-[14px] text-[#FF4D4F]'>{data.paymentStatus}</div>
                 </div>,
-            children:
-                <>
-                    <Radio.Group onChange={onChange1} value={methodPayment}>
-                        <Space direction="vertical">
-                            <Radio value={'cash-on-delivery'}>Thanh toán khi nhận hàng</Radio>
-                            <Radio value={'bank-transfer'}>Chuyển khoản ngân hàng</Radio>
-                        </Space>
-                    </Radio.Group>
-                </>
+            // children:
+            //     <>
+            //         <Radio.Group onChange={onChange1} value={methodPayment}>
+            //             <Space direction="vertical">
+            //                 <Radio value={'cash-on-delivery'}>Thanh toán khi nhận hàng</Radio>
+            //                 <Radio value={'bank-transfer'}>Chuyển khoản ngân hàng</Radio>
+            //             </Space>
+            //         </Radio.Group>
+            //     </>
 
-            ,
+            // ,
         },
 
     ];
