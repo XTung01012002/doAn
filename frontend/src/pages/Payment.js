@@ -263,11 +263,11 @@ const Payment = () => {
         />
       </div>
 
-      <fieldset className="mb-6">
+      {/* <fieldset className="mb-6">
         <legend className="text-gray-700 text-sm font-semibold mb-2">
           Phương thức thanh toán:
         </legend>
-      </fieldset>
+      </fieldset> */}
 
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-2">Tóm tắt đơn hàng:</h3>

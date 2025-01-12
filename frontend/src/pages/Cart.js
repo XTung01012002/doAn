@@ -123,7 +123,7 @@ const Cart = () => {
           <p className="bg-white py-5">No Data</p>
         </div>
       ) : (
-        <div className="flex flex-col lg:flex-row lg:justify-between mt-6">
+        <div className="flex flex-col lg:flex-row lg:justify-between pt-8">
           <div className={`${styles.scrollableContainer}`}>
             {loading
               ? loadingCart?.map((el, index) => (
@@ -135,7 +135,7 @@ const Cart = () => {
               : data.map((product, _index) => (
                 <div
                   key={product?._id + "Thêm vào giỏ hàng"}
-                  className="w-[90vh] bg-white h-32 my-2 border border-slate-300 rounded grid grid-cols-[128px,1fr]"
+                  className="w-[100%] bg-white h-32 my-2 border border-slate-300 rounded grid grid-cols-[128px,1fr]"
                 >
                   <div className="w-32 h-32 bg-slate-200">
                     <img
@@ -182,6 +182,7 @@ const Cart = () => {
                 maxWidth: '300px',
                 borderRadius: '8px',
                 boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+              maxHeight: '220px'
               }}
               styles={{
                 header: {

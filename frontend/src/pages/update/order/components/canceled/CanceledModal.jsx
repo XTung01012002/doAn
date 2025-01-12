@@ -122,7 +122,6 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setData, setQuant
     const handleBuy = () => {
         dispatch(CreateOrder(formData))
     }
-    console.log('methodPayment', methodPayment);
 
     useEffect(() => {
 
@@ -223,16 +222,16 @@ const CanceledModal = ({ open, setOpen, data, quantityProduct, setData, setQuant
                     <Col className="gutter-row" span={24}>
                         <div className='flex justify-between items-center'>
                             <div className='mb-5 font-bold text-[16px]'>
-                                Thông tin khách và vận chuyển
+                                Thông tin khách hàng
                             </div>
-                            <div>
+                            {/* <div>
                                 <Button
                                     onClick={() => setFix(!fix)}
                                     type='primary'
                                 >
                                     {fix ? 'Lưu' : 'Chỉnh sửa'}
                                 </Button>
-                            </div>
+                            </div> */}
                         </div>
                         <Row gutter={[8, 12]}>
                             <Col className='gutter-row' span={24}>

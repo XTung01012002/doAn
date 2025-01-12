@@ -1,7 +1,8 @@
 .scrollableContainer {
-    max-height: calc(90vh - 70px); 
+    max-height: calc(90vh - 100px); 
     overflow-y: auto;
     overflow-x: hidden; 
+    width: 75%;
 }
 
 .scrollableContainer::-webkit-scrollbar {

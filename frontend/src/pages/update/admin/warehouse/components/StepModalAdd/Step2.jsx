@@ -5,7 +5,7 @@ import { PostInventoryreceiptCreate, setSubmit } from '../../../../../../store/a
 import { fetchDataWarehouse } from '../../../../../../store/admin/warehouse/Warahouse';
 import { LuPencilLine } from "react-icons/lu";
 import { MdOutlineDelete } from "react-icons/md";
-
+import styles from './Step2.module.css'
 
 const Step2 = ({ current, setCurrent, data, setData }) => {
 
@@ -156,7 +156,7 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
         setCurrent(current - 1);
     };
     return (
-        <>
+        <div className={styles.customScrollbar}>
             <Form
                 name="basic"
                 form={form}
@@ -260,7 +260,7 @@ const Step2 = ({ current, setCurrent, data, setData }) => {
                     </Button>
                 </Space>
             </div>
-        </>
+        </div>
     )
 }
 

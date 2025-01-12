@@ -5,9 +5,15 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import Context from '../context'
 import addToCart from '../helpers/addToCart'
+import { useDispatch, useSelector } from 'react-redux'
+import { setReload } from '../store/staff/EditProduct'
 
 
 const VerticalCardProduct = ({ category, heading }) => {
+
+
+    
+    const dispatch = useDispatch()
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
     const loadingList = new Array(13).fill(null)
@@ -32,7 +38,8 @@ const VerticalCardProduct = ({ category, heading }) => {
     }
 
     useEffect(() => {
-        fetchData()
+            fetchData()
+            
     }, [])
 
     const scrollRight = () => {
@@ -50,7 +57,7 @@ const VerticalCardProduct = ({ category, heading }) => {
 
 
             <div className={`flex items-center gap-4 md:gap-6 overflow-x-scroll scrollbar-none transition-all `} ref={scrollElement}>
-                {data.length > 5 &&
+                {data.length > 4 &&
                     <>
                         <button className='bg-white shadow-md rounded-full p-1 absolute left-0 text-lg hidden md:block' onClick={scrollLeft}><FaAngleLeft /></button>
                         <button className='bg-white shadow-md rounded-full p-1 absolute right-0 text-lg hidden md:block' onClick={scrollRight}><FaAngleRight /></button>
@@ -90,7 +97,9 @@ const VerticalCardProduct = ({ category, heading }) => {
                                             <p className='text-red-600 font-medium'>{displayVNDCurrency(product?.sellingPrice)}</p>
                                             <p className='text-slate-500 line-through'>{displayVNDCurrency(product?.price)}</p>
                                         </div>
-                                        <button className='text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => handleAddToCart(e, product?._id)}>Thêm vào giỏ hàng</button>
+                                        <button className='text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => handleAddToCart(e, product?._id)}>
+                                            Thêm vào giỏ hàng
+                                        </button>
                                     </div>
                                 </Link>
                             )
