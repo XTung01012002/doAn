@@ -25,7 +25,7 @@ class PaymentInfoService {
         userId: sessionUser,
         confirmOrder: false,
         orderStatus: { $ne: "Đã hủy" },
-      })
+      }).sort({ createdAt: -1 })
       .populate({
         path: "productList.productId",
         select:
@@ -53,7 +53,7 @@ class PaymentInfoService {
       .find({
         userId: sessionUser,
         orderStatus: "Đã hủy",
-      })
+      }).sort({ createdAt: 1 })
       .populate("productList.productId")
       .exec();
   };
@@ -367,7 +367,7 @@ class PaymentInfoService {
         confirmOrder: false,
         paymentStatus: { $ne: "Chưa chọn phương thức thanh toán" },
         orderStatus: { $ne: "Đã hủy" },
-      })
+      }).sort({ createdAt: -1 })
       .populate("productList.productId")
       .populate({ path: "userId", select: "name profilePic -_id" })
       .exec();

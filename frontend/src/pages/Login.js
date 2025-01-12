@@ -8,16 +8,12 @@ import SummaryApi from "../common/index";
 import Context from "../context/index";
 import { useContext } from "react";
 
-
-
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({
     email: "",
     password: "",
   });
-
- 
 
   const navigate = useNavigate();
   const { fetchUserDetails, fetchUserAddToCart } = useContext(Context);
@@ -36,7 +32,7 @@ const Login = () => {
     e.preventDefault();
     const APILogin = await fetch(SummaryApi.signIn.url, {
       method: SummaryApi.signIn.method,
-      credentials : "include",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -59,7 +55,7 @@ const Login = () => {
       <div className="mx-auto container p-4">
         <div className="bg-white p-5 w-full max-w-md mx-auto">
           <div className="w-20 h20 mx-auto">
-            <img src={loginIcons} alt="login icons" />
+            <img src={loginIcons} alt="Biểu tượng đăng nhập" />
           </div>
           <form className="pt-6 flex flex-col gap-2" onSubmit={handleSubmit}>
             <div className="grid">
@@ -67,7 +63,7 @@ const Login = () => {
               <div className="bg-slate-100 p-2">
                 <input
                   type="email"
-                  placeholder="Email"
+                  placeholder="Nhập email"
                   name="email"
                   value={data.email}
                   onChange={handleOnChange}
@@ -77,11 +73,11 @@ const Login = () => {
               </div>
             </div>
             <div>
-              <label> Password: </label>
+              <label> Mật khẩu: </label>
               <div className="bg-slate-100 p-2 flex">
                 <input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Mật khẩu"
+                  placeholder="Nhập mật khẩu"
                   name="password"
                   value={data.password}
                   onChange={handleOnChange}
@@ -99,28 +95,24 @@ const Login = () => {
                 to={"/forgot-password"}
                 className="block w-fit ml-auto hover:underline hover:text-red-600"
               >
-                {" "}
-                Quên mật khẩu ?
+                Quên mật khẩu?
               </Link>
             </div>
 
             <button
               className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6"
             >
-              {" "}
               Đăng nhập
             </button>
           </form>
 
           <p className="mt-5">
-            {" "}
-            Bạn chưa có tài khoản ?{" "}
+            Bạn chưa có tài khoản?
             <Link
               to={"/sign-up"}
               className="text-red-600 hover:text-red-700 hover:underline"
             >
-              {" "}
-              Đăng kí{" "}
+              Đăng ký
             </Link>
           </p>
         </div>

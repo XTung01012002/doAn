@@ -185,6 +185,9 @@ const SummaryApi = {
   },
   putUpdateShippingStatus: {
     url: `${backendDomin}/api/shippinginfo/updateShippingStatus`
+  },
+  changePassword:{
+    url: `${backendDomin}/api/user/changePassword`,
   }
 };
 

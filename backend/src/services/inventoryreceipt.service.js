@@ -113,7 +113,7 @@ class InventoryReceiptService {
           path: "productId",
           select: "productName brandName category -_id",
         },
-      })
+      }).sort({ createdAt: -1 })
       .lean();
 
     const result = inventoryReceipts.map((receipt) => ({

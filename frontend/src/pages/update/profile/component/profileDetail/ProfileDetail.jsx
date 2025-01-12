@@ -1,152 +1,80 @@
-import { UploadOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Space, Typography } from 'antd';
-import React, { useRef, useState } from 'react';
-import uploadImage from '../../../../../helpers/uploadImage';
-import styles from './ProfileDetail.module.css';
-
+import { Typography, Spin, Alert } from 'antd';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const ProfileDetail = () => {
-    const [form] = Form.useForm();
-    const [imageUrl, setImageUrl] = useState(null);
-    const inputRef = useRef(null);
+    const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const [fix, setFix] = useState(false)
-
-    const handleUpload = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-
-        reader.onload = async () => {
-            setImageUrl(reader.result);
-            // await uploadImage(file)
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8088/api/user/userDetail', {
+                    withCredentials: true,
+                });
+                setUserData(response.data.data);
+            } catch (err) {
+                setError(err.response?.data?.message || 'Không thể tải dữ liệu!');
+            } finally {
+                setLoading(false);
+            }
         };
-        reader.readAsDataURL(file);
-    };
 
-    const handleInput = (e) => {
-        const input = e.target;
-        let value = input.value.replace(/\./g, '');
-        if (value === '') {
-            input.value = '';
-        } else if (/^\d*$/.test(value)) {
-            input.value = new Intl.NumberFormat('vi-VN').format(value);
-        }
-    };
+        fetchUserData();
+    }, []);
 
-    const handleSubmit = (value) => {
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Spin size="large" />
+            </div>
+        );
+    }
 
-        if (fix) {
-            console.log(value);
-            setFix(false)
-        } else setFix(true)
-    };
+    if (error) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Alert message="Lỗi" description={error} type="error" showIcon />
+            </div>
+        );
+    }
+
+    const { name, email, profilePic } = userData || {};
 
     return (
-        <Form
-            name='basic'
-            form={form}
-            onFinish={handleSubmit}
-            layout={fix ? 'vertical' : 'horizontal'}
-            className={`${styles.customScrollbar}`}
-        >
-            <div className='px-80'>
+        <div className="px-8 py-6 bg-white shadow-lg rounded-lg max-w-md mx-auto mt-10">
+            <Typography className="text-[24px] font-bold text-center mb-6">
+                Thông tin tài khoản
+            </Typography>
 
-                <Typography className='text-[24px] font-bold mb-10'>
-                    Thông tin tài khoản
-                </Typography>
-
-                <Form.Item
-                    name="productImage"
-                    className='flex justify-center w-full'
-                >
-                    {imageUrl ? (
-                        <div
-                            className="relative w-32 h-32 "
-                            onClick={() => inputRef.current?.click()}
-                        >
-                            <img
-                                src={imageUrl}
-                                alt="Uploaded"
-                                className="w-full h-full object-cover rounded-full cursor-pointer"
-                            />
-                        </div>
-                    ) : (
-                        <div
-                            className="flex flex-col items-center justify-center w-32 h-32 border border-dashed border-gray-400 rounded-full cursor-pointer"
-                            onClick={() => inputRef.current?.click()}
-                        >
-                            <UploadOutlined className="text-xl mb-2" />
-                            <span className="text-sm">Tải ảnh lên</span>
-                        </div>
-                    )}
-
-                    <input
-                        ref={inputRef}
-                        type="file"
-                        accept="image/*"
-                        style={{ display: 'none' }}
-                        onChange={handleUpload}
+            {/* Ảnh đại diện */}
+            <div className="flex justify-center mb-6">
+                {profilePic ? (
+                    <img
+                        src={profilePic}
+                        alt="Avatar"
+                        className="w-32 h-32 object-cover rounded-full border"
                     />
-                </Form.Item>
-
-                {fix ?
-                    <>
-                        <Form.Item label={<span className='font-bold'>Email</span>} name='email'>
-                            <Input
-                                placeholder='Nhập email...'
-                                readOnly
-                            />
-                        </Form.Item>
-
-                        <Form.Item label={<span className='font-bold'>Họ tên</span>} name='name'>
-                            <Input
-                                placeholder='Nhập họ tên...'
-                            />
-                        </Form.Item>
-
-                        <Form.Item label={<span className='font-bold'>Điện thoại</span>} name='phone'>
-                            <Input
-                                placeholder='Nhập họ tên...'
-                            />
-                        </Form.Item>
-
-                    </>
-                    :
-                    <div className='px-[30%]'>
-
-                        <Form.Item label={<span className='font-bold'>Email</span>} name='email'>
-                            email@gmail.com
-                        </Form.Item>
-
-                        <Form.Item label={<span className='font-bold'>Họ tên</span>} name='name'>
-                            Nguyễn Văn A
-                        </Form.Item>
-
-                        <Form.Item label={<span className='font-bold'>Số điện thoại</span>} name='phone'>
-
-                        </Form.Item>
-
-                        {/* <Form.Item label={<span className='font-bold'>Số điện thoại</span>} name='productName'>
-
-                        </Form.Item> */}
-
+                ) : (
+                    <div className="flex items-center justify-center w-32 h-32 border border-dashed border-gray-400 rounded-full">
+                        <span className="text-sm">Không có ảnh</span>
                     </div>
-                }
-
-                <Form.Item
-                    label={null}
-                    className={`flex justify-end `}
-                >
-                    <Space>
-                        <Button type="primary" htmlType='submit'>
-                            {fix ? 'Cập nhật' : 'Sửa thông tin'}
-                        </Button>
-                    </Space>
-                </Form.Item>
+                )}
             </div>
-        </Form>
+
+            {/* Thông tin tài khoản */}
+            <div className="space-y-4 text-center">
+                <div>
+                    <Typography.Text className="font-bold block">Họ tên:</Typography.Text>
+                    <Typography.Text>{name || 'Không có dữ liệu'}</Typography.Text>
+                </div>
+                <div>
+                    <Typography.Text className="font-bold block">Email:</Typography.Text>
+                    <Typography.Text>{email || 'Không có dữ liệu'}</Typography.Text>
+                </div>
+            </div>
+        </div>
     );
 };
 

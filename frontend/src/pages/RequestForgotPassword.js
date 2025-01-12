@@ -39,16 +39,16 @@ const RequestForgotPassword = () => {
   return (
     <body class="antialiased">
       <div class="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl shadow shadow-slate-300">
-        <h1 class="text-4xl font-medium">Forgot password</h1>
-        <p class="text-slate-500">Fill up the form to forgot the password</p>
+        <h1 class="text-4xl font-medium">Quên mật khẩu</h1>
+        <p class="text-slate-500">Điền thông tin vào mẫu để lấy lại mật khẩu</p>
 
         <form action="" class="my-10" onSubmit={handleSubmit}>
           <div class="flex flex-col space-y-5">
             <label for="email">
-              <p class="font-medium text-slate-700 pb-2">Email address:</p>
+              <p class="font-medium text-slate-700 pb-2">Địa chỉ email:</p>
               <input
                 type="email"
-                placeholder="Enter email address"
+                placeholder="Nhập địa chỉ email"
                 name="email"
                 value={data.email}
                 onChange={handleOnChange}
@@ -73,7 +73,7 @@ const RequestForgotPassword = () => {
                 />
               </svg>
 
-              <span>Reset password</span>
+              <span>Đặt lại mật khẩu</span>
             </button>
             <p class="text-center">
               Bạn chưa có tài khoản?{" "}

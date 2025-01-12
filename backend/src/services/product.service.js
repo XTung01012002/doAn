@@ -9,7 +9,7 @@ class ProductService {
   };
 
   static getAllProducts = async () => {
-    const products = await productSchema.find().sort({ createdAt: -1 });
+    const products = await productSchema.find().sort({ quantityInStock: 1 });
     return products;
   };
 
