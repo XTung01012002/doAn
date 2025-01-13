@@ -25,7 +25,8 @@ class PaymentInfoService {
         userId: sessionUser,
         confirmOrder: false,
         orderStatus: { $ne: "Đã hủy" },
-      }).sort({ createdAt: -1 })
+      })
+      .sort({ createdAt: -1 })
       .populate({
         path: "productList.productId",
         select:
@@ -53,7 +54,8 @@ class PaymentInfoService {
       .find({
         userId: sessionUser,
         orderStatus: "Đã hủy",
-      }).sort({ createdAt: 1 })
+      })
+      .sort({ createdAt: 1 })
       .populate("productList.productId")
       .exec();
   };
@@ -171,7 +173,7 @@ class PaymentInfoService {
     }-${
       config.bankInfo.template
     }.png?amount=${totalAmount}&addInfo=${encodeURIComponent(
-      +" Ma giao dich " + transactionId
+      "Ma giao dich " + transactionId
     )}&accountName=${encodeURIComponent(config.bankInfo.accountName)}`;
 
     this.transactions[transactionId] = {
@@ -186,19 +188,25 @@ class PaymentInfoService {
   static checkTransactionStatus = async (data, transactionId) => {
     const { paymentInfoId } = data;
     console.log(paymentInfoId + ":::paymentInfoId");
+
+    // Lấy thông tin đơn hàng
     const paymentInfo = await paymentInfoSchema.findById(paymentInfoId);
     if (!paymentInfo) {
       throw new BadRequestError("Không tìm thấy đơn hàng");
     }
+
     const transaction = this.transactions[transactionId];
+    console.log(transaction + ":::transaction");
     if (!transaction) {
       throw new Error("Giao dịch không tồn tại");
     }
-
     if (transaction) {
       try {
-        const response = await axios.get(
-          `${config.casso.apiUrl}/transactions?timestamp=${Date.now()}`,
+        // Gọi API lấy danh sách giao dịch và lấy trang cuối cùng
+        const initialResponse = await axios.get(
+          `${
+            config.casso.apiUrl
+          }/transactions?limit=10&timestamp=${Date.now()}`,
           {
             headers: {
               Authorization: `Apikey ${config.casso.apiKey}`,
@@ -206,16 +214,28 @@ class PaymentInfoService {
             },
           }
         );
-
-        const transactionsData = response.data.data.records;
-        const sortedTransactions = transactionsData.sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        const totalPages = initialResponse.data.data.totalPages;
+        // Gọi API với trang cuối cùng
+        const response = await axios.get(
+          `${
+            config.casso.apiUrl
+          }/transactions?limit=10&page=${totalPages}&timestamp=${Date.now()}`,
+          {
+            headers: {
+              Authorization: `Apikey ${config.casso.apiKey}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
-        console.log("sortedTransactions:::", sortedTransactions);
+        const transactionsData = response.data.data.records;
+
+        // Tìm giao dịch khớp với transactionId
         const updatedTransaction = transactionsData.find((t) =>
           t.description.includes(transactionId)
         );
+        console.log("Updated Transaction:", updatedTransaction);
 
+        // Xử lý trạng thái giao dịch
         if (updatedTransaction) {
           this.transactions[transactionId].status = "success";
           paymentInfo.paymentStatus = "Đã thanh toán";
@@ -372,7 +392,8 @@ class PaymentInfoService {
         confirmOrder: false,
         paymentStatus: { $ne: "Chưa chọn phương thức thanh toán" },
         orderStatus: { $ne: "Đã hủy" },
-      }).sort({ createdAt: -1 })
+      })
+      .sort({ createdAt: -1 })
       .populate("productList.productId")
       .populate({ path: "userId", select: "name profilePic -_id" })
       .exec();
